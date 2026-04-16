@@ -1,48 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 43
 __lua__
--- runs once on startup
-function _init()
-	cls()
-	shipx=64
-	speed=2
-end
-
--- update is for gameplay
--- hard 30fps
-function _update()
---controls		
-	speed=0
-	
-	if btn(0) then
-		speed=-2
-	end
-	
-	if btn(1) then
-		speed=2
-	end
-	
-	--moving the ship
-	shipx = shipx + speed
-	
-	--checking if we hit the edge
-	if shipx > 120 then
-		shipx = 120
-	end
-	
-	if shipx < 0 then
-		shipx = 0
-	end
-	
-end
-
--- called when a new frame is
--- drawn to the screen (30fps).
-function _draw()
-	cls(0)
-	spr(1, shipx, 64)
-end
-
+#include main.lua
 __gfx__
 00000000000220000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000000000027c2000003300000000000000100000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000
