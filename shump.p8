@@ -4,37 +4,43 @@ __lua__
 -- runs once on startup
 function _init()
 	cls()
-	shipx = 64
-	shipy = 64
+	shipx=64
+	speed=2
+end
+
+-- update is for gameplay
+-- hard 30fps
+function _update()
+--controls		
+	speed=0
 	
-	textx = 120
-	texty = 3
+	if btn(0) then
+		speed=-2
+	end
+	
+	if btn(1) then
+		speed=2
+	end
+	
+	--moving the ship
+	shipx = shipx + speed
+	
+	--checking if we hit the edge
+	if shipx > 120 then
+		shipx = 120
+	end
+	
+	if shipx < 0 then
+		shipx = 0
+	end
+	
 end
 
 -- called when a new frame is
 -- drawn to the screen (30fps).
 function _draw()
 	cls(0)
-	print(textx,textx,texty,10)
-	--circ(64,64,10)
-	spr(1, shipx, shipy)
-end
-
--- update is for gameplay
--- hard 30fps
-function _update60()
-	shipx = shipx
-	shipy = shipy + 1
-	
-	if (shipy >= 116) then
-		shipy = 116
-	end
-	
-	textx = textx - 1
-	
-	if (textx <= 3) then
-		textx=3
-	end
+	spr(1, shipx, 64)
 end
 
 __gfx__
