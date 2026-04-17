@@ -1,78 +1,121 @@
--- runs once on startup
+--runs once on startup
 function _init()
 	cls()
 
+	--set up the ship
+
 	--ship's x and y coordinates
-	shipX = 64
-	shipY = 64
+	shipX=64
+	shipY=64
 
 	--ships' speed in x and y direction
-	SHIPSPDX = 2
-	SHIPSPDY = 2
+	shipSpdX=2
+	shipSpdY=2
 
-	--bullet's x and y coordinates
-	bullX = 64
-	bullY = 40
+	--ship bullet offset
+	shipBullOffset=2
+
+	--setup for bullets
+	bullets = {}
+
+	bulletSprite=3
+	bulletSpeed=3
+	bulletSfx=0
+
+	laserSprite=4
+	laser_speed=4
+	laserSfx=1
 end
 
--- update is for gameplay
--- hard 30fps
-function _update60()
+--factory function for creating bullets
+function new_bullet(x, y, sprite, speed)
+	return {
+		x=x,
+		y=y,
+		speed=speed,
+
+		-- update the bullet's position
+		update=function(self)
+			self.x=self.x
+			self.y=self.y-self.speed
+		end,
+
+		-- draw the bullet to the screen
+		draw = function(self)
+			spr(sprite, self.x, self.y)
+		end
+	}
+end
+
+--update is for gameplay
+--hard 30fps
+function _update()
 --controls
-	SHIPSPDX = 0
-	SHIPSPDY = 0
+	shipSpdX=0
+	shipSpdY=0
 
 	--checking for input
 	--Left ARROW
 	if btn(0) then
-		SHIPSPDX = -2
+		shipSpdX=-2
 	end
 
 	--Right ARROW
 	if btn(1) then
-		SHIPSPDX = 2
+		shipSpdX=2
 	end
 
 	--Up ARROW
 	if btn(2) then
-		SHIPSPDY = -2
+		shipSpdY=-2
 	end
 
 	--Down ARROW
 	if btn(3) then
-		SHIPSPDY = 2
+		shipSpdY=2
 	end
 
-	--FIRE button if z PRESSED
+	--FIRE bullet if x PRESSED
 	if btnp(5) then
-		bullX = shipX
-		bullY = shipY - 3
-		sfx(0)
+		add(bullets, new_bullet(shipX, shipY - shipBullOffset,
+			bulletSprite, bulletSpeed))
+
+		sfx(bulletSfx)
+	end
+
+	--FIRE laser if z PRESSED
+	if btnp(4) then
+		add(bullets, new_bullet(shipX, shipY - shipBullOffset,
+			laserSprite, laser_speed))
+
+		sfx(laserSfx)
 	end
 
 	--moving the ship
-	shipX = shipX + SHIPSPDX
-	shipY = shipY + SHIPSPDY
+	shipX=shipX+shipSpdX
+	shipY=shipY+shipSpdY
 
 	--moving the bullet
-	bullY = bullY - 2
+	for b in all(bullets) do
+		b:update()
+	end
 
 	--checking if we hit the
-	--horizontal bounds of the screen
+	--Horizontal bounds of the screen
 	if shipX > 120 then
-		shipX = 120
+		shipX=120
 	end
 
 	if shipX < 0 then
-		shipX = 0
+		shipX=0
 	end
 
 	if shipY > 120 then
-		shipY = 120
+		shipY=120
 	end
 
 	if shipY < 0 then
-		shipY = 0
+		shipY=0
 	end
 end
 
@@ -81,5 +124,7 @@ end
 function _draw()
 	cls(0)
 	spr(1, shipX, shipY)
-	spr(6, bullX, bullY)
+	for b in all(bullets) do
+		b:draw()
+	end
 end

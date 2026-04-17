@@ -1,4 +1,5 @@
 {
-  "editor.fontFamily": "PICO-8 mono upper, Menlo, Monaco, 'Courier New', monospace",
-  "cSpell.words": ["btnp", "SHIPSPD", "SHIPSPDY", "speedx"]
+  "editor.fontFamily": "PICO-8 mono upper",
+  "cSpell.words": ["btnp", "shipSpdX", "shipSpdY", "shipBullOffset", "bulletSprite", "bulletSpeed", "bulletSfx", "laserSprite", "laserSpeed", "laserSfx"],
+  "workbench.colorTheme": "PICO-8"
 }
