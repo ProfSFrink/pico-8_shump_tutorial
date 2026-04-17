@@ -13,16 +13,16 @@ function _init()
 	shipSpdY=2
 
 	--ship bullet offset
-	shipBullOffset=2
+	shipBullOffset=3
 
 	--setup for bullets
 	bullets = {}
 
-	bulletSprite=3
+	bulletSprite=16
 	bulletSpeed=3
 	bulletSfx=0
 
-	laserSprite=4
+	laserSprite=17
 	laser_speed=4
 	laserSfx=1
 end
@@ -34,14 +34,14 @@ function new_bullet(x, y, sprite, speed)
 		y=y,
 		speed=speed,
 
-		-- update the bullet's position
+		--update the bullet's position
 		update=function(self)
 			self.x=self.x
 			self.y=self.y-self.speed
 		end,
 
-		-- draw the bullet to the screen
-		draw = function(self)
+		--draw the bullet to the screen
+		draw=function(self)
 			spr(sprite, self.x, self.y)
 		end
 	}
