@@ -30,11 +30,16 @@ function _init()
 	bulletSfx=0
 
 	laserSprStart=18
-	laserSprEnd=20
+	laserSprEnd=21
 	laserSpeed=4
 	laserSfx=1
 
 	muzzle=0
+
+	--setup score
+	score=10000
+
+	lives=3
 end
 
 --factory function for creating bullets
@@ -55,7 +60,7 @@ function new_bullet(x, y, sprStart, sprEnd, speed)
 
 			--animate the bullet
             self.currentFrame=self.currentFrame+1
-            if self.currentFrame > self.spriteEnd then
+            if self.currentFrame >= self.spriteEnd then
                 self.currentFrame=self.spriteStart
             end
 		end,
@@ -164,11 +169,25 @@ end
 --drawn to the screen (30fps).
 function _draw()
 	cls(0)
+
 	spr(shipSpr,shipX,shipY)
 	spr(flameSpr,shipX,shipY+8)
+
 	for b in all(bullets) do
 		b:draw()
 	end
+
 	circfill(shipX+3,shipY-2,muzzle,7)
 	circfill(shipX+4,shipY-2,muzzle,7)
+
+	?"SCORE: "..score,40,1,12
+
+	for i=1,4 do
+		if lives >= i then
+			spr(13,i*9-8,1)
+		else
+			spr(14,i*9-8,1)
+		end
+	end
+
 end
