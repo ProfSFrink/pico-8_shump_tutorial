@@ -1,18 +1,26 @@
 {
-  "editor.fontFamily": "PICO-8 mono upper",
+  "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace",
   "cSpell.words": [
     "btnp",
     "bulletSfx",
     "bulletSpeed",
     "bulletSprite",
+    "BULLSPREND",
+    "bullsprstart",
     "circfill",
+    "currframe",
     "FLAMESPR",
     "laserSfx",
     "laserSpeed",
+    "lasersprend",
     "laserSprite",
     "shipBullOffset",
     "shipSpdX",
-    "shipSpdY"
+    "shipSpdY",
+    "spriteend",
+    "spritesrt",
+    "spritestart",
+    "SPRSTART"
   ],
   "workbench.colorTheme": "PICO-8"
 }

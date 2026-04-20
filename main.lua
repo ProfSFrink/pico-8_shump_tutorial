@@ -16,7 +16,7 @@ function _init()
 	shipSpr=3
 
 	--ship flame sprite
-	flamespr=7
+	flameSpr=7
 
 	--ship bullet offset
 	shipBullOffset=3
@@ -24,33 +24,45 @@ function _init()
 	--setup for bullets
 	bullets = {}
 
-	bulletSprite=16
+	bullSprStart=16
+	bullSprEnd=17
 	bulletSpeed=3
 	bulletSfx=0
 
-	laserSprite=17
-	laser_speed=4
+	laserSprStart=18
+	laserSprEnd=20
+	laserSpeed=4
 	laserSfx=1
 
 	muzzle=0
 end
 
 --factory function for creating bullets
-function new_bullet(x, y, sprite, speed)
+function new_bullet(x, y, sprStart, sprEnd, speed)
 	return {
 		x=x,
 		y=y,
 		speed=speed,
+		--current frame of the bullet's animation
+		currentFrame=sprStart,
+		--starting and ending frames of the bullet's animation
+		spriteStart=sprStart,
+		spriteEnd=sprEnd,
 
 		--update the bullet's position
 		update=function(self)
-			self.x=self.x
-			self.y=self.y-self.speed
+            self.y=self.y-self.speed
+
+			--animate the bullet
+            self.currentFrame=self.currentFrame+1
+            if self.currentFrame > self.spriteEnd then
+                self.currentFrame=self.spriteStart
+            end
 		end,
 
 		--draw the bullet to the screen
 		draw=function(self)
-			spr(sprite, self.x, self.y)
+			spr(self.currentFrame, self.x, self.y)
 		end
 	}
 end
@@ -64,47 +76,48 @@ function _update()
 	shipSpr=3
 
 	--checking for input
-	--Left ARROW
+	--Left arrow
 	if btn(0) then
 		shipSpr=1
 		shipSpdX=-2
 	end
 
-	--Right ARROW
+	--Right arrow
 	if btn(1) then
 		shipSpr=5
 		shipSpdX=2
 	end
 
-	--Up ARROW
+	--Up arrow
 	if btn(2) then
 		shipSpr=2
 		shipSpdY=-2
 	end
 
-	--Down ARROW
+	--Down arrow
 	if btn(3) then
 		shipSpr=2
 		shipSpdY=2
 	end
 
-	--FIRE bullet if x PRESSED
+	--fire laser if z pressed
+	if btnp(4) then
+		add(bullets, new_bullet(shipX, shipY - shipBullOffset,
+			laserSprStart, laserSprEnd, laserSpeed))
+
+		sfx(laserSfx)
+		muzzle=4
+	end
+
+	--fire bullet if x pressed
 	if btnp(5) then
 		add(bullets, new_bullet(shipX, shipY - shipBullOffset,
-			bulletSprite, bulletSpeed))
+			bullSprStart, bullSprEnd, bulletSpeed))
 
 		sfx(bulletSfx)
 		muzzle=4
 	end
 
-	--FIRE laser if z PRESSED
-	if btnp(4) then
-		add(bullets, new_bullet(shipX, shipY - shipBullOffset,
-			laserSprite, laser_speed))
-
-		sfx(laserSfx)
-		muzzle=4
-	end
 
 	--moving the ship
 	shipX=shipX+shipSpdX
@@ -116,15 +129,16 @@ function _update()
 	end
 
 	--animate ship flame
-	flamespr=flamespr+1
+	flameSpr=flameSpr+1
+
+	--loop the flame animation
+	if flameSpr > 11 then
+		flameSpr=7
+	end
 
 	--animate the muzzle flash
 	if muzzle >= 0 then
 		muzzle=muzzle-1
-	end
-
-	if flamespr > 11 then
-		flamespr=7
 	end
 
 	--checking if we hit the
@@ -151,7 +165,7 @@ end
 function _draw()
 	cls(0)
 	spr(shipSpr,shipX,shipY)
-	spr(flamespr,shipX,shipY+8)
+	spr(flameSpr,shipX,shipY+8)
 	for b in all(bullets) do
 		b:draw()
 	end
