@@ -12,6 +12,12 @@ function _init()
 	shipSpdX=2
 	shipSpdY=2
 
+	--sHip sprite
+	shipSpr=3
+
+	--ship flame sprite
+	flamespr=7
+
 	--ship bullet offset
 	shipBullOffset=3
 
@@ -25,6 +31,8 @@ function _init()
 	laserSprite=17
 	laser_speed=4
 	laserSfx=1
+
+	muzzle=0
 end
 
 --factory function for creating bullets
@@ -53,25 +61,30 @@ function _update()
 --controls
 	shipSpdX=0
 	shipSpdY=0
+	shipSpr=3
 
 	--checking for input
 	--Left ARROW
 	if btn(0) then
+		shipSpr=1
 		shipSpdX=-2
 	end
 
 	--Right ARROW
 	if btn(1) then
+		shipSpr=5
 		shipSpdX=2
 	end
 
 	--Up ARROW
 	if btn(2) then
+		shipSpr=2
 		shipSpdY=-2
 	end
 
 	--Down ARROW
 	if btn(3) then
+		shipSpr=2
 		shipSpdY=2
 	end
 
@@ -81,6 +94,7 @@ function _update()
 			bulletSprite, bulletSpeed))
 
 		sfx(bulletSfx)
+		muzzle=4
 	end
 
 	--FIRE laser if z PRESSED
@@ -89,6 +103,7 @@ function _update()
 			laserSprite, laser_speed))
 
 		sfx(laserSfx)
+		muzzle=4
 	end
 
 	--moving the ship
@@ -98,6 +113,18 @@ function _update()
 	--moving the bullet
 	for b in all(bullets) do
 		b:update()
+	end
+
+	--animate ship flame
+	flamespr=flamespr+1
+
+	--animate the muzzle flash
+	if muzzle >= 0 then
+		muzzle=muzzle-1
+	end
+
+	if flamespr > 11 then
+		flamespr=7
 	end
 
 	--checking if we hit the
@@ -123,8 +150,11 @@ end
 --drawn to the screen (30fps).
 function _draw()
 	cls(0)
-	spr(1, shipX, shipY)
+	spr(shipSpr,shipX,shipY)
+	spr(flamespr,shipX,shipY+8)
 	for b in all(bullets) do
 		b:draw()
 	end
+	circfill(shipX+3,shipY-2,muzzle,7)
+	circfill(shipX+4,shipY-2,muzzle,7)
 end

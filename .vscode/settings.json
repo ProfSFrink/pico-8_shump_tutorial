@@ -1,5 +1,18 @@
 {
   "editor.fontFamily": "PICO-8 mono upper",
-  "cSpell.words": ["btnp", "shipSpdX", "shipSpdY", "shipBullOffset", "bulletSprite", "bulletSpeed", "bulletSfx", "laserSprite", "laserSpeed", "laserSfx"],
+  "cSpell.words": [
+    "btnp",
+    "bulletSfx",
+    "bulletSpeed",
+    "bulletSprite",
+    "circfill",
+    "FLAMESPR",
+    "laserSfx",
+    "laserSpeed",
+    "laserSprite",
+    "shipBullOffset",
+    "shipSpdX",
+    "shipSpdY"
+  ],
   "workbench.colorTheme": "PICO-8"
 }
