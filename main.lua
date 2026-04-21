@@ -40,6 +40,7 @@ function _init()
 	score=10000
 
 	lives=3
+	bombs=4
 end
 
 --factory function for creating bullets
@@ -188,6 +189,10 @@ function _draw()
 		else
 			spr(14,i*9-8,1)
 		end
+	end
+
+	for i=1,bombs do
+		spr(29,90+i*9-8,1)
 	end
 
 end
