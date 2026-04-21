@@ -12,7 +12,7 @@ function _init()
 	shipSpdX=2
 	shipSpdY=2
 
-	--sHip sprite
+	--ship sprite
 	shipSpr=3
 
 	--ship flame sprite
@@ -30,12 +30,12 @@ function _init()
 
 	--setup and initialize starfield
 	stars={}
-	numOfStars=70
+	numOfStars=100
 	starUiOffset=10
 
-	farStar={colour=5, speed=0.5}
+	farStar={colour=5, speed=0.25}
 
-	midStar={colour=6, speed=1}
+	midStar={colour=6, speed=0.75, isAsteroid=false}
 
 	nearStar={colour=7, twinkleColour=10, speed=2}
 
@@ -49,7 +49,7 @@ function _init()
 
 	--setup lives and bombs
 	lives=3
-	bombs=4
+	bombs=2
 
 end
 
