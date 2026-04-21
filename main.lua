@@ -24,27 +24,37 @@ function _init()
 	--setup for bullets
 	bullets = {}
 
-	bullSprStart=16
-	bullSprEnd=17
-	bulletSpeed=3
-	bulletSfx=0
+	bullet={sprStart=16, spriteEnd=17, speed=3, sfx=0}
 
-	laserSprStart=18
-	laserSprEnd=21
-	laserSpeed=4
-	laserSfx=1
+	laser={sprStart=18, spriteEnd=21, speed=4, sfx=1}
 
+	--setup and initialize starfield
+	stars={}
+	numOfStars=70
+	starUiOffset=10
+
+	farStar={colour=5, speed=0.5}
+
+	midStar={colour=6, speed=1}
+
+	nearStar={colour=7, twinkleColour=10, speed=2}
+
+	createStarfield()
+
+	--setup for muzzle flash
 	muzzle=0
 
 	--setup score
 	score=10000
 
+	--setup lives and bombs
 	lives=3
 	bombs=4
+
 end
 
 --factory function for creating bullets
-function new_bullet(x, y, sprStart, sprEnd, speed)
+function newBullet(x, y, sprStart, sprEnd, speed)
 	return {
 		x=x,
 		y=y,
@@ -108,19 +118,23 @@ function _update()
 
 	--fire laser if z pressed
 	if btnp(4) then
-		add(bullets, new_bullet(shipX, shipY - shipBullOffset,
-			laserSprStart, laserSprEnd, laserSpeed))
+		add(bullets, newBullet(shipX,
+			shipY - shipBullOffset,
+			laser.sprStart, laser.spriteEnd,
+			laser.speed))
 
-		sfx(laserSfx)
+		sfx(laser.sfx)
 		muzzle=4
 	end
 
 	--fire bullet if x pressed
 	if btnp(5) then
-		add(bullets, new_bullet(shipX, shipY - shipBullOffset,
-			bullSprStart, bullSprEnd, bulletSpeed))
+		add(bullets, newBullet(shipX,
+			shipY - shipBullOffset,
+			bullet.sprStart, bullet.spriteEnd,
+			bullet.speed))
 
-		sfx(bulletSfx)
+		sfx(bullet.sfx)
 		muzzle=4
 	end
 
@@ -170,6 +184,7 @@ end
 --drawn to the screen (30fps).
 function _draw()
 	cls(0)
+	updateStarfield()
 
 	spr(shipSpr,shipX,shipY)
 	spr(flameSpr,shipX,shipY+8)

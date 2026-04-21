@@ -1,5 +1,5 @@
 {
-  "editor.fontFamily": "pico-8 mono upper, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace",
   "cSpell.words": [
     "btnp",
     "bulletSfx",
@@ -14,6 +14,7 @@
     "laserSpeed",
     "lasersprend",
     "laserSprite",
+    "pset",
     "shipBullOffset",
     "shipSpdX",
     "shipSpdY",
@@ -22,5 +23,6 @@
     "spritestart",
     "SPRSTART"
   ],
-  "workbench.colorTheme": "PICO-8"
+  "workbench.colorTheme": "PICO-8",
+  "editor.fontSize": 14
 }
