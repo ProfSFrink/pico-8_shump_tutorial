@@ -96,12 +96,21 @@ function updateGame()
 	end
 end
 
+--updates the title screen
+function updateTitle()
+	if btnp(4) or btnp(5) then
+		showStart()
+	end
+end
+
+--update the start screen
 function updateStart()
 	if btnp(4) or btnp(5) then
 		startGame()
 	end
 end
 
+--update the game over screen
 function updateGameOver()
 	if btnp(4) or btnp(5) then
 		restartGame()

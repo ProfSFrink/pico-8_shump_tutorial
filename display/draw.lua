@@ -30,8 +30,8 @@ function drawGame()
 
 end
 
---draws the start screen
-function drawStart()
+--draws the title screen
+function drawTitle()
     cls(0)
 
 	updateStarfield()
@@ -43,6 +43,26 @@ function drawStart()
 	?title,calcCentreX(title), 40, 10
 
 	?start,calcCentreX(start), 80, blink()
+end
+
+--draw the start game screen
+function drawStart()
+	cls(0)
+
+	startTimer += 1
+
+	local start="PLAYER 1 START"
+	local getReady="GET READY"
+
+	?start,calcCentreX(start)+1, 41, 1
+	?start,calcCentreX(start), 40, 8
+
+	?getReady,calcCentreX(getReady), 60, blink()
+
+	--holds screen for 60 frames (2 secs)
+	if startTimer > 60 then
+		startGame()
+	end
 end
 
 --draws the game over screen

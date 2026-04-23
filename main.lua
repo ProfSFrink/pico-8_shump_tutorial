@@ -18,9 +18,9 @@ function _init()
 
 	blinkT=0
 
-	states={start="start", game="game", gameOver="gameOver"}
+	states={title="title", start="start", game="game", gameOver="gameOver"}
 
-	mode=states.start
+	mode=states.title
 
 	createStarfield(true)
 end
@@ -29,9 +29,11 @@ end
 --hard 30fps
 function _update()
 	blinkT+=1
-	
+
 	if mode == states.game then
 		updateGame()
+	elseif mode == states.title then
+		updateTitle()
 	elseif mode == states.start then
 		updateStart()
 	elseif mode == states.gameOver then
@@ -44,6 +46,8 @@ end
 function _draw()
 	if mode == states.game then
 		drawGame()
+	elseif mode == states.title then
+		drawTitle()
 	elseif mode == states.start then
 		drawStart()
 	elseif mode == states.gameOver then
@@ -95,8 +99,15 @@ function startGame()
 	createStarfield(false)
 end
 
+--start game screen
+function showStart()
+	startTimer=0
+
+	mode=states.start
+end
+
 --restart the game
 function restartGame()
-	mode=states.start
+	mode=states.title
 	createStarfield(true)
 end
