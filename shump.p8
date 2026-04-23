@@ -2,9 +2,11 @@ pico-8 cartridge // http://www.pico-8.com
 version 43
 __lua__
 #include main.lua
-#include ./display/update.lua
-#include ./display/draw.lua
-#include ./display/tools.lua
+#include ./util/tools.lua
+#include ./states/title.lua
+#include ./states/start.lua
+#include ./states/game.lua
+#include ./states/gameOver.lua
 #include ./components/starfield.lua
 #include ./components/bullets.lua
 __gfx__

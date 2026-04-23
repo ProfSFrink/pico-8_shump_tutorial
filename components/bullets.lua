@@ -1,27 +1,31 @@
---factory function for creating bullets
+-- Factory function for creating bullets
+	-- @param x: The x position of the bullet.
+	-- @param y: The y position of the bullet.
+	-- @param sprStart: The starting frame of the bullet's animation.
+	-- @param sprEnd: The ending frame of the bullet's animation.
+	-- @param speed: The speed of the bullet.
+	-- @return: A new bullet object.
 function newBullet(x, y, sprStart, sprEnd, speed)
 	return {
 		x=x,
 		y=y,
 		speed=speed,
-		--current frame of the bullet's animation
 		currentFrame=sprStart,
-		--starting and ending frames of the bullet's animation
 		spriteStart=sprStart,
 		spriteEnd=sprEnd,
 
-		--update the bullet's position
+		-- Update the bullet's position.
 		update=function(self)
             self.y=self.y-self.speed
 
-			--animate the bullet
+			-- Animate the bullet.
             self.currentFrame=self.currentFrame+1
             if self.currentFrame >= self.spriteEnd then
                 self.currentFrame=self.spriteStart
             end
 		end,
 
-		--draw the bullet to the screen
+		-- Draw the bullet to the screen.
 		draw=function(self)
 			spr(self.currentFrame, self.x, self.y)
 		end

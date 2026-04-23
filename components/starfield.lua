@@ -1,5 +1,11 @@
---factory function for creating stars
-function newStar(colour,speed,isStart)
+-- Factory function for creating stars.
+-- @param colour: The colour of the star.
+-- @param speed: How fast the star moves.
+-- @param isStart: If true, the star is
+-- for the title/start screen, otherwise
+-- it's for the game/game over screen.
+-- @return: A new star object.
+function createStar(colour,speed,isStart)
 	return {
 		x=flr(rnd(118)+10),
 		y=flr(rnd(118)+10),
@@ -7,12 +13,12 @@ function newStar(colour,speed,isStart)
 		speed=speed,
 		isAsteroid=false,
 
-        --update the star's position
+        -- Update the star's position.
 		update=function(self)
 			self.y=self.y+self.speed
 
             --[[reset the star to the top of the screen
-            if it goes off the bottom]]--
+            if it goes off the bottom.]]--
 			if self.y > 128 then
                 local uiOffset = isStart and 0 or uiHeight
 
@@ -23,7 +29,7 @@ function newStar(colour,speed,isStart)
 				self.x = flr(rnd(128))
 			end
 
-            --twinkle the star if it's a near star
+            -- Twinkle the star if it's a near star.
             if self.colour == nearStar.colour then
                 self.colour=nearStar.twinkleColour
             elseif self.colour == nearStar.twinkleColour then
@@ -33,27 +39,30 @@ function newStar(colour,speed,isStart)
 	}
 end
 
---creates starfield on game start
+-- Creates starfield background.
+-- @param isStart: whether this is
+-- for the title/start screen (true)
+-- or the game/game over screen (false).
 function createStarfield(isStart)
     for i=1,numOfStars do
         colour=flr(rnd(3))+5
 
-        --set far stars
+        -- Set far stars.
         if colour == farStar.colour then
             speed=farStar.speed
-        --set mid stars
+        -- Set mid stars.
         elseif colour == midStar.colour then
             speed=midStar.speed
-        --set near stars
+        -- Set near stars.
         else
             speed=nearStar.speed
         end
 
-        stars[i] = newStar(colour, speed, isStart)
+        stars[i] = createStar(colour, speed, isStart)
     end
 end
 
---update starfield and draw to screen
+-- Update stars and draw them to the screen.
 function updateStarfield()
     for s in all(stars) do
         s:update()
@@ -65,17 +74,20 @@ function updateStarfield()
     end
 end
 
---fade out the starfield when the game is over
 
+-- Fade map for fading out stars on game over.
 local starFadeMap = {[10]=7,[7]=6,[6]=5,[5]=0,[0]=0}
-local starFadeTimer = 0
-local starFadeSpeed = 13
+-- Timer for fading out stars.
+local fadeTimer = 0
+-- Fade speed in frames for fading out stars.
+local fadeSpeed = 13
 
+-- Fade out the starfield when the game is over.
 function fadeOutStarfield()
-    starFadeTimer += 1
+    fadeTimer += 1
 
-    if starFadeTimer >= starFadeSpeed then
-        starFadeTimer = 0
+    if fadeTimer >= fadeSpeed then
+        fadeTimer = 0
 
         for s in all(stars) do
             s.colour = starFadeMap[s.colour] or 0
