@@ -2,14 +2,34 @@
 function _init()
 	cls()
 
+	--text for start and restart
+	pressAKey="PRESS Z OR X TO "
+
+	--setup and initialize starfield
+	stars={}
+	numOfStars=100
+	uiHeight=10
+
+	farStar={colour=5, speed=0.25}
+
+	midStar={colour=6, speed=0.75, isAsteroid=false}
+
+	nearStar={colour=7, twinkleColour=10, speed=2}
+
+	blinkT=0
+
 	states={start="start", game="game", gameOver="gameOver"}
 
 	mode=states.start
+
+	createStarfield(true)
 end
 
 --update is for gameplay
 --hard 30fps
 function _update()
+	blinkT+=1
+	
 	if mode == states.game then
 		updateGame()
 	elseif mode == states.start then
@@ -62,19 +82,6 @@ function startGame()
 
 	laser={sprStart=18, spriteEnd=21, speed=4, sfx=1}
 
-	--setup and initialize starfield
-	stars={}
-	numOfStars=100
-	starUiOffset=10
-
-	farStar={colour=5, speed=0.25}
-
-	midStar={colour=6, speed=0.75, isAsteroid=false}
-
-	nearStar={colour=7, twinkleColour=10, speed=2}
-
-	createStarfield()
-
 	--setup for muzzle flash
 	muzzle=0
 
@@ -84,4 +91,12 @@ function startGame()
 	--setup lives and bombs
 	lives=3
 	bombs=2
+
+	createStarfield(false)
+end
+
+--restart the game
+function restartGame()
+	mode=states.start
+	createStarfield(true)
 end

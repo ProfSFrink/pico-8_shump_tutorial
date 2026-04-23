@@ -4,6 +4,7 @@ __lua__
 #include main.lua
 #include ./display/update.lua
 #include ./display/draw.lua
+#include ./display/tools.lua
 #include ./components/starfield.lua
 #include ./components/bullets.lua
 __gfx__

@@ -30,14 +30,29 @@ function drawGame()
 
 end
 
+--draws the start screen
 function drawStart()
-    cls(1)
-    ?"PICO-8 SHUMP", 40, 50, 10
-    ?"PRESS Z OR X TO START", 23, 80, 7
+    cls(0)
+
+	updateStarfield()
+
+	local title="SHUMP TUTORIAL"
+	local start=pressAKey.."START"
+
+	?title,calcCentreX(title)+1, 41, 1
+	?title,calcCentreX(title), 40, 10
+
+	?start,calcCentreX(start), 80, blink()
 end
 
+--draws the game over screen
 function drawGameOver()
-    cls(8)
-    ?"GAME OVER", 45, 50, 7
-    ?"PRESS Z OR X TO RESTART", 20, 80, 7
+    cls(0)
+
+	fadeOutStarfield()
+
+	local restart=pressAKey.."RESTART"
+
+    ?"GAME OVER",calcCentreX("GAME OVER"), 50, 7
+    ?restart,calcCentreX(restart), 80, blink()
 end

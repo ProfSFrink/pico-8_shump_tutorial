@@ -33,13 +33,13 @@ function updateGame()
 
 	--fire laser if z pressed
 	if btnp(4) then
-		--[[add(bullets, newBullet(shipX,
-			shipY - shipBullOffset,
-			laser.sprStart, laser.spriteEnd,
-			laser.speed))
+		--add(bullets, newBullet(shipX,
+		--	shipY - shipBullOffset,
+		--	laser.sprStart, laser.spriteEnd,
+		--	laser.speed))
 
 		sfx(laser.sfx)
-		muzzle=4]]--
+		--muzzle=4
 		mode=states.gameOver
 	end
 
@@ -104,6 +104,6 @@ end
 
 function updateGameOver()
 	if btnp(4) or btnp(5) then
-		mode=states.start
+		restartGame()
 	end
 end
