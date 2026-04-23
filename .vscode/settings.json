@@ -16,6 +16,7 @@
     "laserSprite",
     "PICO",
     "pset",
+    "rectfill",
     "shipBullOffset",
     "shipSpdX",
     "shipSpdY",

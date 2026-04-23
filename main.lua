@@ -7,13 +7,18 @@ function _init()
 	-- Text for start and restart.
 	pressAKey="PRESS Z OR X TO "
 
+	-- Offset for the height of the UI.
+	uiHeight=9
+
+	-- Height of a bullet.
+	bullHeight=4
+
 	-- Starting colour for blinking text.
 	blinkT=0
 
 	-- Setup and initialize starfield.
 	stars={}
 	numOfStars=100
-	uiHeight=10
 
 	farStar={colour=5, speed=0.25}
 

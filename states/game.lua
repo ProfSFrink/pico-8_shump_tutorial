@@ -84,7 +84,7 @@ function updateGame()
 
 		sfx(laser.sfx)
 		--muzzle=4
-		state=stateNames.gameOver
+		showGameOver()
 	end
 
 	-- Fire bullet if X pressed.
@@ -154,7 +154,11 @@ function drawGame()
 	circfill(shipX+3,shipY-2,muzzle,7)
 	circfill(shipX+4,shipY-2,muzzle,7)
 
-	?"SCORE: "..score,40,1,12
+    rectfill(0,0,127,uiHeight,1)
+
+    local scoreStr = "SCORE: "..score
+
+	?scoreStr,calcCenX(#scoreStr),2,12
 
 	for i=1,4 do
 		if lives >= i then

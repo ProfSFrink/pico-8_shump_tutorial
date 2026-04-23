@@ -23,6 +23,12 @@ function newBullet(x, y, sprStart, sprEnd, speed)
             if self.currentFrame >= self.spriteEnd then
                 self.currentFrame=self.spriteStart
             end
+
+			-- Remove the bullet if it
+			-- disappears behind the UI.
+			if self.y < uiHeight-bullHeight then
+				del(bullets, self)
+			end
 		end,
 
 		-- Draw the bullet to the screen.

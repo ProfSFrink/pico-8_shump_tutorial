@@ -11,7 +11,7 @@ end
 function drawStart()
 	cls(0)
 
-	startTimer += 1
+	startTimer+=1
 
 	local start="PLAYER 1 START"
 	local getReady="GET READY"
