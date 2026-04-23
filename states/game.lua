@@ -23,8 +23,8 @@ function startGame()
 	-- Ship bullet offset.
 	shpBullOffset=3
 
-	-- Setup for bullets.
-	bullets = {}
+	-- Setup for projectiles.
+	projectiles = {}
 
 	-- Setup for bullets & lasers.
 	-- strtFram: Starting frame of the bullet's animation.
@@ -91,7 +91,7 @@ function updateGame()
 
 	-- Fire laser if Z pressed.
 	if btnp(4) then
-		add(bullets, newLaser(shipX,
+		add(projectiles, newLaser(shipX,
 		shipY - shpBullOffset,
 		laser.strtFram, laser.endFram,
 		laser.spd))
@@ -102,7 +102,7 @@ function updateGame()
 
 	-- Fire bullet if X pressed.
 	if btnp(5) then
-		add(bullets, newBullet(shipX,
+		add(projectiles, newBullet(shipX,
 			shipY - shpBullOffset,
 			bullet.strtFram, bullet.endFram,
 			bullet.spd))
@@ -115,9 +115,9 @@ function updateGame()
 	shipX=shipX+shipSpdX
 	shipY=shipY+shipSpdY
 
-	-- Moving the bullet.
-	for b in all(bullets) do
-		b:update()
+	-- Moving the projectiles.
+	for p in all(projectiles) do
+		p:update()
 	end
 
 	-- Animate ship flame.
@@ -157,13 +157,13 @@ function drawGame()
 	cls(0)
 	updateStarfield()
 
-	?"BULLETS: "..#bullets, 0, 123, 7
+	?"PROJECTILES: "..#projectiles, 0, 123, 7
 
 	spr(shipSpr,shipX,shipY)
 	spr(flameSpr,shipX,shipY+8)
 
-	for b in all(bullets) do
-		b:draw()
+	for p in all(projectiles) do
+		p:draw()
 	end
 
 	circfill(shipX+3,shipY-2,muzzle,7)
