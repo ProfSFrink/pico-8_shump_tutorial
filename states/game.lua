@@ -8,7 +8,7 @@ function startGame()
 
 	-- Ship's x and y coordinates.
 	shipX=64
-	shipY=64
+	shipY=108
 
 	-- Ship's speed in x and y direction.
 	spdX=2
@@ -21,14 +21,28 @@ function startGame()
 	flameSpr=7
 
 	-- Ship bullet offset.
-	shipBullOffset=3
+	shpBullOffset=3
 
 	-- Setup for bullets.
 	bullets = {}
 
-	bullet={sprStart=16, spriteEnd=17, speed=3, sfx=0}
+	-- Setup for bullets & lasers.
+	-- strtFram: Starting frame of the bullet's animation.
+	-- endFram: Ending frame of the bullet's animation.
+	-- spd: Speed of the bullet.
+	bullet={
+		strtFram=16,
+		endFram=17,
+		spd=3,
+		sfx=0
+	}
 
-	laser={sprStart=18, spriteEnd=21, speed=4, sfx=1}
+	laser={
+		strtFram=18,
+		endFram=21,
+		spd=4,
+		sfx=1
+	}
 
 	-- Setup for muzzle flash.
 	muzzle=0
@@ -77,22 +91,21 @@ function updateGame()
 
 	-- Fire laser if Z pressed.
 	if btnp(4) then
-		--add(bullets, newBullet(shipX,
-		--	shipY - shipBullOffset,
-		--	laser.sprStart, laser.spriteEnd,
-		--	laser.speed))
+		add(bullets, newLaser(shipX,
+		shipY - shpBullOffset,
+		laser.strtFram, laser.endFram,
+		laser.spd))
 
 		sfx(laser.sfx)
-		--muzzle=4
-		showGameOver()
+		muzzle=4
 	end
 
 	-- Fire bullet if X pressed.
 	if btnp(5) then
 		add(bullets, newBullet(shipX,
-			shipY - shipBullOffset,
-			bullet.sprStart, bullet.spriteEnd,
-			bullet.speed))
+			shipY - shpBullOffset,
+			bullet.strtFram, bullet.endFram,
+			bullet.spd))
 
 		sfx(bullet.sfx)
 		muzzle=4
@@ -111,30 +124,30 @@ function updateGame()
 	flameSpr=flameSpr+1
 
 	-- Loop the flame animation.
-	if flameSpr > 11 then
+	if flameSpr>11 then
 		flameSpr=7
 	end
 
 	-- Animate the muzzle flash.
-	if muzzle >= 0 then
+	if muzzle>=0 then
 		muzzle=muzzle-1
 	end
 
 	-- Checking if we hit the
 	-- Horizontal bounds of the screen.
-	if shipX > 120 then
+	if shipX>120 then
 		shipX=120
 	end
 
-	if shipX < 0 then
+	if shipX<0 then
 		shipX=0
 	end
 
-	if shipY > 120 then
+	if shipY>120 then
 		shipY=120
 	end
 
-	if shipY < 0 then
+	if shipY<0 then
 		shipY=0
 	end
 end
@@ -143,6 +156,8 @@ end
 function drawGame()
 	cls(0)
 	updateStarfield()
+
+	?"BULLETS: "..#bullets, 0, 123, 7
 
 	spr(shipSpr,shipX,shipY)
 	spr(flameSpr,shipX,shipY+8)
@@ -161,7 +176,7 @@ function drawGame()
 	?scoreStr,calcCenX(#scoreStr),2,12
 
 	for i=1,4 do
-		if lives >= i then
+		if lives>=i then
 			spr(13,i*9-8,1)
 		else
 			spr(14,i*9-8,1)

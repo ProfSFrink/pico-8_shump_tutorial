@@ -10,6 +10,7 @@
     "circfill",
     "currframe",
     "FLAMESPR",
+    "Fram",
     "laserSfx",
     "laserSpeed",
     "lasersprend",
@@ -24,7 +25,8 @@
     "spriteend",
     "spritesrt",
     "spritestart",
-    "SPRSTART"
+    "SPRSTART",
+    "strt"
   ],
   "workbench.colorTheme": "PICO-8",
   "editor.fontSize": 14

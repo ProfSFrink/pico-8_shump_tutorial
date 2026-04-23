@@ -18,13 +18,13 @@ function _init()
 
 	-- Setup and initialize starfield.
 	stars={}
-	numOfStars=100
+	numOfStars=150
 
-	farStar={colour=5, speed=0.25}
+	farStar={col=5, spd=0.25}
 
-	midStar={colour=6, speed=0.75, isAsteroid=false}
+	midStar={col=6, spd=0.75, isAsteroid=false}
 
-	nearStar={colour=7, twinkleColour=10, speed=2}
+	nearStar={col=7, twinkleCol=10, spd=2}
 
 	stateNames={title="title", start="start", 
 	game="game", gameOver="gameOver"}
