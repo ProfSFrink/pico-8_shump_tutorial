@@ -10,6 +10,8 @@ function _init()
 	-- Offset for the height of the UI.
 	uiHeight=9
 
+	initProjectiles()
+
 	-- Height of a bullet.
 	bullHeight=4
 
@@ -18,7 +20,7 @@ function _init()
 
 	-- Setup and initialize starfield.
 	stars={}
-	numOfStars=125
+	numOfStars=80
 
 	farStar={col=5, spd=0.25}
 

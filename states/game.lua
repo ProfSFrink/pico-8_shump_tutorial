@@ -4,6 +4,9 @@
 function startGame()
 	state=stateNames.game
 
+	-- Setup game timer.
+	gameTimer=0
+
 	-- Set up the ship.
 	-- x: X coordinate.
 	-- y: Y coordinate.
@@ -24,34 +27,6 @@ function startGame()
 
 	-- Setup for projectiles.
 	projectiles = {}
-
-	-- Setup for bullets & lasers.
-	-- strtFram: Starting frame of the bullet's animation.
-	-- endFram: Ending frame of the bullet's animation.
-	-- animDelay: Frames before the bullet's animation advances.
-	-- spd: Speed of the bullet.
-	-- sfx: Sound effect to play when firing the bullet.
-	-- btn: Button to fire the bullet.
-	projectileTypes={
-		bullet={
-			strtFram=16,
-			endFram=17,
-			animDelay=5,
-			spd=3,
-			sfx=0,
-			btn=5,
-			factory=newBullet
-		},
-		laser={
-			strtFram=18,
-			endFram=21,
-			animDelay=6,
-			spd=4,
-			sfx=1,
-			btn=4,
-			factory=newLaser
-		}
-	}
 
 	-- Setup for ship muzzle flash.
 	muzzle=0
@@ -108,32 +83,34 @@ end
 function updateGame()
 -- Controls.
 
+	-- Advance timer by 1 frame.
+	gameTimer+=1
+
 	shipSpdX=0
 	shipSpdY=0
-	shipSpr=3
 
 	-- Checking for input.
 	-- Left arrow.
 	if btn(0) then
-		shipSpr=1
+		ship.spr=1
 		shipSpdX=-ship.spdX
 	end
 
 	-- Right arrow.
 	if btn(1) then
-		shipSpr=5
+		ship.spr=5
 		shipSpdX=ship.spdX
 	end
 
 	-- Up arrow.
 	if btn(2) then
-		shipSpr=2
+		ship.spr=2
 		shipSpdY=-ship.spdY
 	end
 
 	-- Down arrow.
 	if btn(3) then
-		shipSpr=2
+		ship.spr=2
 		shipSpdY=ship.spdY
 	end
 
@@ -175,23 +152,7 @@ function updateGame()
 	end
 
 	-- Checking if we hit the
-	-- Horizontal bounds of the screen.
-	if ship.x>120 then
-		ship.x=120
-	end
-
-	if ship.x<0 then
-		ship.x=0
-	end
-
-	if ship.y>120 then
-		ship.y=120
-	end
-
-	if ship.y<0 then
-		ship.y=0
-	end
-
+	-- bounds of the screen.
 	ship.x=mid(0,ship.x,120)
 	ship.y=mid(0+uiHeight,ship.y,120)
 end
@@ -207,7 +168,9 @@ function drawGame()
 	?shipSpdX, 0, 63, 7
 	?shipSpdY, 0, 70, 7
 
-	spr(shipSpr,ship.x,ship.y)
+	?"t:"..gameTimer, 105, 123, 7
+
+	spr(ship.spr,ship.x,ship.y)
 	spr(ship.flameSpr,ship.x,ship.y+8)
 
 	for e in all(enemies) do
