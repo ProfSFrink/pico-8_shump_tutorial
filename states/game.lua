@@ -30,7 +30,7 @@ function startGame()
 	-- endFram: Ending frame of the bullet's animation.
 	-- animDelay: Frames before the bullet's animation advances.
 	-- spd: Speed of the bullet.
-	bullet={
+	bulletCfg={
 		strtFram=16,
 		endFram=17,
 		animDelay=5,
@@ -38,7 +38,7 @@ function startGame()
 		sfx=0
 	}
 
-	laser={
+	laserCfg={
 		strtFram=18,
 		endFram=21,
 		animDelay=6,
@@ -82,6 +82,21 @@ function startGame()
 	createEnemy()
 end
 
+
+-- Fires a projectile from the ship.
+-- @param projectileFn: The function to create the projectile (newBullet or newLaser).
+-- @param cfg: The configuration for the projectile (bulletCfg or laserCfg).
+function fireProjectile(projectileFn, cfg)
+    add(projectiles, projectileFn(
+        ship.x,
+        ship.y - ship.bullOffset,
+        cfg.strtFram, cfg.endFram,
+        cfg.spd, cfg.animDelay
+    ))
+    sfx(cfg.sfx)
+    muzzle=4
+end
+
 -- Updates the game screen.
 function updateGame()
 -- Controls.
@@ -117,24 +132,12 @@ function updateGame()
 
 	-- Fire laser if Z pressed.
 	if btnp(4) then
-		add(projectiles, newLaser(ship.x,
-		ship.y - ship.bullOffset,
-		laser.strtFram, laser.endFram,
-		laser.spd))
-
-		sfx(laser.sfx)
-		muzzle=4
+		fireProjectile(newLaser, laserCfg)
 	end
 
 	-- Fire bullet if X pressed.
 	if btnp(5) then
-		add(projectiles, newBullet(ship.x,
-			ship.y - ship.bullOffset,
-			bullet.strtFram, bullet.endFram,
-			bullet.spd))
-
-		sfx(bullet.sfx)
-		muzzle=4
+		fireProjectile(newBullet, bulletCfg)
 	end
 
 	-- Moving the ship.

@@ -44,7 +44,7 @@ function newProjectile(x, y, strtFram, endFram, spd, animDelay, animFunc)
 end
 
 -- Creates a new bullet object.
-function newBullet(x, y, strtFram, endFram, spd)
+function newBullet(x, y, strtFram, endFram, spd, animDelay)
     local pulseFn = function(self)
         if self.curFram == self.strtFram then
             self.curFram = self.endFram
@@ -52,15 +52,15 @@ function newBullet(x, y, strtFram, endFram, spd)
             self.curFram = self.strtFram
         end
     end
-    return newProjectile(x, y, strtFram, endFram, spd, 5, pulseFn)
+    return newProjectile(x, y, strtFram, endFram, spd, animDelay, pulseFn)
 end
 
 -- Creates a new laser object.
-function newLaser(x, y, strtFram, endFram, spd)
+function newLaser(x, y, strtFram, endFram, spd, animDelay)
     local incrementFn = function(self)
         if self.curFram < self.endFram then
             self.curFram += 1
         end
     end
-    return newProjectile(x, y, strtFram, endFram, spd, 6, incrementFn)
+    return newProjectile(x, y, strtFram, endFram, spd, animDelay, incrementFn)
 end
