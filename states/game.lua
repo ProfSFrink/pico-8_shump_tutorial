@@ -4,8 +4,22 @@
 function startGame()
 	state=stateNames.game
 
-	-- Setup game timer.
+	-- Setup game timer (frames).
 	gameTimer=0
+
+	-- Spawn timelines in frames (30fps).
+	spawnEvent={
+		{frame=30, type="green",spawnX=12},
+		{frame=90, type="blue", spawnX=40},
+		{frame=150, type="green", spawnX=72},
+		{frame=210, type="blue", spawnX=100},
+	}
+
+	-- Points towards next spawn event.
+	spawnEventIndex=1
+
+	-- Max number of enemies on screen.
+	maxEnemies=16
 
 	-- Set up the ship.
 	-- x: X coordinate.
@@ -34,22 +48,7 @@ function startGame()
 	-- Setup for enemies.
 	enemies={}
 
-	-- Setup for an enemy.
-	-- x: x coordinate.
-	-- y: y coordinate.
-	-- strtFram: Starting frame of the enemy's animation.
-	-- endFram: Ending frame of the enemy's animation.
-	-- animDelay: Frames before the enemy's animation advances.
-	-- spd: Enemy speed.
-	-- spr: Enemy sprite.
-	enemy={
-		x=0,
-		y=-8,
-		strtFram=48,
-		endFram=51,
-		animDelay=3,
-		spd=0.5
-	}
+	initEnemies()
 
 	noOfEnemies=4
 
@@ -61,7 +60,6 @@ function startGame()
 	bombs=2
 
 	createStarfield(false)
-	createEnemy()
 end
 
 
@@ -127,6 +125,16 @@ function updateGame()
 	-- Moving the ship.
 	ship.x=ship.x+shipSpdX
 	ship.y=ship.y+shipSpdY
+
+	-- Trigger one-shot spawn events from frame schedule.
+	local nextSpawnEvent=spawnEvent[spawnEventIndex]
+
+	if nextSpawnEvent and gameTimer>=nextSpawnEvent.frame then
+		if #enemies<maxEnemies then
+			spawnEnemy(enemyType[nextSpawnEvent.type], nextSpawnEvent.spawnX)
+		end
+		spawnEventIndex+=1
+	end
 
 	-- Move the enemies.
 	for e in all(enemies) do
