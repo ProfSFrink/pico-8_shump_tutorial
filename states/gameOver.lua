@@ -1,3 +1,5 @@
+-- Game over state logic.
+
 -- Update the game over screen.
 function updateGameOver()
 	if btnp(4) or btnp(5) then

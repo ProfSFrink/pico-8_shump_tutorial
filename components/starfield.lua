@@ -1,3 +1,5 @@
+-- Starfield component logic.
+
 -- Factory function for creating stars.
 -- @param col: The colour of the star.
 -- @param spd: How fast the star moves.
@@ -5,7 +7,7 @@
 -- for the title/start screen, otherwise
 -- it's for the game/game over screen.
 -- @return: A new star object.
-function createStar(col,spd,isStart)
+function newStar(col,spd,isStart)
 	return {
 		x=flr(rnd(118)+10),
 		y=flr(rnd(118)+10),
@@ -59,7 +61,7 @@ function createStarfield(isStart)
             spd=nearStar.spd
         end
 
-        stars[i] = createStar(col, spd, isStart)
+        stars[i] = newStar(col, spd, isStart)
     end
 end
 

@@ -5,23 +5,22 @@ function startGame()
 	state=stateNames.game
 
 	-- Set up the ship.
-
-	-- Ship's x and y coordinates.
-	shipX=64
-	shipY=108
-
-	-- Ship's speed in x and y direction.
-	spdX=2
-	spdY=2
-
-	-- Ship sprite.
-	shipSpr=3
-
-	-- Ship flame sprite.
-	flameSpr=7
-
-	-- Ship bullet offset.
-	shpBullOffset=3
+	-- x: X coordinate.
+	-- y: Y coordinate.
+	-- spdX: Speed in the x direction.
+	-- spdY: Speed in the y direction.
+	-- spr: Ship sprite.
+	-- flameSpr: Ship flame sprite.
+	-- bullOffset: Offset for where bullets spawn from the ship.
+	ship={
+		x=64,
+		y=108,
+		spdX=2,
+		spdY=2,
+		spr=3,
+		flameSpr=7,
+		bullOffset=3
+	}
 
 	-- Setup for projectiles.
 	projectiles = {}
@@ -29,10 +28,12 @@ function startGame()
 	-- Setup for bullets & lasers.
 	-- strtFram: Starting frame of the bullet's animation.
 	-- endFram: Ending frame of the bullet's animation.
+	-- animDelay: Frames before the bullet's animation advances.
 	-- spd: Speed of the bullet.
 	bullet={
 		strtFram=16,
 		endFram=17,
+		animDelay=5,
 		spd=3,
 		sfx=0
 	}
@@ -40,12 +41,35 @@ function startGame()
 	laser={
 		strtFram=18,
 		endFram=21,
+		animDelay=6,
 		spd=4,
 		sfx=1
 	}
 
-	-- Setup for muzzle flash.
+	-- Setup for ship muzzle flash.
 	muzzle=0
+
+	-- Setup for enemies.
+	enemies={}
+
+	-- Setup for an enemy.
+	-- x: x coordinate.
+	-- y: y coordinate.
+	-- strtFram: Starting frame of the enemy's animation.
+	-- endFram: Ending frame of the enemy's animation.
+	-- animDelay: Frames before the enemy's animation advances.
+	-- spd: Enemy speed.
+	-- spr: Enemy sprite.
+	enemy={
+		x=0,
+		y=-8,
+		strtFram=48,
+		endFram=51,
+		animDelay=3,
+		spd=0.5
+	}
+
+	noOfEnemies=4
 
 	-- Setup score
 	score=10000
@@ -55,11 +79,13 @@ function startGame()
 	bombs=2
 
 	createStarfield(false)
+	createEnemy()
 end
 
 -- Updates the game screen.
 function updateGame()
 -- Controls.
+
 	shipSpdX=0
 	shipSpdY=0
 	shipSpr=3
@@ -68,31 +94,31 @@ function updateGame()
 	-- Left arrow.
 	if btn(0) then
 		shipSpr=1
-		shipSpdX=-spdX
+		shipSpdX=-ship.spdX
 	end
 
 	-- Right arrow.
 	if btn(1) then
 		shipSpr=5
-		shipSpdX=spdX
+		shipSpdX=ship.spdX
 	end
 
 	-- Up arrow.
 	if btn(2) then
 		shipSpr=2
-		shipSpdY=-spdY
+		shipSpdY=-ship.spdY
 	end
 
 	-- Down arrow.
 	if btn(3) then
 		shipSpr=2
-		shipSpdY=spdY
+		shipSpdY=ship.spdY
 	end
 
 	-- Fire laser if Z pressed.
 	if btnp(4) then
-		add(projectiles, newLaser(shipX,
-		shipY - shpBullOffset,
+		add(projectiles, newLaser(ship.x,
+		ship.y - ship.bullOffset,
 		laser.strtFram, laser.endFram,
 		laser.spd))
 
@@ -102,8 +128,8 @@ function updateGame()
 
 	-- Fire bullet if X pressed.
 	if btnp(5) then
-		add(projectiles, newBullet(shipX,
-			shipY - shpBullOffset,
+		add(projectiles, newBullet(ship.x,
+			ship.y - ship.bullOffset,
 			bullet.strtFram, bullet.endFram,
 			bullet.spd))
 
@@ -112,8 +138,13 @@ function updateGame()
 	end
 
 	-- Moving the ship.
-	shipX=shipX+shipSpdX
-	shipY=shipY+shipSpdY
+	ship.x=ship.x+shipSpdX
+	ship.y=ship.y+shipSpdY
+
+	-- Move the enemies.
+	for e in all(enemies) do
+		e:update()
+	end
 
 	-- Moving the projectiles.
 	for p in all(projectiles) do
@@ -121,34 +152,34 @@ function updateGame()
 	end
 
 	-- Animate ship flame.
-	flameSpr=flameSpr+1
+	ship.flameSpr+=1
 
 	-- Loop the flame animation.
-	if flameSpr>11 then
-		flameSpr=7
+	if ship.flameSpr>11 then
+		ship.flameSpr=7
 	end
 
 	-- Animate the muzzle flash.
 	if muzzle>=0 then
-		muzzle=muzzle-1
+		muzzle-=1
 	end
 
 	-- Checking if we hit the
 	-- Horizontal bounds of the screen.
-	if shipX>120 then
-		shipX=120
+	if ship.x>120 then
+		ship.x=120
 	end
 
-	if shipX<0 then
-		shipX=0
+	if ship.x<0 then
+		ship.x=0
 	end
 
-	if shipY>120 then
-		shipY=120
+	if ship.y>120 then
+		ship.y=120
 	end
 
-	if shipY<0 then
-		shipY=0
+	if ship.y<0 then
+		ship.y=0
 	end
 end
 
@@ -157,17 +188,25 @@ function drawGame()
 	cls(0)
 	updateStarfield()
 
-	?"PROJECTILES: "..#projectiles, 0, 123, 7
+	?#projectiles, 0, 123, 7
+	?#enemies, 7, 123, 3
 
-	spr(shipSpr,shipX,shipY)
-	spr(flameSpr,shipX,shipY+8)
+	?shipSpdX, 0, 63, 7
+	?shipSpdY, 0, 70, 7
+
+	spr(shipSpr,ship.x,ship.y)
+	spr(ship.flameSpr,ship.x,ship.y+8)
+
+	for e in all(enemies) do
+		e:draw()
+	end
 
 	for p in all(projectiles) do
 		p:draw()
 	end
 
-	circfill(shipX+3,shipY-2,muzzle,7)
-	circfill(shipX+4,shipY-2,muzzle,7)
+	circfill(ship.x+3,ship.y-2,muzzle,7)
+	circfill(ship.x+4,ship.y-2,muzzle,7)
 
     rectfill(0,0,127,uiHeight,1)
 

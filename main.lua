@@ -18,7 +18,7 @@ function _init()
 
 	-- Setup and initialize starfield.
 	stars={}
-	numOfStars=150
+	numOfStars=125
 
 	farStar={col=5, spd=0.25}
 

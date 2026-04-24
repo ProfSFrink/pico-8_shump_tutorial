@@ -1,4 +1,6 @@
--- Shared factory function for creating projectiles
+ -- Projectile component logic.
+ 
+ -- Shared factory function for creating projectiles
 -- @param x: The x position.
 -- @param y: The y position.
 -- @param strtFram: Starting frame.
