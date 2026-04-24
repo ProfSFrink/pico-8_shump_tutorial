@@ -9,10 +9,14 @@ function startGame()
 
 	-- Spawn timelines in frames (30fps).
 	spawnEvent={
-		{frame=30, type="green",spawnX=12},
-		{frame=90, type="blue", spawnX=40},
-		{frame=150, type="green", spawnX=72},
-		{frame=210, type="blue", spawnX=100},
+		{frame=30, kind=enemyKind.green,spawnX=12},
+		{frame=35, kind=enemyKind.blue, spawnX=40},
+		{frame=45, kind=enemyKind.blue, spawnX=70},
+		{frame=55, kind=enemyKind.blue, spawnX=70},
+		{frame=65, kind=enemyKind.blue, spawnX=70},
+		{frame=75, kind=enemyKind.blue, spawnX=70},
+		{frame=100, kind=enemyKind.green, spawnX=72},
+
 	}
 
 	-- Points towards next spawn event.
@@ -131,7 +135,7 @@ function updateGame()
 
 	if nextSpawnEvent and gameTimer>=nextSpawnEvent.frame then
 		if #enemies<maxEnemies then
-			spawnEnemy(enemyType[nextSpawnEvent.type], nextSpawnEvent.spawnX)
+			spawnEnemy(nextSpawnEvent.kind, nextSpawnEvent.spawnX)
 		end
 		spawnEventIndex+=1
 	end

@@ -1,5 +1,11 @@
 -- Enemy component data & logic.
 
+-- Shared enemy type IDs used game-wide.
+enemyKind={
+    green="green",
+    blue="blue"
+}
+
 function initEnemies()
     -- Setup for an enemy.
     -- x: x coordinate.
@@ -8,8 +14,8 @@ function initEnemies()
     -- endFram: Ending frame of the enemy's animation.
     -- animDelay: Frames before the enemy's animation advances.
     -- spd: Enemy speed.
-    enemyType={
-        green={
+    enemyDefs={
+        [enemyKind.green]={
             x=0,
             y=-8,
             strtFram=48,
@@ -17,7 +23,7 @@ function initEnemies()
             animDelay=3,
             spd=0.5
         },
-        blue={
+        [enemyKind.blue]={
             x=0,
             y=-8,
             strtFram=32,
@@ -29,27 +35,23 @@ function initEnemies()
 end
 
 -- Factory function for creating enemies.
--- @param x: The x position.
--- @param y: The y position.
--- @param spd: The speed of the enemy.
--- @param strtFram: Starting frame of the enemy's animation.
--- @param endFram: Ending frame of the enemy's animation.
--- @param animDelay: Frames before the enemy's animation advances.
+-- @param enemyCfg: Enemy configuration object.
 -- @return: A new enemy object.
-function newEnemy(x, y, spd, strtFram,
-    endFram,animDelay)
+function newEnemy(enemyCfg)
     return {
-        x=x,
-        y=y,
-        spd=spd,
-        curFram=strtFram,
-        strtFram=strtFram,
-        endFram=endFram,
+        x=enemyCfg.x,
+        y=enemyCfg.y,
+        spd=enemyCfg.spd,
+        curFram=enemyCfg.strtFram,
+        strtFram=enemyCfg.strtFram,
+        endFram=enemyCfg.endFram,
         frameDelay=0,
-        animDelay=animDelay,
+        animDelay=enemyCfg.animDelay,
+        animFunc=enemyCfg.animFunc or function() end,
 
         update=function(self)
             self.y=self.y+self.spd
+            self.animFunc(self)
 
             -- Animate the enemy.
             self.frameDelay+=1
@@ -78,25 +80,49 @@ end
 -- Spawn a green enemy at a specific x coordinate.
 -- @param x: The x coordinate to spawn the enemy at.
 function newGreenEnemy(x)
-    return newEnemy(x, enemyType.green.y, enemyType.green.spd,
-        enemyType.green.strtFram, enemyType.green.endFram,
-        enemyType.green.animDelay)
+    local moveFunction = function(self)
+        self.x = self.x + cos(self.y/16)*0.5
+    end
+
+    local def=enemyDefs[enemyKind.green]
+    return newEnemy({
+        x=x,
+        y=def.y,
+        spd=def.spd,
+        strtFram=def.strtFram,
+        endFram=def.endFram,
+        animDelay=def.animDelay,
+        animFunc=moveFunction
+    })
 end
 
 -- Spawn a blue enemy at a specific x coordinate.
 -- @param x: The x coordinate to spawn the enemy at.
 function newBlueEnemy(x)
-    return newEnemy(x, enemyType.blue.y, enemyType.blue.spd,
-        enemyType.blue.strtFram, enemyType.blue.endFram,
-        enemyType.blue.animDelay)
+    local moveFunction = function(self)
+        self.x = self.x + cos(self.y/16)*0.75
+    end
+
+    local def=enemyDefs[enemyKind.blue]
+    return newEnemy({
+        x=x,
+        y=def.y,
+        spd=def.spd,
+        strtFram=def.strtFram,
+        endFram=def.endFram,
+        animDelay=def.animDelay,
+        animFunc=moveFunction
+    })
 end
 
 -- Spawns one enemy using shared enemy config.
 -- @param x: X position.
-function spawnEnemy(enemyType,x)
-    if enemyType == enemyType.green then
+function spawnEnemy(kind,x)
+    if kind == enemyKind.green then
         add(enemies, newGreenEnemy(x))
-    elseif enemyType == enemyType.blue then
+    end
+
+    if kind == enemyKind.blue then
         add(enemies, newBlueEnemy(x))
     end
 end
