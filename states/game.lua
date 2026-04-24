@@ -30,20 +30,27 @@ function startGame()
 	-- endFram: Ending frame of the bullet's animation.
 	-- animDelay: Frames before the bullet's animation advances.
 	-- spd: Speed of the bullet.
-	bulletCfg={
-		strtFram=16,
-		endFram=17,
-		animDelay=5,
-		spd=3,
-		sfx=0
-	}
-
-	laserCfg={
-		strtFram=18,
-		endFram=21,
-		animDelay=6,
-		spd=4,
-		sfx=1
+	-- sfx: Sound effect to play when firing the bullet.
+	-- btn: Button to fire the bullet.
+	projectileTypes={
+		bullet={
+			strtFram=16,
+			endFram=17,
+			animDelay=5,
+			spd=3,
+			sfx=0,
+			btn=5,
+			factory=newBullet
+		},
+		laser={
+			strtFram=18,
+			endFram=21,
+			animDelay=6,
+			spd=4,
+			sfx=1,
+			btn=4,
+			factory=newLaser
+		}
 	}
 
 	-- Setup for ship muzzle flash.
@@ -131,13 +138,13 @@ function updateGame()
 	end
 
 	-- Fire laser if Z pressed.
-	if btnp(4) then
-		fireProjectile(newLaser, laserCfg)
+	if btnp(projectileTypes.laser.btn) then
+		fireProjectile(projectileTypes.laser.factory, projectileTypes.laser)
 	end
 
 	-- Fire bullet if X pressed.
-	if btnp(5) then
-		fireProjectile(newBullet, bulletCfg)
+	if btnp(projectileTypes.bullet.btn) then
+		fireProjectile(projectileTypes.bullet.factory, projectileTypes.bullet)
 	end
 
 	-- Moving the ship.
@@ -184,6 +191,9 @@ function updateGame()
 	if ship.y<0 then
 		ship.y=0
 	end
+
+	ship.x=mid(0,ship.x,120)
+	ship.y=mid(0+uiHeight,ship.y,120)
 end
 
 -- Draws the game screen.
