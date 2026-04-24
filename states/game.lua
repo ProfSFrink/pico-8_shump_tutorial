@@ -52,15 +52,11 @@ function startGame()
 	-- Setup for enemies.
 	enemies={}
 
-	initEnemies()
-
-	noOfEnemies=4
-
 	-- Setup score
 	score=10000
 
 	-- Setup lives and bombs.
-	lives=3
+	lives=1
 	bombs=2
 
 	createStarfield(false)
@@ -68,10 +64,9 @@ end
 
 
 -- Fires a projectile from the ship.
--- @param projectileFn: The function to create the projectile (newBullet or newLaser).
--- @param cfg: The configuration for the projectile (bulletCfg or laserCfg).
-function fireProjectile(projectileFn, cfg)
-    add(projectiles, projectileFn(
+-- @param cfg: The projectile configuration.
+function fireProjectile(cfg)
+    add(projectiles, cfg.factory(
         ship.x,
         ship.y - ship.bullOffset,
         cfg.strtFram, cfg.endFram,
@@ -118,17 +113,22 @@ function updateGame()
 
 	-- Fire laser if Z pressed.
 	if btnp(projectileTypes.laser.btn) then
-		fireProjectile(projectileTypes.laser.factory, projectileTypes.laser)
+		fireProjectile(projectileTypes.laser)
 	end
 
 	-- Fire bullet if X pressed.
 	if btnp(projectileTypes.bullet.btn) then
-		fireProjectile(projectileTypes.bullet.factory, projectileTypes.bullet)
+		fireProjectile(projectileTypes.bullet)
 	end
 
 	-- Moving the ship.
 	ship.x=ship.x+shipSpdX
 	ship.y=ship.y+shipSpdY
+
+	-- Checking if we hit the
+	-- bounds of the screen.
+	ship.x=mid(0,ship.x,120)
+	ship.y=mid(0+uiHeight,ship.y,120)
 
 	-- Trigger one-shot spawn events from frame schedule.
 	local nextSpawnEvent=spawnEvent[spawnEventIndex]
@@ -150,6 +150,20 @@ function updateGame()
 		p:update()
 	end
 
+	-- Collision detection between ship and enemies.
+	for e in all(enemies) do
+		if col(e,ship) then
+			lives-=1
+			sfx(2)
+			del(enemies, e)
+		end
+	end
+
+	if lives<=0 then
+		showGameOver()
+		return
+	end
+
 	-- Animate ship flame.
 	ship.flameSpr+=1
 
@@ -163,10 +177,6 @@ function updateGame()
 		muzzle-=1
 	end
 
-	-- Checking if we hit the
-	-- bounds of the screen.
-	ship.x=mid(0,ship.x,120)
-	ship.y=mid(0+uiHeight,ship.y,120)
 end
 
 -- Draws the game screen.

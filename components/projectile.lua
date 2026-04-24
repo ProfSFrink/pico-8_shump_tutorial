@@ -1,36 +1,49 @@
- -- Projectile component data & logic.
+-- Projectile component data & logic.
 
- function initProjectiles()
-  	-- Setup for bullets & lasers.
-	-- strtFram: Starting frame of the bullet's animation.
-	-- endFram: Ending frame of the bullet's animation.
-	-- animDelay: Frames before the bullet's animation advances.
-	-- spd: Speed of the bullet.
-	-- sfx: Sound effect to play when firing the bullet.
-	-- btn: Button to fire the bullet.
-	projectileTypes={
-		bullet={
-			strtFram=16,
-			endFram=17,
-			animDelay=5,
-			spd=3,
-			sfx=0,
-			btn=5,
-			factory=newBullet
-		},
-		laser={
-			strtFram=18,
-			endFram=21,
-			animDelay=6,
-			spd=4,
-			sfx=1,
-			btn=4,
-			factory=newLaser
-		}
-	}
- end
+function initProjectiles()
+    -- Setup for bullets & lasers.
+    -- strtFram: Starting frame.
+    -- endFram: Ending frame.
+    -- animDelay: Frames before animation advances.
+    -- spd: Speed.
+    -- sfx: Sound effect to play when firing.
+    -- btn: Button to fire.
+    -- animFunc: Custom animation function(self).
+    projectileTypes={
+        bullet={
+            strtFram=16,
+            endFram=17,
+            animDelay=5,
+            spd=3,
+            sfx=0,
+            btn=5,
+            animFunc=function(self)
+                if self.curFram == self.strtFram then
+                    self.curFram=self.endFram
+                else
+                    self.curFram=self.strtFram
+                end
+            end,
+            factory=newBullet
+        },
+        laser={
+            strtFram=18,
+            endFram=21,
+            animDelay=6,
+            spd=4,
+            sfx=1,
+            btn=4,
+            animFunc=function(self)
+                if self.curFram < self.endFram then
+                    self.curFram+=1
+                end
+            end,
+            factory=newLaser
+        }
+    }
+end
 
- -- Shared factory function for creating projectiles
+-- Shared factory function for creating projectiles.
 -- @param x: The x position.
 -- @param y: The y position.
 -- @param strtFram: Starting frame.
@@ -49,7 +62,7 @@ function newProjectile(x, y, strtFram, endFram, spd, animDelay, animFunc)
         endFram=endFram,
         framDelay=0,
         animDelay=animDelay,
-        animFunc=animFunc,
+        animFunc=animFunc or function() end,
 
         update=function(self)
             self.y=self.y-self.spd
@@ -73,38 +86,18 @@ function newProjectile(x, y, strtFram, endFram, spd, animDelay, animFunc)
     }
 end
 
--- Creates a new bullet object.
--- param x: The x position.
--- param y: The y position.
--- param strtFram: Starting frame.
--- param endFram: Ending frame.
--- param spd: Speed.
--- param animDelay: Frames before animation advances.
--- return: A new bullet object.
+-- Compatibility wrapper for bullet projectile creation.
 function newBullet(x, y, strtFram, endFram, spd, animDelay)
-    local pulseFn = function(self)
-        if self.curFram == self.strtFram then
-            self.curFram = self.endFram
-        else
-            self.curFram = self.strtFram
-        end
-    end
-    return newProjectile(x, y, strtFram, endFram, spd, animDelay, pulseFn)
+    local def=projectileTypes.bullet
+    return newProjectile(
+        x, y, strtFram, endFram, spd, animDelay, def.animFunc
+    )
 end
 
--- Creates a new laser object.
--- param x: The x position.
--- param y: The y position.
--- param strtFram: Starting frame.
--- param endFram: Ending frame.
--- param spd: Speed.
--- param animDelay: Frames before animation advances.
--- return: A new laser object.
+-- Compatibility wrapper for laser projectile creation.
 function newLaser(x, y, strtFram, endFram, spd, animDelay)
-    local incrementFn = function(self)
-        if self.curFram < self.endFram then
-            self.curFram += 1
-        end
-    end
-    return newProjectile(x, y, strtFram, endFram, spd, animDelay, incrementFn)
+    local def=projectileTypes.laser
+    return newProjectile(
+        x, y, strtFram, endFram, spd, animDelay, def.animFunc
+    )
 end

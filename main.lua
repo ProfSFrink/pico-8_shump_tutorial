@@ -11,6 +11,7 @@ function _init()
 	uiHeight=9
 
 	initProjectiles()
+	initEnemies()
 
 	-- Height of a bullet.
 	bullHeight=4

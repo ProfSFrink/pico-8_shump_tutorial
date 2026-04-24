@@ -93,12 +93,12 @@ function fadeOutStarfield()
         fadeTimer = 0
 
         for s in all(stars) do
-            s.colour = starFadeMap[s.colour] or 0
+            s.col = starFadeMap[s.col] or 0
         end
     end
 
     for s in all(stars) do
-        pset(s.x, s.y, s.colour)
+        pset(s.x, s.y, s.col)
     end
 
 end

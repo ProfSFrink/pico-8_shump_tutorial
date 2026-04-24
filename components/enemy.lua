@@ -14,6 +14,7 @@ function initEnemies()
     -- endFram: Ending frame of the enemy's animation.
     -- animDelay: Frames before the enemy's animation advances.
     -- spd: Enemy speed.
+    -- animFunc: Custom animation function(self).
     enemyDefs={
         [enemyKind.green]={
             x=0,
@@ -21,7 +22,10 @@ function initEnemies()
             strtFram=48,
             endFram=51,
             animDelay=3,
-            spd=0.5
+            spd=0.5,
+            animFunc=function(self)
+                self.x = self.x + cos(self.y/16)*0.5
+            end
         },
         [enemyKind.blue]={
             x=0,
@@ -29,7 +33,10 @@ function initEnemies()
             strtFram=32,
             endFram=35,
             animDelay=3,
-            spd=0.75
+            spd=0.75,
+            animFunc=function(self)
+                self.x = self.x + cos(self.y/16)*0.75
+            end
         },
     }
 end
@@ -47,7 +54,7 @@ function newEnemy(enemyCfg)
         endFram=enemyCfg.endFram,
         frameDelay=0,
         animDelay=enemyCfg.animDelay,
-        animFunc=enemyCfg.animFunc or function() end,
+        animFunc=enemyCfg.animFunc,
 
         update=function(self)
             self.y=self.y+self.spd
@@ -75,54 +82,26 @@ function newEnemy(enemyCfg)
     }
 end
 
--- Factory functions for specific enemy types.
-
--- Spawn a green enemy at a specific x coordinate.
--- @param x: The x coordinate to spawn the enemy at.
-function newGreenEnemy(x)
-    local moveFunction = function(self)
-        self.x = self.x + cos(self.y/16)*0.5
-    end
-
-    local def=enemyDefs[enemyKind.green]
-    return newEnemy({
-        x=x,
-        y=def.y,
-        spd=def.spd,
-        strtFram=def.strtFram,
-        endFram=def.endFram,
-        animDelay=def.animDelay,
-        animFunc=moveFunction
-    })
-end
-
--- Spawn a blue enemy at a specific x coordinate.
--- @param x: The x coordinate to spawn the enemy at.
-function newBlueEnemy(x)
-    local moveFunction = function(self)
-        self.x = self.x + cos(self.y/16)*0.75
-    end
-
-    local def=enemyDefs[enemyKind.blue]
-    return newEnemy({
-        x=x,
-        y=def.y,
-        spd=def.spd,
-        strtFram=def.strtFram,
-        endFram=def.endFram,
-        animDelay=def.animDelay,
-        animFunc=moveFunction
-    })
-end
-
 -- Spawns one enemy using shared enemy config.
 -- @param x: X position.
 function spawnEnemy(kind,x)
+    local def
+
     if kind == enemyKind.green then
-        add(enemies, newGreenEnemy(x))
+        def=enemyDefs[enemyKind.green]
     end
 
     if kind == enemyKind.blue then
-        add(enemies, newBlueEnemy(x))
+        def=enemyDefs[enemyKind.blue]
     end
+
+    add(enemies, newEnemy({
+        x=x,
+        y=def.y,
+        spd=def.spd,
+        strtFram=def.strtFram,
+        endFram=def.endFram,
+        animDelay=def.animDelay,
+        animFunc=def.animFunc
+    }))
 end

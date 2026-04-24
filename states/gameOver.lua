@@ -35,10 +35,10 @@ function drawGameOver()
 end
 
 function showGameOver()
+    state=stateNames.gameOver
     bg={x1=64,y1=64,x2=64,y2=64}
     bgCol=8
     startTimer=0
-    state=stateNames.gameOver
 end
 
 -- Restart the game and
