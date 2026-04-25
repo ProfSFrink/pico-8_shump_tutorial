@@ -6,6 +6,7 @@ function initProjectiles()
     -- endFram: Ending frame.
     -- animDelay: Frames before animation advances.
     -- spd: Speed.
+    -- rof: Rate of fire in frames.
     -- sfx: Sound effect to play when firing.
     -- btn: Button to fire.
     -- animFunc: Custom animation function(self).
@@ -15,6 +16,7 @@ function initProjectiles()
             endFram=17,
             animDelay=5,
             spd=3,
+            rof=4,
             sfx=0,
             btn=5,
             animFunc=function(self)
@@ -31,6 +33,7 @@ function initProjectiles()
             endFram=21,
             animDelay=6,
             spd=4,
+            rof=8,
             sfx=1,
             btn=4,
             animFunc=function(self)
@@ -62,7 +65,7 @@ function newProjectile(x, y, strtFram, endFram, spd, animDelay, animFunc)
         endFram=endFram,
         framDelay=0,
         animDelay=animDelay,
-        animFunc=animFunc or function() end,
+        animFunc=animFunc,
 
         update=function(self)
             self.y=self.y-self.spd
@@ -89,6 +92,12 @@ end
 -- Compatibility wrapper for bullet projectile creation.
 function newBullet(x, y, strtFram, endFram, spd, animDelay)
     local def=projectileTypes.bullet
+
+
+    -- delay between first and second shot is 1 frame longer than rof to account for the fact that the first shot can be fired immediately, while subsequent shots must wait for the rof timer to expire.
+    poke(0x5f5c, def.rof)
+    poke(0x5f5d, def.rof)
+
     return newProjectile(
         x, y, strtFram, endFram, spd, animDelay, def.animFunc
     )
@@ -97,6 +106,10 @@ end
 -- Compatibility wrapper for laser projectile creation.
 function newLaser(x, y, strtFram, endFram, spd, animDelay)
     local def=projectileTypes.laser
+
+    poke(0x5f5c, def.rof)
+    poke(0x5f5d, def.rof)
+
     return newProjectile(
         x, y, strtFram, endFram, spd, animDelay, def.animFunc
     )

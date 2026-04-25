@@ -177,6 +177,7 @@ function updateGame()
 		end
 	end
 
+	-- Check for game over.
 	if lives<=0 then
 		showGameOver()
 		return
@@ -184,8 +185,6 @@ function updateGame()
 
 	-- Animate ship flame.
 	ship.flameSpr+=1
-
-	-- Loop the flame animation.
 	if ship.flameSpr>11 then
 		ship.flameSpr=7
 	end
@@ -212,6 +211,8 @@ function drawGame()
 
 	?"t:"..gameTimer, 105, 123, 7
 
+	-- Game screen.
+
 	spr(ship.spr,ship.x,ship.y)
 	spr(ship.flameSpr,ship.x,ship.y+8)
 
@@ -225,6 +226,8 @@ function drawGame()
 
 	circfill(ship.x+3,ship.y-2,muzzle,7)
 	circfill(ship.x+4,ship.y-2,muzzle,7)
+
+	-- UI.
 
     rectfill(0,0,127,uiHeight,1)
 

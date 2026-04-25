@@ -1,6 +1,5 @@
 -- Enemy component data & logic.
 
--- Shared enemy type IDs used game-wide.
 eneTyp={
     green="green",
     blue="blue"
@@ -92,7 +91,7 @@ function spawnEnemy(enemy,x)
     end
 
     if enemy == eneTyp.blue then
-        def=eneDefs[eneTyp.blue]
+        def=eneDefs[eneTyp.blue] 
     end
 
     add(enemies, newEnemy({
