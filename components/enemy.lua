@@ -1,7 +1,7 @@
 -- Enemy component data & logic.
 
 -- Shared enemy type IDs used game-wide.
-enemyKind={
+eneTyp={
     green="green",
     blue="blue"
 }
@@ -15,8 +15,8 @@ function initEnemies()
     -- animDelay: Frames before the enemy's animation advances.
     -- spd: Enemy speed.
     -- animFunc: Custom animation function(self).
-    enemyDefs={
-        [enemyKind.green]={
+    eneDefs={
+        [eneTyp.green]={
             x=0,
             y=-8,
             strtFram=48,
@@ -27,7 +27,7 @@ function initEnemies()
                 self.x = self.x + cos(self.y/16)*0.5
             end
         },
-        [enemyKind.blue]={
+        [eneTyp.blue]={
             x=0,
             y=-8,
             strtFram=32,
@@ -84,15 +84,15 @@ end
 
 -- Spawns one enemy using shared enemy config.
 -- @param x: X position.
-function spawnEnemy(kind,x)
+function spawnEnemy(enemy,x)
     local def
 
-    if kind == enemyKind.green then
-        def=enemyDefs[enemyKind.green]
+    if enemy == eneTyp.green then
+        def=eneDefs[eneTyp.green]
     end
 
-    if kind == enemyKind.blue then
-        def=enemyDefs[enemyKind.blue]
+    if enemy == eneTyp.blue then
+        def=eneDefs[eneTyp.blue]
     end
 
     add(enemies, newEnemy({

@@ -9,13 +9,13 @@ function startGame()
 
 	-- Spawn timelines in frames (30fps).
 	spawnEvent={
-		{frame=30, kind=enemyKind.green,spawnX=12},
-		{frame=35, kind=enemyKind.blue, spawnX=40},
-		{frame=45, kind=enemyKind.blue, spawnX=70},
-		{frame=55, kind=enemyKind.blue, spawnX=70},
-		{frame=65, kind=enemyKind.blue, spawnX=70},
-		{frame=75, kind=enemyKind.blue, spawnX=70},
-		{frame=100, kind=enemyKind.green, spawnX=72},
+		{frame=30, kind=eneTyp.green,spawnX=12},
+		{frame=35, kind=eneTyp.blue, spawnX=40},
+		{frame=45, kind=eneTyp.blue, spawnX=70},
+		{frame=55, kind=eneTyp.blue, spawnX=70},
+		{frame=65, kind=eneTyp.blue, spawnX=70},
+		{frame=75, kind=eneTyp.blue, spawnX=70},
+		{frame=100, kind=eneTyp.green, spawnX=72},
 
 	}
 
@@ -53,7 +53,7 @@ function startGame()
 	enemies={}
 
 	-- Setup score
-	score=10000
+	score=0
 
 	-- Setup lives and bombs.
 	lives=1
@@ -150,12 +150,30 @@ function updateGame()
 		p:update()
 	end
 
-	-- Collision detection between ship and enemies.
+	--[[Collision detection between
+		ship and enemies.]]--
 	for e in all(enemies) do
 		if col(e,ship) then
 			lives-=1
 			sfx(2)
 			del(enemies, e)
+		end
+	end
+
+	--[[Collision detection between
+		projectiles and enemies.]]--
+	for e in all(enemies) do
+		--[[Prevents enemy being hit
+			before it appears on screen.]]--
+		if e.y > 0 then
+			for p in all(projectiles) do
+				if col(e,p) then
+					score+=100
+					sfx(0)
+					del(enemies, e)
+					del(projectiles, p)
+				end
+			end
 		end
 	end
 
@@ -184,11 +202,13 @@ function drawGame()
 	cls(0)
 	updateStarfield()
 
+	-- Debug info.
+
 	?#projectiles, 0, 123, 7
 	?#enemies, 7, 123, 3
 
-	?shipSpdX, 0, 63, 7
-	?shipSpdY, 0, 70, 7
+	?ship.x, 0, 63, 7
+	?ship.y, 0, 70, 7
 
 	?"t:"..gameTimer, 105, 123, 7
 
