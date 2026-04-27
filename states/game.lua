@@ -31,7 +31,8 @@ function startGame()
 	-- spdX: Speed in the x direction.
 	-- spdY: Speed in the y direction.
 	-- spr: Ship sprite.
-	-- flameSpr: Ship flame sprite.
+	-- flStrtFram: Ship flame start frame.
+	-- flEndFram: Ship flame end frame.
 	-- bullOffset: Offset for where bullets spawn from the ship.
 	ship={
 		x=64,
@@ -39,12 +40,18 @@ function startGame()
 		spdX=2,
 		spdY=2,
 		spr=3,
-		flameSpr=7,
-		bullOffset=3
+		flStrtFram=7,
+		flEndFram=11,
+		bullOffset=3,
+		invul=0
 	}
+
+	shipFlFram=ship.flStrtFram
 
 	-- Setup for projectiles.
 	projectiles = {}
+
+	proTimer=0
 
 	-- Setup for ship muzzle flash.
 	muzzle=0
@@ -56,7 +63,7 @@ function startGame()
 	score=0
 
 	-- Setup lives and bombs.
-	lives=1
+	lives=4
 	bombs=2
 
 	createStarfield(false)
@@ -83,6 +90,7 @@ function updateGame()
 	-- Advance timer by 1 frame.
 	gameTimer+=1
 
+	ship.spr=3
 	shipSpdX=0
 	shipSpdY=0
 
@@ -112,14 +120,22 @@ function updateGame()
 	end
 
 	-- Fire laser if Z pressed.
-	if btnp(projectileTypes.laser.btn) then
-		fireProjectile(projectileTypes.laser)
+	if btn(projectileTypes.laser.btn) then
+		if proTimer<=0 then
+			fireProjectile(projectileTypes.laser)
+			proTimer=projectileTypes.laser.rof
+		end
 	end
 
 	-- Fire bullet if X pressed.
-	if btnp(projectileTypes.bullet.btn) then
-		fireProjectile(projectileTypes.bullet)
+	if btn(projectileTypes.bullet.btn) then
+		if proTimer<=0 then
+			fireProjectile(projectileTypes.bullet)
+			proTimer=projectileTypes.bullet.rof
+		end
 	end
+
+	proTimer-=1
 
 	-- Moving the ship.
 	ship.x=ship.x+shipSpdX
@@ -151,16 +167,6 @@ function updateGame()
 	end
 
 	--[[Collision detection between
-		ship and enemies.]]--
-	for e in all(enemies) do
-		if col(e,ship) then
-			lives-=1
-			sfx(2)
-			del(enemies, e)
-		end
-	end
-
-	--[[Collision detection between
 		projectiles and enemies.]]--
 	for e in all(enemies) do
 		--[[Prevents enemy being hit
@@ -169,12 +175,29 @@ function updateGame()
 			for p in all(projectiles) do
 				if col(e,p) then
 					score+=100
-					sfx(0)
+					sfx(2)
 					del(enemies, e)
 					del(projectiles, p)
+					spawnEnemy(eneTyp.green, rnd(120))
 				end
 			end
 		end
+	end
+
+	--[[Collision detection between
+		ship and enemies.]]--
+	for e in all(enemies) do
+		if col(e,ship) and ship.invul<=0 then
+			lives-=1
+			ship.invul=60
+			sfx(2)
+			del(enemies, e)
+			spawnEnemy(eneTyp.green, rnd(120))
+		end
+	end
+
+	if ship.invul>0 then
+		ship.invul-=1
 	end
 
 	-- Check for game over.
@@ -184,9 +207,9 @@ function updateGame()
 	end
 
 	-- Animate ship flame.
-	ship.flameSpr+=1
-	if ship.flameSpr>11 then
-		ship.flameSpr=7
+	shipFlFram+=1
+	if shipFlFram>ship.flEndFram then
+		shipFlFram=ship.flStrtFram
 	end
 
 	-- Animate the muzzle flash.
@@ -202,27 +225,37 @@ function drawGame()
 	updateStarfield()
 
 	-- Debug info.
-
-	?#projectiles, 0, 123, 7
-	?#enemies, 7, 123, 3
-
-	?ship.x, 0, 63, 7
-	?ship.y, 0, 70, 7
-
-	?"t:"..gameTimer, 105, 123, 7
+	if debugMode then
+		showDebugUI()
+	end
 
 	-- Game screen.
 
-	spr(ship.spr,ship.x,ship.y)
-	spr(ship.flameSpr,ship.x,ship.y+8)
+	-- Ship.
+
+	if ship.invul<=0 then
+		spr(ship.spr,ship.x,ship.y)
+		spr(shipFlFram,ship.x,ship.y+8)
+	else
+		if sin(gameTimer/5)<0.1 then
+			spr(ship.spr,ship.x,ship.y)
+			spr(shipFlFram,ship.x,ship.y+8)
+		end
+	end
+
+	-- Enemies.
 
 	for e in all(enemies) do
 		e:draw()
 	end
 
+	-- Projectiles.
+
 	for p in all(projectiles) do
 		p:draw()
 	end
+
+	-- Muzzle flash.
 
 	circfill(ship.x+3,ship.y-2,muzzle,7)
 	circfill(ship.x+4,ship.y-2,muzzle,7)

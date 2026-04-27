@@ -1,3 +1,17 @@
+-- Utility functions for the game.
+
+-- Shows debug info on the screen.
+function showDebugUI()
+    ?#projectiles, 0, 123, 7
+	?#enemies, 7, 123, 3
+
+	?ship.x, 0, 63, 7
+	?ship.y, 0, 70, 7
+
+	?"i:"..ship.invul,110, 113, 7
+	?"t:"..gameTimer, 105, 123, 7
+end
+
 -- Returns the x value to centre an object on the screen.
 -- @param width: the width of the object in pixels.
 function calcCenX(width)

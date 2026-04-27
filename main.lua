@@ -2,6 +2,8 @@
 function _init()
 	cls()
 
+	debugMode=true
+
 	-- Game strings.
 
 	-- Text for start and restart.

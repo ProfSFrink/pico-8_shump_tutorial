@@ -93,11 +93,6 @@ end
 function newBullet(x, y, strtFram, endFram, spd, animDelay)
     local def=projectileTypes.bullet
 
-
-    -- delay between first and second shot is 1 frame longer than rof to account for the fact that the first shot can be fired immediately, while subsequent shots must wait for the rof timer to expire.
-    poke(0x5f5c, def.rof)
-    poke(0x5f5d, def.rof)
-
     return newProjectile(
         x, y, strtFram, endFram, spd, animDelay, def.animFunc
     )
@@ -106,9 +101,6 @@ end
 -- Compatibility wrapper for laser projectile creation.
 function newLaser(x, y, strtFram, endFram, spd, animDelay)
     local def=projectileTypes.laser
-
-    poke(0x5f5c, def.rof)
-    poke(0x5f5d, def.rof)
 
     return newProjectile(
         x, y, strtFram, endFram, spd, animDelay, def.animFunc
