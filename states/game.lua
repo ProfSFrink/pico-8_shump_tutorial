@@ -7,23 +7,23 @@ function startGame()
 	-- Setup game timer (frames).
 	gameTimer=0
 
-	-- Spawn timelines in frames (30fps).
-	spawnEvent={
-		{frame=30, kind=eneTyp.green,spawnX=12},
-		{frame=35, kind=eneTyp.blue, spawnX=40},
-		{frame=45, kind=eneTyp.blue, spawnX=70},
-		{frame=55, kind=eneTyp.blue, spawnX=70},
-		{frame=65, kind=eneTyp.blue, spawnX=70},
-		{frame=75, kind=eneTyp.blue, spawnX=70},
-		{frame=100, kind=eneTyp.green, spawnX=72},
-
-	}
-
 	-- Points towards next spawn event.
 	spawnEventIndex=1
 
 	-- Max number of enemies on screen.
 	maxEnemies=16
+
+	-- Spawn timelines in frames (30fps).
+	spawnEvent={
+		{frame=30, kind=eneDefs.green,spawnX=12},
+		{frame=35, kind=eneDefs.blue, spawnX=40},
+		{frame=45, kind=eneDefs.blue, spawnX=70},
+		{frame=55, kind=eneDefs.blue, spawnX=70},
+		{frame=65, kind=eneDefs.blue, spawnX=70},
+		{frame=75, kind=eneDefs.blue, spawnX=70},
+		{frame=100, kind=eneDefs.green, spawnX=72},
+
+	}
 
 	-- Set up the ship.
 	-- x: X coordinate.
@@ -51,6 +51,7 @@ function startGame()
 	-- Setup for projectiles.
 	projectiles = {}
 
+	-- Tracks frames between shots.
 	proTimer=0
 
 	-- Setup for ship muzzle flash.
@@ -59,12 +60,12 @@ function startGame()
 	-- Setup for enemies.
 	enemies={}
 
-	-- Setup score
-	score=0
-
-	-- Setup lives and bombs.
-	lives=4
-	bombs=2
+	-- Setup player.
+	player={
+		score=0,
+		lives=4,
+		bombs=2
+	}
 
 	createStarfield(false)
 end
@@ -174,11 +175,8 @@ function updateGame()
 		if e.y > 0 then
 			for p in all(projectiles) do
 				if col(e,p) then
-					score+=100
-					sfx(2)
-					del(enemies, e)
+					e:kill()
 					del(projectiles, p)
-					spawnEnemy(eneTyp.green, rnd(120))
 				end
 			end
 		end
@@ -188,11 +186,9 @@ function updateGame()
 		ship and enemies.]]--
 	for e in all(enemies) do
 		if col(e,ship) and ship.invul<=0 then
-			lives-=1
+			player.lives-=1
 			ship.invul=60
-			sfx(2)
-			del(enemies, e)
-			spawnEnemy(eneTyp.green, rnd(120))
+			e:kill()
 		end
 	end
 
@@ -201,7 +197,7 @@ function updateGame()
 	end
 
 	-- Check for game over.
-	if lives<=0 then
+	if player.lives<=0 then
 		showGameOver()
 		return
 	end
@@ -264,19 +260,19 @@ function drawGame()
 
     rectfill(0,0,127,uiHeight,1)
 
-    local scoreStr = "SCORE: "..score
+    local scoreStr = "SCORE: "..player.score
 
 	?scoreStr,calcCenX(#scoreStr),2,12
 
 	for i=1,4 do
-		if lives>=i then
+		if player.lives>=i then
 			spr(13,i*9-8,1)
 		else
 			spr(14,i*9-8,1)
 		end
 	end
 
-	for i=1,bombs do
+	for i=1,player.bombs do
 		spr(29,90+i*9-8,1)
 	end
 end

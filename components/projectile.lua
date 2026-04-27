@@ -12,6 +12,7 @@ function initProjectiles()
     -- animFunc: Custom animation function(self).
     projectileTypes={
         bullet={
+            type="bullet",
             strtFram=16,
             endFram=17,
             animDelay=5,
@@ -29,6 +30,7 @@ function initProjectiles()
             factory=newBullet
         },
         laser={
+            type="laser",
             strtFram=18,
             endFram=21,
             animDelay=6,
