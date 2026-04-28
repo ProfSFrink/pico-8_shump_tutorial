@@ -12,6 +12,7 @@ __lua__
 #include ./components/projectile.lua
 #include ./components/starfield.lua
 #include ./components/enemy.lua
+#include ./components/explosion.lua
 
 __gfx__
 00000000000220000002200000022000000220000002200000000000000000000000000000000000000000000000000000000000088008800880088000000000

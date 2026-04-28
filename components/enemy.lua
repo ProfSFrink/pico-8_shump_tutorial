@@ -3,7 +3,7 @@
 -- TODO: Add hp property.
 -- TODO: Add projectiles for enemies.
 
-
+-- Initial enemy definitions.
 function initEnemies()
     -- Setup for an enemy.
     -- type: Enemy type.
@@ -110,7 +110,6 @@ function newEnemy(enemyCfg)
         kill=function(self)
             self.dead=true
             player.score+=self.points
-            sfx(2)
         end
     }
 end

@@ -10,9 +10,6 @@ function startGame()
 	-- Points towards next spawn event.
 	spawnEventIndex=1
 
-	-- Max number of enemies on screen.
-	maxEnemies=16
-
 	-- Spawn timelines in frames (30fps).
 	spawnEvent={
 		{frame=30, kind=eneDefs.green,spawnX=12},
@@ -22,7 +19,6 @@ function startGame()
 		{frame=65, kind=eneDefs.blue, spawnX=70},
 		{frame=75, kind=eneDefs.blue, spawnX=70},
 		{frame=100, kind=eneDefs.green, spawnX=72},
-
 	}
 
 	-- Set up the ship.
@@ -30,35 +26,30 @@ function startGame()
 	-- y: Y coordinate.
 	-- spdX: Speed in the x direction.
 	-- spdY: Speed in the y direction.
-	-- spr: Ship sprite.
+	-- spr: Current ship sprite.
 	-- flStrtFram: Ship flame start frame.
 	-- flEndFram: Ship flame end frame.
 	-- bullOffset: Offset for where bullets spawn from the ship.
 	ship={
+		-- Starting position.
 		x=64,
 		y=108,
+		-- Speed of the ship.
 		spdX=2,
 		spdY=2,
+		-- Current ship sprite.
 		spr=3,
+		-- Ship flame start & end frame.
 		flStrtFram=7,
 		flEndFram=11,
+		flCurrFram=7,
+		-- Offset for bullets.
 		bullOffset=3,
+		-- Size of muzzles flash.
+		muzzle=0,
+		-- Invulnerability timer in frames.
 		invul=0
 	}
-
-	shipFlFram=ship.flStrtFram
-
-	-- Setup for projectiles.
-	projectiles = {}
-
-	-- Tracks frames between shots.
-	proTimer=0
-
-	-- Setup for ship muzzle flash.
-	muzzle=0
-
-	-- Setup for enemies.
-	enemies={}
 
 	-- Setup player.
 	player={
@@ -66,6 +57,20 @@ function startGame()
 		lives=4,
 		bombs=2
 	}
+
+	-- Setup for projectiles.
+	projectiles = {}
+
+	-- Tracks frames between shots.
+	proTimer=0
+
+	-- Setup for enemies.
+	enemies={}
+
+	-- Max number of enemies on screen.
+	maxEnemies=16
+
+	initExps()
 
 	createStarfield(false)
 end
@@ -81,7 +86,7 @@ function fireProjectile(cfg)
         cfg.spd, cfg.animDelay
     ))
     sfx(cfg.sfx)
-    muzzle=4
+    ship.muzzle=4
 end
 
 -- Updates the game screen.
@@ -167,6 +172,11 @@ function updateGame()
 		p:update()
 	end
 
+	-- Moving the explosions.
+	for x in all(exps) do
+		x:update()
+	end
+
 	--[[Collision detection between
 		projectiles and enemies.]]--
 	for e in all(enemies) do
@@ -175,8 +185,9 @@ function updateGame()
 		if e.y > 0 then
 			for p in all(projectiles) do
 				if col(e,p) then
-					e:kill()
 					del(projectiles, p)
+					spawnExp(e.x, e.y)
+					e:kill()
 				end
 			end
 		end
@@ -203,14 +214,14 @@ function updateGame()
 	end
 
 	-- Animate ship flame.
-	shipFlFram+=1
-	if shipFlFram>ship.flEndFram then
-		shipFlFram=ship.flStrtFram
+	ship.flCurrFram+=1
+	if ship.flCurrFram>ship.flEndFram then
+		ship.flCurrFram=ship.flStrtFram
 	end
 
 	-- Animate the muzzle flash.
-	if muzzle>=0 then
-		muzzle-=1
+	if ship.muzzle>=0 then
+		ship.muzzle-=1
 	end
 
 end
@@ -231,30 +242,32 @@ function drawGame()
 
 	if ship.invul<=0 then
 		spr(ship.spr,ship.x,ship.y)
-		spr(shipFlFram,ship.x,ship.y+8)
+		spr(ship.flCurrFram,ship.x,ship.y+8)
 	else
 		if sin(gameTimer/5)<0.1 then
 			spr(ship.spr,ship.x,ship.y)
-			spr(shipFlFram,ship.x,ship.y+8)
+			spr(ship.flCurrFram,ship.x,ship.y+8)
 		end
 	end
 
 	-- Enemies.
-
 	for e in all(enemies) do
 		e:draw()
 	end
 
 	-- Projectiles.
-
 	for p in all(projectiles) do
 		p:draw()
 	end
 
-	-- Muzzle flash.
+	-- Explosions.
+	for x in all(exps) do
+		x:draw()
+	end
 
-	circfill(ship.x+3,ship.y-2,muzzle,7)
-	circfill(ship.x+4,ship.y-2,muzzle,7)
+	-- Muzzle flash.
+	circfill(ship.x+3,ship.y-2,ship.muzzle,7)
+	circfill(ship.x+4,ship.y-2,ship.muzzle,7)
 
 	-- UI.
 
@@ -262,7 +275,7 @@ function drawGame()
 
     local scoreStr = "SCORE: "..player.score
 
-	?scoreStr,calcCenX(#scoreStr),2,12
+	print(scoreStr,calcCenX(#scoreStr),2,12)
 
 	for i=1,4 do
 		if player.lives>=i then
