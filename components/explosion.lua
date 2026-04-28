@@ -14,8 +14,8 @@ end
 -- @return: A new explosion object.
 function newExp(x, y)
     return {
-        x=x,
-        y=y,
+        x=x+4,
+        y=y+4,
         spdX=1-rnd(2),
         spdY=1-rnd(2),
         scale=2+rnd(2),
@@ -46,5 +46,5 @@ function spawnExp(x, y)
     for i=1,numOfExps do
         add(exps, newExp(x, y))
     end
-    -- TODO: ADD SOUND EFFECT.
+    sfx(rnd(3)+2)
 end
