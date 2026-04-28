@@ -7,38 +7,40 @@
 -- for the title/start screen, otherwise
 -- it's for the game/game over screen.
 -- @return: A new star object.
-function newStar(col,spd,isStart)
-	return {
-		x=flr(rnd(118)+10),
-		y=flr(rnd(118)+10),
-		col=col,
-		spd=spd,
-		isAsteroid=false,
+function newStar(col, spd, isStart)
+    return {
+        x = flr(rnd(118) + 10),
+        y = flr(rnd(118) + 10),
+        col = col,
+        spd = spd,
+        isAsteroid = false,
 
         -- Update the star's position.
-		update=function(self)
-			self.y=self.y+self.spd
+        update = function(self)
+            self.y = self.y + self.spd
 
-            --[[reset the star to the top of the screen
-            if it goes off the bottom.]]--
-			if self.y > 128 then
+
+                --
+                --[[reset the star to the top of the screen
+            if it goes off the bottom.]]
+            if self.y > 128 then
                 local uiOffset = isStart and 0 or uiHeight
 
-				self.isAsteroid = self.col == midStar.col
-                and rnd(1) < 0.005
+                self.isAsteroid = self.col == midStar.col
+                        and rnd(1) < 0.005
 
-				self.y = uiOffset
-				self.x = flr(rnd(128))
-			end
+                self.y = uiOffset
+                self.x = flr(rnd(128))
+            end
 
             -- Twinkle the star if it's a near star.
             if self.col == nearStar.col then
-                self.col=nearStar.twinkleCol
+                self.col = nearStar.twinkleCol
             elseif self.col == nearStar.twinkleCol then
-                self.col=nearStar.col
+                self.col = nearStar.col
             end
-		end
-	}
+        end
+    }
 end
 
 -- Creates starfield background.
@@ -46,19 +48,19 @@ end
 -- for the title/start screen (true)
 -- or the game/game over screen (false).
 function createStarfield(isStart)
-    for i=1,numOfStars do
-        local col=flr(rnd(3))+5
+    for i = 1, numOfStars do
+        local col = flr(rnd(3)) + 5
         local spd
 
         -- Set far stars.
         if col == farStar.col then
-            spd=farStar.spd
-        -- Set mid stars.
+            spd = farStar.spd
+            -- Set mid stars.
         elseif col == midStar.col then
-            spd=midStar.spd
-        -- Set near stars.
+            spd = midStar.spd
+            -- Set near stars.
         else
-            spd=nearStar.spd
+            spd = nearStar.spd
         end
 
         stars[i] = newStar(col, spd, isStart)
@@ -77,9 +79,8 @@ function updateStarfield()
     end
 end
 
-
 -- Fade map for fading out stars on game over.
-local starFadeMap = {[10]=7,[7]=6,[6]=5,[5]=0,[0]=0}
+local starFadeMap = { [10] = 7, [7] = 6, [6] = 5, [5] = 0, [0] = 0 }
 -- Timer for fading out stars.
 local fadeTimer = 0
 -- Fade speed in frames for fading out stars.
@@ -100,5 +101,4 @@ function fadeOutStarfield()
     for s in all(stars) do
         pset(s.x, s.y, s.col)
     end
-
 end

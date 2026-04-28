@@ -9,15 +9,14 @@ end
 
 -- Draws the title screen.
 function drawTitle()
-    cls(0)
+	cls(0)
 
 	updateStarfield()
 
-	local title="SHUMP TUTORIAL"
-	local start=pressAKey.."START"
+	local title = "SHUMP TUTORIAL"
+	local start = pressAKey .. "START"
 
-	?title,calcCenX(#title)+1, 41, 1
-	?title,calcCenX(#title), 40, 10
-
-	?start,calcCenX(#start), 80, blink()
+	?title, calcCenX(#title) + 1, 41, 1
+	?title, calcCenX(#title), 40, 10
+	?start, calcCenX(#start), 80, blink()
 end

@@ -2,39 +2,41 @@
 function _init()
 	cls()
 
-	debugMode=true
+	debugMode = true
 
 	-- Game strings.
 
 	-- Text for start and restart.
-	pressAKey="PRESS Z OR X TO "
+	pressAKey = "PRESS Z OR X TO "
 
 	-- Offset for the height of the UI.
-	uiHeight=9
+	uiHeight = 9
 
 	initProjectiles()
 	initEnemies()
 
 	-- Height of a bullet.
-	bullHeight=4
+	bullHeight = 4
 
 	-- Starting colour for blinking text.
-	blinkT=0
+	blinkT = 0
 
 	-- Setup and initialize starfield.
-	stars={}
-	numOfStars=80
+	stars = {}
+	numOfStars = 80
 
-	farStar={col=5, spd=0.25}
+	farStar = { col = 5, spd = 0.25 }
 
-	midStar={col=6, spd=0.75, isAsteroid=false}
+	midStar = { col = 6, spd = 0.75, isAsteroid = false }
 
-	nearStar={col=7, twinkleCol=10, spd=2}
+	nearStar = { col = 7, twinkleCol = 10, spd = 2 }
 
-	stateNames={title="title", start="start", 
-	game="game", gameOver="gameOver"}
+	stateNames = {
+		title = "title", start = "start",
+		game = "game", gameOver = "gameOver"
+	}
 
-	state=stateNames.title
+	state = stateNames.title
 
 	createStarfield(true)
 end
@@ -42,7 +44,7 @@ end
 -- Update is for gameplay.
 -- Hard 30fps.
 function _update()
-	blinkT+=1
+	blinkT += 1
 
 	if state == stateNames.game then
 		updateGame()
@@ -67,5 +69,4 @@ function _draw()
 	elseif state == stateNames.gameOver then
 		drawGameOver()
 	end
-
 end

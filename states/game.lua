@@ -206,8 +206,7 @@ function updateGame()
 		if col(e, ship) and ship.invul <= 0 then
 			player.lives -= 1
 			ship.invul = 60
-			e:kill()
-			sfx(2)
+			e:dam()
 		end
 	end
 

@@ -127,6 +127,8 @@ function newEnemy(enemyCfg)
         end,
 
         dam = function(self, dam)
+            -- If no damage value is provided, use the enemy's remaining hp to ensure kill.
+            dam = dam or self.hp
             self.hit = true
             self.hp -= dam
             sfx(5)
