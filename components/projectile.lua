@@ -9,41 +9,43 @@ function initProjectiles()
     -- rof: Rate of fire in frames.
     -- sfx: Sound effect to play when firing.
     -- btn: Button to fire.
-    -- animFunc: Custom animation function(self).
-    projectileTypes={
-        bullet={
-            type="bullet",
-            strtFram=16,
-            endFram=17,
-            animDelay=5,
-            spd=3,
-            rof=4,
-            sfx=0,
-            btn=5,
-            animFunc=function(self)
+    -- upFunc: Custom update function.
+    pTypes = {
+        bullet = {
+            type = "bullet",
+            strtFram = 16,
+            endFram = 17,
+            animDelay = 5,
+            spd = 3,
+            rof = 4,
+            dam = 1,
+            sfx = 0,
+            btn = 5,
+            upFunc = function(self)
                 if self.curFram == self.strtFram then
-                    self.curFram=self.endFram
+                    self.curFram = self.endFram
                 else
-                    self.curFram=self.strtFram
+                    self.curFram = self.strtFram
                 end
             end,
-            factory=newBullet
+            factory = newBullet
         },
-        laser={
-            type="laser",
-            strtFram=18,
-            endFram=21,
-            animDelay=6,
-            spd=4,
-            rof=8,
-            sfx=1,
-            btn=4,
-            animFunc=function(self)
+        laser = {
+            type = "laser",
+            strtFram = 18,
+            endFram = 21,
+            animDelay = 6,
+            spd = 4,
+            rof = 8,
+            dam = 2,
+            sfx = 1,
+            btn = 4,
+            upFunc = function(self)
                 if self.curFram < self.endFram then
-                    self.curFram+=1
+                    self.curFram += 1
                 end
             end,
-            factory=newLaser
+            factory = newLaser
         }
     }
 end
@@ -55,56 +57,64 @@ end
 -- @param endFram: Ending frame.
 -- @param spd: Speed.
 -- @param animDelay: Frames before animation advances.
--- @param animFunc: Custom animation function(self).
+-- @param upFunc: Custom animation function(self).
 -- @return: A new projectile object.
-function newProjectile(x, y, strtFram, endFram, spd, animDelay, animFunc)
+function newProjectile(type, x, y, strtFram, endFram, spd, dam, animDelay, upFunc)
     return {
-        x=x,
-        y=y,
-        spd=spd,
-        curFram=strtFram,
-        strtFram=strtFram,
-        endFram=endFram,
-        framDelay=0,
-        animDelay=animDelay,
-        animFunc=animFunc,
+        type = type,
+        x = x,
+        y = y,
+        spd = spd,
+        dam = dam,
 
-        update=function(self)
-            self.y=self.y-self.spd
+        -- Current sprite being animated.
+        curFram = strtFram,
+        strtFram = strtFram,
+        endFram = endFram,
+        animTimer = 0,
 
-            -- Animate the projectile.
-            self.framDelay+=1
-            if self.framDelay >= self.animDelay then
-                self.framDelay=0
-                self.animFunc(self)
+        -- Frames since last animation change.
+        animDelay = animDelay,
+
+        upFunc = upFunc,
+
+        -- Update the projectile.
+        update = function(self)
+            self.y = self.y - self.spd
+
+            self.animTimer += 1
+            if self.animTimer >= self.animDelay then
+                self.animTimer = 0
+                self.upFunc(self)
             end
 
             -- Remove if off-screen.
-            if self.y < uiHeight-bullHeight then
+            if self.y < uiHeight - bullHeight then
                 del(projectiles, self)
             end
         end,
 
-        draw=function(self)
+        -- Draw the projectile.
+        draw = function(self)
             spr(self.curFram, self.x, self.y)
         end
     }
 end
 
 -- Compatibility wrapper for bullet projectile creation.
-function newBullet(x, y, strtFram, endFram, spd, animDelay)
-    local def=projectileTypes.bullet
+function newBullet(x, y, strtFram, endFram, spd, dam, animDelay)
+    local def = pTypes.bullet
 
     return newProjectile(
-        x, y, strtFram, endFram, spd, animDelay, def.animFunc
+        def.type, x, y, strtFram, endFram, spd, dam, animDelay, def.upFunc
     )
 end
 
 -- Compatibility wrapper for laser projectile creation.
-function newLaser(x, y, strtFram, endFram, spd, animDelay)
-    local def=projectileTypes.laser
+function newLaser(x, y, strtFram, endFram, spd, dam, animDelay)
+    local def = pTypes.laser
 
     return newProjectile(
-        x, y, strtFram, endFram, spd, animDelay, def.animFunc
+        def.type, x, y, strtFram, endFram, spd, dam, animDelay, def.upFunc
     )
 end
