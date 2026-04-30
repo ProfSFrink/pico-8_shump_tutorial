@@ -12,6 +12,8 @@ local dTimerLim = 10
 function initEnemies()
     -- Setup for an enemy.
     -- name: Enemy name.
+    -- cols: table of color pairs for the enemy, first is
+    --       entry matches sprite colours.
     -- strtFram: Starting sprite of the enemy's animation.
     -- endFram: Ending sprite of the enemy's animation.
     -- flFram: Flash sprite when hit or dead.
@@ -23,6 +25,13 @@ function initEnemies()
     eTypes = {
         alien = {
             name = "alien",
+            cols = {
+                { c1 = 11, c2 = 3 }, -- Green.
+                { c1 = 9, c2 = 4 }, -- Brown.
+                { c1 = 10, c2 = 9 }, -- Orange.
+                { c1 = 8, c2 = 2 }, -- Red.
+                { c1 = 6, c2 = 13 } -- Grey.
+            },
             strtFram = 48,
             endFram = 51,
             flFram = 52,
@@ -36,6 +45,13 @@ function initEnemies()
         },
         ufo = {
             name = "ufo",
+            cols = {
+                { c1 = 12, c2 = 1 }, -- Blue.
+                { c1 = 9, c2 = 4 }, -- Brown.
+                { c1 = 11, c2 = 3 }, -- Green.
+                { c1 = 8, c2 = 2 }, -- Red.
+                { c1 = 14, c2 = 2 } -- Pink.
+            },
             strtFram = 32,
             endFram = 35,
             flFram = 36,
@@ -61,6 +77,9 @@ function newEnemy(enemyCfg)
         spd = enemyCfg.spd,
         hp = enemyCfg.hp,
         points = enemyCfg.points,
+
+        cols = enemyCfg.cols,
+        ranCol = flr(rnd(#enemyCfg.cols)) + 1,
 
         -- Current sprite being animated.
         curFram = enemyCfg.strtFram,
@@ -88,14 +107,14 @@ function newEnemy(enemyCfg)
                 if self.dTimer <= 0 then
                     del(enemies, self)
                 end
-            -- Check if in hit state.
+                -- Check if in hit state.
             elseif self.hit then
                 self.hTimer -= 1
                 if self.hTimer <= 0 then
                     self.hit = false
                     self.hTimer = hTimerLim
                 end
-            -- Otherwise, run normal animation function.
+                -- Otherwise, run normal animation function.
             else
                 self.upFunc(self)
             end
@@ -120,11 +139,18 @@ function newEnemy(enemyCfg)
         end,
 
         draw = function(self)
+            if self.ranCol >= 1 then
+                pal(self.cols[1].c1, self.cols[self.ranCol].c1)
+                pal(self.cols[1].c2, self.cols[self.ranCol].c2)
+            end
+
             if self.dead then
                 spr(self.curFram, self.x, self.y, 1, 1, false, self.dTimer % 2 == 0)
             else
                 spr(self.curFram, self.x, self.y)
             end
+
+            if self.ranCol >= 1 then pal() end
         end,
 
         -- Handle being hurt.
@@ -141,7 +167,7 @@ function newEnemy(enemyCfg)
                 -- Spawn explosion.
                 spawnExp(self.x, self.y)
             end
-        end,
+        end
     }
 end
 
@@ -165,6 +191,7 @@ function spawnEnemy(enemy, x)
             spd = def.spd,
             hp = def.hp,
             points = def.points,
+            cols = def.cols,
             strtFram = def.strtFram,
             endFram = def.endFram,
             flFram = def.flFram,
