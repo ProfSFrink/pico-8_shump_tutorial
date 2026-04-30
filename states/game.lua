@@ -12,13 +12,13 @@ function startGame()
 
 	-- Spawn timelines in frames (30fps).
 	spawnEvent = {
-		{ frame = 30, kind = eTypes.green, spawnX = 12 },
-		{ frame = 35, kind = eTypes.blue, spawnX = 40 },
-		{ frame = 45, kind = eTypes.blue, spawnX = 70 },
-		{ frame = 55, kind = eTypes.blue, spawnX = 70 },
-		{ frame = 65, kind = eTypes.blue, spawnX = 70 },
-		{ frame = 75, kind = eTypes.blue, spawnX = 70 },
-		{ frame = 100, kind = eTypes.green, spawnX = 72 }
+		{ frame = 30, kind = eTypes.alien, spawnX = 12 },
+		{ frame = 35, kind = eTypes.ufo, spawnX = 40 },
+		{ frame = 45, kind = eTypes.ufo, spawnX = 70 },
+		{ frame = 55, kind = eTypes.ufo, spawnX = 70 },
+		{ frame = 65, kind = eTypes.ufo, spawnX = 70 },
+		{ frame = 75, kind = eTypes.ufo, spawnX = 70 },
+		{ frame = 100, kind = eTypes.alien, spawnX = 72 }
 	}
 
 	-- Set up the ship.
@@ -92,14 +92,17 @@ end
 
 -- Updates the game screen.
 function updateGame()
-	-- Controls.
-
-	-- Advance timer by 1 frame.
+	-- advance game timer.
 	gameTimer += 1
+	-- advance projectile timer.
+	proTimer -= 1
 
+	-- Reset ship sprite and speed.
 	ship.spr = 3
 	shipSpdX = 0
 	shipSpdY = 0
+
+	-- Controls.
 
 	-- Checking for input.
 	-- Left arrow.
@@ -144,13 +147,11 @@ function updateGame()
 		end
 	end
 
-	proTimer -= 1
-
-	-- Moving the ship.
+	-- Move the ship.
 	ship.x = ship.x + shipSpdX
 	ship.y = ship.y + shipSpdY
 
-	-- Checking if we hit the
+	-- Check if we hit the
 	-- bounds of the screen.
 	ship.x = mid(0, ship.x, 120)
 	ship.y = mid(0 + uiHeight, ship.y, 120)
@@ -165,59 +166,45 @@ function updateGame()
 		spawnEventIndex += 1
 	end
 
-	-- Move the enemies.
-	for e in all(enemies) do
-		e:update()
-	end
-
-	-- Moving the projectiles.
+	-- Move the projectiles.
 	for p in all(projectiles) do
 		p:update()
 	end
 
-	-- Moving the explosions.
+	-- Move the explosions.
 	for x in all(exps) do
 		x:update()
 	end
 
-
-	--[[Collision detection between
-	projectiles and enemies.]]
+	-- Move the enemies and
+	-- check for collisions.
 	for e in all(enemies) do
+		e:update()
 
-
-		--[[Prevents enemy being hit
-		before it appears on screen.]]
+		-- Prevents enemy being hit
+		-- before it appears on screen.
 		if e.y > 0 then
+			-- Handle projectile collisions.
 			for p in all(projectiles) do
-				if col(e, p) then
+				if col(e, p) and e.dead==false then
 					del(projectiles, p)
 
-					e:dam(p.dam)
+					e:hurt(p.dam)
 				end
 			end
 		end
-	end
 
-
-	--[[Collision detection between
-	ship and enemies.]]
-	for e in all(enemies) do
+		-- Handle collision with ship.
 		if col(e, ship) and ship.invul <= 0 then
 			player.lives -= 1
-			ship.invul = 60
-			e:dam()
+			ship.invul = 60 -- 2 secs of invulnerability.
+			e:hurt()
 		end
+
 	end
 
 	if ship.invul > 0 then
 		ship.invul -= 1
-	end
-
-	-- Check for game over.
-	if player.lives <= 0 then
-		showGameOver()
-		return
 	end
 
 	-- Animate ship flame.
@@ -229,6 +216,12 @@ function updateGame()
 	-- Animate the muzzle flash.
 	if ship.muzzle >= 0 then
 		ship.muzzle -= 1
+	end
+
+	-- Check for game over.
+	if player.lives <= 0 then
+		showGameOver()
+		return
 	end
 end
 
@@ -251,8 +244,10 @@ function drawGame()
 		spr(ship.flCurrFram, ship.x, ship.y + 8)
 	else
 		if sin(gameTimer / 5) < 0.1 then
+			pal(2,6)
 			spr(ship.spr, ship.x, ship.y)
 			spr(ship.flCurrFram, ship.x, ship.y + 8)
+			pal()
 		end
 	end
 

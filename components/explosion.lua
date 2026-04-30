@@ -1,5 +1,7 @@
 -- Explosion component data & logic.
 
+-- NOTE: Explosions currently only work with 8x8 sprites. Adjustments would be needed to support larger sprites.
+
 -- Initial explosion definitions.
 function initExps()
     exps = {}

@@ -1,16 +1,17 @@
 -- Enemy component data & logic.
 
-local hTimerLim = 3
 -- Hit state frame timer.
-local dTimerLim = 10
+local hTimerLim = 3
 -- Death state frame timer.
+local dTimerLim = 10
 
 -- TODO: Add projectiles for enemies.
+-- TODO: Get rid of boolean hit and dead values and just use timers.
 
--- Initial enemy definitions.
+-- Initial enemy definitions on game load.
 function initEnemies()
     -- Setup for an enemy.
-    -- type: Enemy type.
+    -- name: Enemy name.
     -- strtFram: Starting sprite of the enemy's animation.
     -- endFram: Ending sprite of the enemy's animation.
     -- flFram: Flash sprite when hit or dead.
@@ -20,8 +21,8 @@ function initEnemies()
     -- points: Enemy score value.
     -- upFunc: Custom update function.
     eTypes = {
-        green = {
-            type = "green",
+        alien = {
+            name = "alien",
             strtFram = 48,
             endFram = 51,
             flFram = 52,
@@ -33,8 +34,8 @@ function initEnemies()
                 self.x = self.x + cos(self.y / 16) * 0.5
             end
         },
-        blue = {
-            type = "blue",
+        ufo = {
+            name = "ufo",
             strtFram = 32,
             endFram = 35,
             flFram = 36,
@@ -54,7 +55,7 @@ end
 -- @return: A new enemy object.
 function newEnemy(enemyCfg)
     return {
-        type = enemyCfg.type,
+        name = enemyCfg.name,
         x = enemyCfg.x,
         y = -8,
         spd = enemyCfg.spd,
@@ -73,9 +74,9 @@ function newEnemy(enemyCfg)
 
         animDelay = enemyCfg.animDelay,
         upFunc = enemyCfg.upFunc,
-        hit = false,
+        hit = false, -- if enemy in hit state.
         hTimer = hTimerLim,
-        dead = false,
+        dead = false, -- if enemy in dead state.
         dTimer = dTimerLim,
 
         update = function(self)
@@ -126,7 +127,9 @@ function newEnemy(enemyCfg)
             end
         end,
 
-        dam = function(self, dam)
+        -- Handle being hurt.
+        -- @param dam: Damage to apply to the enemy.
+        hurt = function(self, dam)
             -- If no damage value is provided, use the enemy's remaining hp to ensure kill.
             dam = dam or self.hp
             self.hit = true
@@ -135,6 +138,7 @@ function newEnemy(enemyCfg)
             if self.hp <= 0 then
                 self.dead = true
                 player.score += self.points
+                -- Spawn explosion.
                 spawnExp(self.x, self.y)
             end
         end,
@@ -146,17 +150,17 @@ end
 function spawnEnemy(enemy, x)
     local def
 
-    if enemy.type == eTypes.green.type then
-        def = eTypes.green
+    if enemy.name == eTypes.alien.name then
+        def = eTypes.alien
     end
 
-    if enemy.type == eTypes.blue.type then
-        def = eTypes.blue
+    if enemy.name == eTypes.ufo.name then
+        def = eTypes.ufo
     end
 
     add(
         enemies, newEnemy({
-            type = def.type,
+            name = def.name,
             x = x,
             spd = def.spd,
             hp = def.hp,
