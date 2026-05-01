@@ -14,9 +14,6 @@ function _init()
 	-- Offset for the height of the UI.
 	uiHeight = 9
 
-	initProjectiles()
-	initEnemies()
-
 	-- Height of a bullet.
 	bullHeight = 4
 

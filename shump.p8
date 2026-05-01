@@ -8,6 +8,8 @@ __lua__
 #include ./states/start.lua
 #include ./states/game.lua
 #include ./states/gameOver.lua
+#include ./definitions/enemies.lua
+#include ./definitions/projectiles.lua
 
 #include ./components/projectile.lua
 #include ./components/starfield.lua

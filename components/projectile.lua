@@ -1,120 +1,63 @@
--- Projectile component data & logic.
+-- Projectile Factory logic.
 
-function initProjectiles()
-    -- Setup for bullets & lasers.
-    -- strtFram: Starting frame.
-    -- endFram: Ending frame.
-    -- animDelay: Frames before animation advances.
-    -- spd: Speed.
-    -- rof: Rate of fire in frames.
-    -- sfx: Sound effect to play when firing.
-    -- btn: Button to fire.
-    -- upFunc: Custom update function.
-    pTypes = {
-        bullet = {
-            type = "bullet",
-            strtFram = 16,
-            endFram = 17,
-            animDelay = 5,
-            spd = 3,
-            rof = 4,
-            dam = 1,
-            sfx = 0,
-            btn = 5,
-            upFunc = function(self)
-                if self.curFram == self.strtFram then
-                    self.curFram = self.endFram
-                else
-                    self.curFram = self.strtFram
-                end
-            end,
-            factory = newBullet
-        },
-        laser = {
-            type = "laser",
-            strtFram = 18,
-            endFram = 21,
-            animDelay = 6,
-            spd = 4,
-            rof = 8,
-            dam = 2,
-            sfx = 1,
-            btn = 4,
-            upFunc = function(self)
-                if self.curFram < self.endFram then
-                    self.curFram += 1
-                end
-            end,
-            factory = newLaser
-        }
-    }
-end
-
--- Shared factory function for creating projectiles.
+-- factory function for creating projectiles.
+-- @param proCfg: Projectile type definition.
 -- @param x: The x position.
 -- @param y: The y position.
--- @param strtFram: Starting frame.
--- @param endFram: Ending frame.
--- @param spd: Speed.
--- @param animDelay: Frames before animation advances.
--- @param upFunc: Custom animation function(self).
 -- @return: A new projectile object.
-function newProjectile(type, x, y, strtFram, endFram, spd, dam, animDelay, upFunc)
+function newProjectile(proCfg, proX, proY)
+    -- Local references to global scope.
+    local proj = projectiles
+    local uiH = uiHeight
+    local bullH = bullHeight
+
     return {
-        type = type,
-        x = x,
-        y = y,
-        spd = spd,
-        dam = dam,
+        type = proCfg.type,
+        x = proX,
+        y = proY,
+        spd = proCfg.spd,
+        dam = proCfg.dam,
 
         -- Current sprite being animated.
-        curFram = strtFram,
-        strtFram = strtFram,
-        endFram = endFram,
+        curFram = proCfg.strtFram,
+        strtFram = proCfg.strtFram,
+        endFram = proCfg.endFram,
         animTimer = 0,
 
         -- Frames before animation advances.
-        animDelay = animDelay,
+        animDelay = proCfg.animDelay,
 
-        upFunc = upFunc,
+        upFunc = proCfg.upFunc,
 
         -- Update the projectile.
-        update = function(self)
-            self.y = self.y - self.spd
+        update = function(_ENV)
+            y -= spd
 
-            self.animTimer += 1
-            if self.animTimer >= self.animDelay then
-                self.animTimer = 0
-                self.upFunc(self)
+            animTimer += 1
+            if animTimer >= animDelay then
+                animTimer = 0
+                upFunc(_ENV)
             end
 
             -- Remove if off-screen.
-            if self.y < uiHeight - bullHeight then
-                del(projectiles, self)
+            if y < uiH - bullH then
+                del(proj, _ENV)
+
             end
         end,
 
         -- Draw the projectile.
-        draw = function(self)
-            spr(self.curFram, self.x, self.y)
+        draw = function(_ENV)
+            spr(curFram, x, y)
         end
     }
 end
 
--- Compatibility wrapper for bullet projectile creation.
-function newBullet(x, y, strtFram, endFram, spd, dam, animDelay)
-    local def = pTypes.bullet
-
-    return newProjectile(
-        def.type, x, y, strtFram, endFram, spd, dam, animDelay, def.upFunc
-    )
-end
-
--- Compatibility wrapper for laser projectile creation.
-function newLaser(x, y, strtFram, endFram, spd, dam, animDelay)
-    local def = pTypes.laser
-
-    return newProjectile(
-        def.type, x, y, strtFram, endFram, spd, dam, animDelay, def.upFunc
-    )
+-- Spawns one projectile using shared projectile config.
+-- @param proCfg: Projectile type definition.
+-- @param x: Spawn x position.
+-- @param y: Spawn y position.
+function spawnProjectile(proCfg, x, y)
+    add(projectiles, newProjectile(proCfg, x, y))
+    sfx(proCfg.sfx)
 end

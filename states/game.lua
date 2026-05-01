@@ -67,27 +67,13 @@ function startGame()
 	-- Reset enemies table.
 	enemies = {}
 
+	-- Reset explosions table.
+	exps = {}
+
 	-- Max number of enemies on screen.
 	maxEnemies = 16
 
-	initExps()
-
 	createStarfield(false)
-end
-
--- Fires a projectile from the ship.
--- @param cfg: The projectile configuration.
-function fireProjectile(cfg)
-	add(
-		projectiles, cfg.factory(
-			ship.x,
-			ship.y - ship.bullOffset,
-			cfg.strtFram, cfg.endFram,
-			cfg.spd, cfg.dam, cfg.animDelay
-		)
-	)
-	sfx(cfg.sfx)
-	ship.muzzle = 4
 end
 
 -- Updates the game screen.
@@ -130,19 +116,23 @@ function updateGame()
 	end
 
 	-- Fire laser if Z pressed.
-	if btn(pTypes.laser.btn) then
+	if btn(4) then
 		local laserCfg = pTypes.laser
+
 		if proTimer <= 0 then
-			fireProjectile(laserCfg)
+			spawnProjectile(laserCfg, ship.x, ship.y - ship.bullOffset)
+			ship.muzzle = 4
 			proTimer = laserCfg.rof
 		end
 	end
 
 	-- Fire bullet if X pressed.
-	if btn(pTypes.bullet.btn) then
+	if btn(5) then
 		local bulletCfg = pTypes.bullet
+
 		if proTimer <= 0 then
-			fireProjectile(bulletCfg)
+			spawnProjectile(bulletCfg, ship.x, ship.y - ship.bullOffset)
+			ship.muzzle = 4
 			proTimer = bulletCfg.rof
 		end
 	end
@@ -261,15 +251,16 @@ function drawGame()
 		p:draw()
 	end
 
+	-- Enemies.
+	for e in all(enemies) do
+		e:draw()
+	end
+
 	-- Explosions.
 	for x in all(exps) do
 		x:draw()
 	end
 
-	-- Enemies.
-	for e in all(enemies) do
-		e:draw()
-	end
 
 	-- Sparks.
 	for s in all(sparks) do

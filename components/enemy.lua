@@ -1,4 +1,4 @@
--- Enemy component data & logic.
+-- Enemy Factory logic.
 
 -- Hit state frame timer.
 local hTimerLim = 3
@@ -8,68 +8,11 @@ local dTimerLim = 10
 -- TODO: Add projectiles for enemies.
 -- TODO: Get rid of boolean hit and dead values and just use timers.
 
--- Initial enemy definitions on game load.
-function initEnemies()
-    -- Setup for an enemy.
-    -- name: Enemy name.
-    -- cols: table of color pairs for the enemy, first is
-    --       entry matches sprite colours.
-    -- strtFram: Starting sprite of the enemy's animation.
-    -- endFram: Ending sprite of the enemy's animation.
-    -- flFram: Flash sprite when hit or dead.
-    -- animDelay: Delay between animation frames.
-    -- spd: Enemy speed.
-    -- hp: Enemy health points.
-    -- points: Enemy score value.
-    -- upFunc: Custom update function.
-    eTypes = {
-        alien = {
-            name = "alien",
-            cols = {
-                { c1 = 11, c2 = 3 }, -- Green.
-                { c1 = 9, c2 = 4 }, -- Brown.
-                { c1 = 10, c2 = 9 }, -- Orange.
-                { c1 = 8, c2 = 2 }, -- Red.
-                { c1 = 6, c2 = 13 } -- Grey.
-            },
-            strtFram = 48,
-            endFram = 51,
-            flFram = 52,
-            animDelay = 3,
-            spd = 0.5,
-            hp = 3,
-            points = 100,
-            upFunc = function(_ENV)
-                x = x + cos(y / 16) * 0.5
-            end
-        },
-        ufo = {
-            name = "ufo",
-            cols = {
-                { c1 = 12, c2 = 1 }, -- Blue.
-                { c1 = 9, c2 = 4 }, -- Brown.
-                { c1 = 11, c2 = 3 }, -- Green.
-                { c1 = 8, c2 = 2 }, -- Red.
-                { c1 = 14, c2 = 2 } -- Pink.
-            },
-            strtFram = 32,
-            endFram = 35,
-            flFram = 36,
-            animDelay = 3,
-            spd = 0.75,
-            hp = 5,
-            points = 150,
-            upFunc = function(_ENV)
-                x = x + cos(y / 16) * 0.75
-            end
-        }
-    }
-end
-
 -- Factory function for creating enemies.
 -- @param enemyCfg: Enemy configuration object.
+-- @param eneX: Spawn x position.
 -- @return: A new enemy object.
-function newEnemy(enemyCfg)
+function newEnemy(enemyCfg, eneX)
     -- Local references to global scope.
     local ene = enemies
     local pl = player
@@ -79,8 +22,8 @@ function newEnemy(enemyCfg)
 
     return {
         name = enemyCfg.name,
-        x = enemyCfg.x,
-        y = -8,
+        x = eneX,
+        y = -8, -- Start just above the screen.
         spd = enemyCfg.spd,
         hp = enemyCfg.hp,
         points = enemyCfg.points,
@@ -194,18 +137,6 @@ function spawnEnemy(enemy, x)
     end
 
     add(
-        enemies, newEnemy({
-            name = def.name,
-            x = x,
-            spd = def.spd,
-            hp = def.hp,
-            points = def.points,
-            cols = def.cols,
-            strtFram = def.strtFram,
-            endFram = def.endFram,
-            flFram = def.flFram,
-            animDelay = def.animDelay,
-            upFunc = def.upFunc
-        })
+        enemies, newEnemy(def, x)
     )
 end

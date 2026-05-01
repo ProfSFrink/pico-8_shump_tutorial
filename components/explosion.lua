@@ -1,15 +1,11 @@
--- Explosion component data & logic.
+-- Explosion Factory data & logic.
 
 -- NOTE: Explosions currently only work with 8x8 sprites. Adjustments would be needed to support larger sprites.
 
 -- Initial explosion definitions.
-function initExps()
-    exps = {}
-    clrs = { 5, 9, 10, 7 }
-    numOfExps = 20
-    ls = 5
-    -- Explosion lifetime.
-end
+clrs = { 5, 9, 10, 7 }
+numOfExps = 20
+ls = 5 -- Explosion lifetime.
 
 -- Factory function for creating explosions.
 -- @param x: The x position of the explosion.
@@ -27,7 +23,7 @@ function newExp(x, y)
         update = function(self)
             self.x += self.spdX
             self.y += self.spdY
-            self.scale -= 0.1
+            self.scale -= .1
             self.life -= .1
             self.col = flr(self.life)
 
