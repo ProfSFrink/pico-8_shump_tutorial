@@ -73,7 +73,7 @@ function newProjectile(type, x, y, strtFram, endFram, spd, dam, animDelay, upFun
         endFram = endFram,
         animTimer = 0,
 
-        -- Frames since last animation change.
+        -- Frames before animation advances.
         animDelay = animDelay,
 
         upFunc = upFunc,

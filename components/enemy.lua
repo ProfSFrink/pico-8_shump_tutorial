@@ -160,6 +160,8 @@ function newEnemy(enemyCfg)
             dam = dam or self.hp
             self.hit = true
             self.hp -= dam
+            newSpark(self.x, self.y)
+
             sfx(5)
             if self.hp <= 0 then
                 self.dead = true

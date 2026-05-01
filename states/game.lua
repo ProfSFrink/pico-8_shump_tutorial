@@ -176,6 +176,11 @@ function updateGame()
 		x:update()
 	end
 
+	-- Move any sparks.
+	for s in all(sparks) do
+		s:update()
+	end
+
 	-- Move the enemies and
 	-- check for collisions.
 	for e in all(enemies) do
@@ -251,11 +256,6 @@ function drawGame()
 		end
 	end
 
-	-- Enemies.
-	for e in all(enemies) do
-		e:draw()
-	end
-
 	-- Projectiles.
 	for p in all(projectiles) do
 		p:draw()
@@ -265,6 +265,18 @@ function drawGame()
 	for x in all(exps) do
 		x:draw()
 	end
+
+	-- Sparks.
+	for s in all(sparks) do
+		s:draw()
+	end
+
+	-- Enemies.
+	for e in all(enemies) do
+		e:draw()
+	end
+
+
 
 	-- Muzzle flash.
 	circfill(ship.x + 3, ship.y - 2, ship.muzzle, 7)
