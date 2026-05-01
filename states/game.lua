@@ -64,7 +64,7 @@ function startGame()
 	-- Tracks frames between shots.
 	proTimer = 0
 
-	-- Setup for enemies.
+	-- Reset enemies table.
 	enemies = {}
 
 	-- Max number of enemies on screen.
@@ -176,11 +176,6 @@ function updateGame()
 		x:update()
 	end
 
-	-- Move any sparks.
-	for s in all(sparks) do
-		s:update()
-	end
-
 	-- Move the enemies and
 	-- check for collisions.
 	for e in all(enemies) do
@@ -206,6 +201,11 @@ function updateGame()
 			e:hurt()
 		end
 
+	end
+
+	-- Move any sparks.
+	for s in all(sparks) do
+		s:update()
 	end
 
 	if ship.invul > 0 then
@@ -266,17 +266,15 @@ function drawGame()
 		x:draw()
 	end
 
-	-- Sparks.
-	for s in all(sparks) do
-		s:draw()
-	end
-
 	-- Enemies.
 	for e in all(enemies) do
 		e:draw()
 	end
 
-
+	-- Sparks.
+	for s in all(sparks) do
+		s:draw()
+	end
 
 	-- Muzzle flash.
 	circfill(ship.x + 3, ship.y - 2, ship.muzzle, 7)

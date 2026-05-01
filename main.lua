@@ -2,6 +2,8 @@
 function _init()
 	cls()
 
+	_g=_ENV
+
 	debugMode = true
 
 	-- Game strings.

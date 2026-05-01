@@ -2,44 +2,46 @@
 sparks = {}
 
 -- Adds a new spark at the given position.
--- @param x: X position.
--- @param y: Y position.
-function newSpark(x, y)
+-- @param sx: X position.
+-- @param sy: Y position.
+-- @param sspd: Spark speed.
+function newSpark(sx, sy, sspd)
+    local spks = sparks
+
     local s = {
-        x = x,
-        y = y+8, -- Offset to appear at bottom of enemy.
-        life = 8,-- Frames until the spark disappears.
+        x = sx,
+        y = sy + 4,
+        spd = sspd,
+        life = 8,
 
-        -- Current sprite being animated.
         curFram = 55,
-
         strtFram = 55,
         endFram = 58,
-        -- Frames before animation advances.
         animDelay = 2,
-
-        -- Frames since last animation change.
         animTimer = 0,
 
-        update = function(self)
-            self.life -= 1
-            if self.life <= 0 then
-                del(sparks, self)
+        update = function(_ENV)
+            y += spd
+            life -= 1
+
+            if life <= 0 then
+                del(spks, _ENV)
+                return
             end
 
-            self.animTimer += 1
-            if self.animTimer >= self.animDelay then
-                self.animTimer = 0
-                if self.curFram < self.endFram then
-                    self.curFram += 1
+            animTimer += 1
+            if animTimer >= animDelay then
+                animTimer = 0
+                if curFram < endFram then
+                    curFram += 1
                 end
             end
         end,
 
-        draw = function(self)
-            spr(self.curFram, self.x, self.y)
+        draw = function(_ENV)
+            spr(curFram, x, y)
         end
     }
 
-    add(sparks, s)
+    add(spks, s)
 end

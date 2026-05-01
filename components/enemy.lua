@@ -39,8 +39,8 @@ function initEnemies()
             spd = 0.5,
             hp = 3,
             points = 100,
-            upFunc = function(self)
-                self.x = self.x + cos(self.y / 16) * 0.5
+            upFunc = function(_ENV)
+                x = x + cos(y / 16) * 0.5
             end
         },
         ufo = {
@@ -59,8 +59,8 @@ function initEnemies()
             spd = 0.75,
             hp = 5,
             points = 150,
-            upFunc = function(self)
-                self.x = self.x + cos(self.y / 16) * 0.75
+            upFunc = function(_ENV)
+                x = x + cos(y / 16) * 0.75
             end
         }
     }
@@ -70,6 +70,13 @@ end
 -- @param enemyCfg: Enemy configuration object.
 -- @return: A new enemy object.
 function newEnemy(enemyCfg)
+    -- Local references to global scope.
+    local ene = enemies
+    local pl = player
+    local spk = newSpark
+    local exp = spawnExp
+    local playSfx = sfx
+
     return {
         name = enemyCfg.name,
         x = enemyCfg.x,
@@ -79,7 +86,7 @@ function newEnemy(enemyCfg)
         points = enemyCfg.points,
 
         cols = enemyCfg.cols,
-        ranCol = flr(rnd(#enemyCfg.cols)) + 1,
+        ranIdx = flr(rnd(#enemyCfg.cols)) + 1,
 
         -- Current sprite being animated.
         curFram = enemyCfg.strtFram,
@@ -98,76 +105,76 @@ function newEnemy(enemyCfg)
         dead = false, -- if enemy in dead state.
         dTimer = dTimerLim,
 
-        update = function(self)
-            self.y = self.y + self.spd
+        update = function(_ENV)
+            y += spd
 
             -- Check if in dead state.
-            if self.dead then
-                self.dTimer -= 1
-                if self.dTimer <= 0 then
-                    del(enemies, self)
+            if dead then
+                dTimer -= 1
+                if dTimer <= 0 then
+                    del(ene, _ENV)
                 end
                 -- Check if in hit state.
-            elseif self.hit then
-                self.hTimer -= 1
-                if self.hTimer <= 0 then
-                    self.hit = false
-                    self.hTimer = hTimerLim
+            elseif hit then
+                hTimer -= 1
+                if hTimer <= 0 then
+                    hit = false
+                    hTimer = hTimerLim
                 end
                 -- Otherwise, run normal animation function.
             else
-                self.upFunc(self)
+                upFunc(_ENV)
             end
 
-            self.animTimer += 1
-            if self.dead or self.hit then
-                self.curFram = self.flFram
+            animTimer += 1
+            if dead or hit then
+                curFram = flFram
             else
-                if self.animTimer >= self.animDelay then
-                    self.animTimer = 0
-                    if self.curFram < self.endFram then
-                        self.curFram += 1
+                if animTimer >= animDelay then
+                    animTimer = 0
+                    if curFram < endFram then
+                        curFram += 1
                     else
-                        self.curFram = self.strtFram
+                        curFram = strtFram
                     end
                 end
             end
 
-            if self.y > 128 then
-                del(enemies, self)
+            if y > 128 then
+                del(ene, _ENV)
             end
         end,
 
-        draw = function(self)
-            if self.ranCol >= 1 then
-                pal(self.cols[1].c1, self.cols[self.ranCol].c1)
-                pal(self.cols[1].c2, self.cols[self.ranCol].c2)
+        draw = function(_ENV)
+            if ranIdx >= 1 then
+                pal(cols[1].c1, cols[ranIdx].c1)
+                pal(cols[1].c2, cols[ranIdx].c2)
             end
 
-            if self.dead then
-                spr(self.curFram, self.x, self.y, 1, 1, false, self.dTimer % 2 == 0)
+            if dead then
+                spr(curFram, x, y, 1, 1, false, dTimer % 2 == 0)
             else
-                spr(self.curFram, self.x, self.y)
+                spr(curFram, x, y)
             end
 
-            if self.ranCol >= 1 then pal() end
+            if ranIdx >= 1 then pal() end
         end,
 
         -- Handle being hurt.
         -- @param dam: Damage to apply to the enemy.
-        hurt = function(self, dam)
+        hurt = function(_ENV, dam)
             -- If no damage value is provided, use the enemy's remaining hp to ensure kill.
-            dam = dam or self.hp
-            self.hit = true
-            self.hp -= dam
-            newSpark(self.x, self.y)
+            dam = dam or hp
+            hit = true
+            hp -= dam
+            spk(x, y, spd)
 
-            sfx(5)
-            if self.hp <= 0 then
-                self.dead = true
-                player.score += self.points
+            playSfx(5)
+            if hp <= 0 then
+                dead = true
+                pl.score += points
                 -- Spawn explosion.
-                spawnExp(self.x, self.y)
+                exp(x, y)
             end
         end
     }
