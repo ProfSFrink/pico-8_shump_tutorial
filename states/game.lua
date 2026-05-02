@@ -5,7 +5,7 @@ function startGame()
 	state = stateNames.game
 
 	-- Setup game timer (frames).
-	gameTimer = 0
+	gameT = 0
 
 	-- Points towards next spawn event.
 	spawnEventIndex = 1
@@ -62,7 +62,7 @@ function startGame()
 	projectiles = {}
 
 	-- Tracks frames between shots.
-	proTimer = 0
+	proT = 0
 
 	-- Reset enemies table.
 	enemies = {}
@@ -79,9 +79,9 @@ end
 -- Updates the game screen.
 function updateGame()
 	-- advance game timer.
-	gameTimer += 1
+	gameT += 1
 	-- advance projectile timer.
-	proTimer -= 1
+	proT -= 1
 
 	-- Reset ship sprite and speed.
 	ship.spr = 3
@@ -119,10 +119,10 @@ function updateGame()
 	if btn(4) then
 		local laserCfg = pTypes.laser
 
-		if proTimer <= 0 then
+		if proT <= 0 then
 			spawnProjectile(laserCfg, ship.x, ship.y - ship.bullOffset)
 			ship.muzzle = 4
-			proTimer = laserCfg.rof
+			proT = laserCfg.rof
 		end
 	end
 
@@ -130,10 +130,10 @@ function updateGame()
 	if btn(5) then
 		local bulletCfg = pTypes.bullet
 
-		if proTimer <= 0 then
+		if proT <= 0 then
 			spawnProjectile(bulletCfg, ship.x, ship.y - ship.bullOffset)
 			ship.muzzle = 4
-			proTimer = bulletCfg.rof
+			proT = bulletCfg.rof
 		end
 	end
 
@@ -149,7 +149,7 @@ function updateGame()
 	-- Trigger one-shot spawn events from frame schedule.
 	local nextSpawnEvent = spawnEvent[spawnEventIndex]
 
-	if nextSpawnEvent and gameTimer >= nextSpawnEvent.frame then
+	if nextSpawnEvent and gameT >= nextSpawnEvent.frame then
 		if #enemies < maxEnemies then
 			spawnEnemy(nextSpawnEvent.kind, nextSpawnEvent.spawnX)
 		end
@@ -238,7 +238,7 @@ function drawGame()
 		spr(ship.spr, ship.x, ship.y)
 		spr(ship.flCurrFram, ship.x, ship.y + 8)
 	else
-		if sin(gameTimer / 5) < 0.1 then
+		if sin(gameT / 5) < 0.1 then
 			pal(2,6)
 			spr(ship.spr, ship.x, ship.y)
 			spr(ship.flCurrFram, ship.x, ship.y + 8)

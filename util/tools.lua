@@ -7,7 +7,7 @@ function showDebugUI()
     ?ship.x, 0, 63, 7
     ?ship.y, 0, 70, 7
     ?"i:" .. ship.invul, 110, 113, 7
-    ?"t:" .. gameTimer, 105, 123, 7
+    ?"t:" .. gameT, 105, 123, 7
 end
 
 -- Returns the x value to centre an object on the screen.
