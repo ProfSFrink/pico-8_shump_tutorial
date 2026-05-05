@@ -12,19 +12,19 @@ function startGame()
 
 	-- Spawn timelines in frames (30fps).
 	spawnEvent = {
-		{ frame = 30, kind = eTypes.alien,
+		{ frame = 30, kind = alien,
 			spawnX = ranInt(0, 120) },
-		{ frame = 35, kind = eTypes.ufo,
+		{ frame = 35, kind = ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 45, kind = eTypes.ufo,
+		{ frame = 45, kind = ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 55, kind = eTypes.ufo,
+		{ frame = 55, kind = ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 65, kind = eTypes.ufo,
+		{ frame = 65, kind = ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 75, kind = eTypes.ufo,
+		{ frame = 75, kind = ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 100, kind = eTypes.alien,
+		{ frame = 100, kind = alien,
 			spawnX = ranInt(0, 120) }
 	}
 
@@ -132,23 +132,23 @@ function updateGame()
 
 	-- Fire laser if Z pressed.
 	if btn(4) then
-		local laserCfg = pTypes.laser
+		local proCfg = getConfig(laser)
 
 		if proT <= 0 then
-			spawnProjectile(laserCfg, ship.x, ship.y - ship.bullOffset)
+			spawnProjectile(proCfg, ship.x, ship.y - ship.bullOffset)
 			ship.muzzle = 4
-			proT = laserCfg.rof
+			proT = proCfg.rof
 		end
 	end
 
 	-- Fire bullet if X pressed.
 	if btn(5) then
-		local bulletCfg = pTypes.bullet
+		local proCfg = getConfig(bullet)
 
 		if proT <= 0 then
-			spawnProjectile(bulletCfg, ship.x, ship.y - ship.bullOffset)
+			spawnProjectile(proCfg, ship.x, ship.y - ship.bullOffset)
 			ship.muzzle = 4
-			proT = bulletCfg.rof
+			proT = proCfg.rof
 		end
 	end
 

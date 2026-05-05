@@ -9,8 +9,16 @@ function _init()
 
 	-- Game strings.
 
-	-- Text for start and restart.
-	pressAKey = "PRESS Z OR X TO "
+		-- Text for start and restart.
+		pressAKey = "PRESS Z OR X TO "
+
+		-- Projectile object literals.
+		bullet = "bullet"
+		laser = "laser"
+
+		-- Enemy object literals.
+		alien = "alien"
+		ufo = "ufo"
 
 	-- Offset for the height of the UI.
 	uiHeight = 9
