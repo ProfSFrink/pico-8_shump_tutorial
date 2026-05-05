@@ -1,5 +1,4 @@
 -- Sparks effect & logic.
-sparks = {}
 
 -- Adds a new spark at the given position.
 -- @param sx: X position.
@@ -15,7 +14,6 @@ function newSpark(sx, sy, sspd)
         life = 8,
 
         curFram = 55,
-        strtFram = 55,
         endFram = 58,
         animDelay = 2,
         animTimer = 0,

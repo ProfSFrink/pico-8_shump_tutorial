@@ -19,6 +19,7 @@ function newEnemy(enemyCfg, eneX)
     local spk = newSpark
     local exp = spawnExp
     local playSfx = sfx
+    local expCols = eneCols
 
     return {
         name = enemyCfg.name,
@@ -29,7 +30,7 @@ function newEnemy(enemyCfg, eneX)
         points = enemyCfg.points,
 
         cols = enemyCfg.cols,
-        ranIdx = flr(rnd(#enemyCfg.cols)) + 1,
+        ranIdx = ranInt(1, #enemyCfg.cols),
 
         -- Current sprite being animated.
         curFram = enemyCfg.strtFram,
@@ -117,7 +118,7 @@ function newEnemy(enemyCfg, eneX)
                 dead = true
                 pl.score += points
                 -- Spawn explosion.
-                exp(x, y, spd)
+                exp(x, y, spd, expCols)
             end
         end
     }

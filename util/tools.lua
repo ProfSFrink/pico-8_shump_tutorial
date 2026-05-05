@@ -28,6 +28,20 @@ function blink()
     return banim[blinkT]
 end
 
+-- Returns a random float between the provided min and max values.
+-- @param min: the minimum value.
+-- @param max: the maximum value.
+function ranFloat(min, max)
+    return rnd(max - min) + min
+end
+
+-- Returns a random integer between the provided min and max values.
+-- @param min: the minimum value.
+-- @param max: the maximum value.
+function ranInt(min, max)
+    return flr(rnd(max - min + 1)) + min
+end
+
 -- Collision detection between two objects.
 -- @param a: The first object with x and y properties.
 -- @param b: The second object with x and y properties.

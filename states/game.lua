@@ -12,13 +12,20 @@ function startGame()
 
 	-- Spawn timelines in frames (30fps).
 	spawnEvent = {
-		{ frame = 30, kind = eTypes.alien, spawnX = 12 },
-		{ frame = 35, kind = eTypes.ufo, spawnX = 40 },
-		{ frame = 45, kind = eTypes.ufo, spawnX = 70 },
-		{ frame = 55, kind = eTypes.ufo, spawnX = 70 },
-		{ frame = 65, kind = eTypes.ufo, spawnX = 70 },
-		{ frame = 75, kind = eTypes.ufo, spawnX = 70 },
-		{ frame = 100, kind = eTypes.alien, spawnX = 72 }
+		{ frame = 30, kind = eTypes.alien,
+			spawnX = ranInt(0, 120) },
+		{ frame = 35, kind = eTypes.ufo,
+			spawnX = ranInt(0, 120) },
+		{ frame = 45, kind = eTypes.ufo,
+			spawnX = ranInt(0, 120) },
+		{ frame = 55, kind = eTypes.ufo,
+			spawnX = ranInt(0, 120) },
+		{ frame = 65, kind = eTypes.ufo,
+			spawnX = ranInt(0, 120) },
+		{ frame = 75, kind = eTypes.ufo,
+			spawnX = ranInt(0, 120) },
+		{ frame = 100, kind = eTypes.alien,
+			spawnX = ranInt(0, 120) }
 	}
 
 	-- Set up the ship.
@@ -48,13 +55,15 @@ function startGame()
 		-- Size of muzzles flash.
 		muzzle = 0,
 		-- Invulnerability timer in frames.
-		invul = 0
+		invul = 0,
+		-- Death timer in frames.
+		dTimer = 0
 	}
 
 	-- Setup player.
 	player = {
 		score = 0,
-		lives = 4,
+		lives = 1,
 		bombs = 2
 	}
 
@@ -69,6 +78,12 @@ function startGame()
 
 	-- Reset explosions table.
 	exps = {}
+
+	-- Reset sparks table.
+	sparks = {}
+
+	-- Reset shockwave table.
+	shwaves = {}
 
 	-- Max number of enemies on screen.
 	maxEnemies = 16
@@ -187,8 +202,14 @@ function updateGame()
 		-- Handle collision with ship.
 		if col(e, ship) and ship.invul <= 0 then
 			player.lives -= 1
-			ship.invul = 60 -- 2 secs of invulnerability.
 			e:hurt()
+			if player.lives <= 0 then
+				ship.dTimer = 15
+				ship.invul = 30
+				spawnExp(ship.x, ship.y, 0, shipCols)
+			else
+				ship.invul = 60 -- 2 secs of invulnerability.
+			end
 		end
 
 	end
@@ -215,8 +236,11 @@ function updateGame()
 
 	-- Check for game over.
 	if player.lives <= 0 then
-		showGameOver()
-		return
+		ship.dTimer -= 1
+		if ship.dTimer <= 0 then
+			showGameOver()
+			return
+		end
 	end
 end
 

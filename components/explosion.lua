@@ -8,29 +8,36 @@
 
 -- No of particles used for creating
 -- an explosion when enemy / ship is destroyed.
-numOfParts = 25
+numOfParts = 30
+
+-- Colours for enemy explosions.
+eneCols = { 5, 9, 10, 7 }
+
+-- Colours for ship explosions.
+shipCols = { 1, 1, 12, 7 }
 
 -- Factory function for creating enemy and
 -- ship explosions.
 -- @param x: The x pos of the explosion.
 -- @param y: The y pos of the explosion.
 -- @param objSpdY: The speed of the exploding object.
+-- @param expCols: The colour palette for the explosion.
 -- @return: A new explosion object.
-function newExpObj(expX, expY, objSpdY)
+function newExpObj(expX, expY, objSpdY, expCols)
      -- Local references to global scope.
      local exps = exps
 
-     --
     -- Colours for explosions.
-    local cols = { 5, 9, 10, 7 }
+    local cols = expCols
     return {
         x = expX + 4,
         y = expY + 4,
         spdX = (rnd() - 0.5) * 5,
         spdY = objSpdY + (rnd() - 0.5) * 5,
-        scale = (rnd(4)) + 1,
-        life = (rnd(4)) + 1,
-        maxLife = (rnd(4)) + 1,
+        scale = ranFloat(1, 4),
+        life = ranFloat(1, 4),
+        maxLife = ranFloat(1, 4),
+        small = ranFloat(1,2),
 
         update = function(_ENV)
             x += spdX
@@ -59,22 +66,58 @@ function newExpObj(expX, expY, objSpdY)
         end,
 
         draw = function(_ENV)
-            circfill(x, y, scale, col)
+            if small <= 1.25 then
+                pset(x, y, col)
+            else
+                circfill(x, y, scale, col)
+            end
         end
     }
 end
 
--- Factory function creating particle flashes.
-function newFlash()
+-- Creates a one shot flash effect.
+-- @param expX: The x pos of the flash.
+-- @param expY: The y pos of the flash.
+-- @param expScale: The initial scale of the flash.
+-- @param expLife: The life of the flash.
+-- @param expCol: The colour of the flash.
+function newFlash(expX, expY, expScale, expLife, expCol)
+     -- Local references to global scope.
+     local exps = exps
+
+     return {
+        x = expX + 4,
+        y = expY + 4,
+        scale = expScale,
+        life = expLife,
+        col = expCol,
+
+        update = function(_ENV)
+            life -= .5
+            scale -= .5
+
+            if life <= 0 then
+                del(exps, _ENV)
+            end
+        end,
+
+        draw = function(_ENV)
+            circfill(x, y, scale, col)
+        end
+    }
 end
 
 -- Create Explosion for an exploding object.
 -- @param x: The x position of the explosion.
 -- @param y: The y position of the explosion.
 -- @param objSpdY: The speed of the exploding object.
-function spawnExp(expX, expY, objSpdY)
+-- @param expCols: The colour palette for the explosion.
+function spawnExp(expX, expY, objSpdY, expCols)
     for i = 1, numOfParts do
-        add(exps, newExpObj(expX, expY, objSpdY))
+        add(exps, newExpObj(expX, expY, objSpdY, expCols))
     end
+
+    add(exps, newFlash(expX, expY, 8, 4, 7))
+
     sfx(rnd(2) + 2)
 end
