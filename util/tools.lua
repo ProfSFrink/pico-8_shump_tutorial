@@ -43,19 +43,10 @@ function col(a, b)
     local b_right = b.x + 7
     local b_bottom = b.y + 7
 
-    if a_top > b_bottom then
-        return false
-    end
-
-    if b_top > a_bottom then
-        return false
-    end
-
-    if a_left > b_right then
-        return false
-    end
-
-    if b_left > a_right then
+    if a_top > b_bottom or
+       b_top > a_bottom or
+       a_left > b_right or
+       b_left > a_right then
         return false
     end
 

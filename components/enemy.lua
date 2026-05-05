@@ -117,7 +117,7 @@ function newEnemy(enemyCfg, eneX)
                 dead = true
                 pl.score += points
                 -- Spawn explosion.
-                exp(x, y)
+                exp(x, y, spd)
             end
         end
     }

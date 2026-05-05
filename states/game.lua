@@ -261,7 +261,6 @@ function drawGame()
 		x:draw()
 	end
 
-
 	-- Sparks.
 	for s in all(sparks) do
 		s:draw()
@@ -279,15 +278,18 @@ function drawGame()
 
 	print(scoreStr, calcCenX(#scoreStr), 2, 12)
 
+	local uiX = 0
+
 	for i = 1, 4 do
+		uiX = i * 9 - 8
 		if player.lives >= i then
-			spr(13, i * 9 - 8, 1)
+			spr(13, uiX, 1)
 		else
-			spr(14, i * 9 - 8, 1)
+			spr(14, uiX, 1)
 		end
 	end
 
 	for i = 1, player.bombs do
-		spr(29, 90 + i * 9 - 8, 1)
+		spr(29, 90 + uiX, 1)
 	end
 end

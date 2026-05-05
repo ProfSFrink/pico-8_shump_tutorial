@@ -2,6 +2,7 @@
 function _init()
 	cls()
 
+	-- References to global scope.
 	_g=_ENV
 
 	debugMode = true
@@ -19,6 +20,8 @@ function _init()
 
 	-- Starting colour for blinking text.
 	blinkT = 0
+
+	-- todo: move to defs.
 
 	-- Setup and initialize starfield.
 	stars = {}
