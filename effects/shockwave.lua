@@ -1,4 +1,4 @@
--- Sparks effect & logic.
+-- Shockwave effect & logic.
 
 -- Shockwave configs.
 
@@ -10,11 +10,11 @@
 slSwCfg = { r = 2, tr = 4, spd = 1, col = 9 }
 lgSwCfg = { r = 2, tr = 24, spd = 2.5, col = 7 }
 
--- Adds a new shockwave at the given position.
+-- Spawn a shockwave at the given position.
 -- @param sx: X position.
 -- @param sy: Y position.
--- @param swConfig: Shockwave config object..
-function newShockWave(sx, sy, swConfig)
+-- @param swConfig: Shockwave config object.
+function spawnShockWave(sx, sy, swConfig)
     local sws = shwaves
 
     local s = {

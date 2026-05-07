@@ -14,7 +14,7 @@
     -- upFunc: Custom update function.
 eTypes = {
     alien = {
-        name = alien,
+        name = "alien",
         cols = {
             { c1 = 11, c2 = 3 }, -- Green.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -34,7 +34,7 @@ eTypes = {
         end
     },
     ufo = {
-        name = ufo,
+        name = "ufo",
         cols = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -73,7 +73,7 @@ function newEnemy(enemyCfg, eneX)
     -- Local references to global scope.
     local ene = enemies
     local pl = player
-    local newSw = newShockWave
+    local newSw = spawnShockWave
     local swConfig = lgSwCfg
     local exp = spawnExp
     local playSfx = sfx
@@ -88,6 +88,7 @@ function newEnemy(enemyCfg, eneX)
         points = enemyCfg.points,
 
         cols = enemyCfg.cols,
+        -- Randomly select a color palette.
         ranIdx = ranInt(1, #enemyCfg.cols),
 
         -- Current sprite being animated.

@@ -12,19 +12,19 @@ function startGame()
 
 	-- Spawn timelines in frames (30fps).
 	spawnEvent = {
-		{ frame = 30, kind = alien,
+		{ frame = 30, kind = eTypes.alien,
 			spawnX = ranInt(0, 120) },
-		{ frame = 35, kind = ufo,
+		{ frame = 35, kind = eTypes.ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 45, kind = ufo,
+		{ frame = 45, kind = eTypes.ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 55, kind = ufo,
+		{ frame = 55, kind = eTypes.ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 65, kind = ufo,
+		{ frame = 65, kind = eTypes.ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 75, kind = ufo,
+		{ frame = 75, kind = eTypes.ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 100, kind = alien,
+		{ frame = 100, kind = eTypes.alien,
 			spawnX = ranInt(0, 120) }
 	}
 
@@ -63,7 +63,7 @@ function startGame()
 	-- Setup player.
 	player = {
 		score = 0,
-		lives = 1,
+		lives = 4,
 		bombs = 2
 	}
 
@@ -78,6 +78,9 @@ function startGame()
 
 	-- Reset explosions table.
 	exps = {}
+
+	-- Reset spark table.
+	sparks = {}
 
 	-- Reset shockwave table.
 	shwaves = {}
@@ -129,13 +132,15 @@ function updateGame()
 
 	-- Fire laser if Z pressed.
 	if btn(4) then
-		local proCfg = getConfig(laser)
+		-- local proCfg = getConfig(laser)
 
-		if proT <= 0 then
-			spawnProjectile(proCfg, ship.x, ship.y - ship.bullOffset)
-			ship.muzzle = 4
-			proT = proCfg.rof
-		end
+		-- if proT <= 0 then
+		-- 	spawnProjectile(proCfg, ship.x, ship.y - ship.bullOffset)
+		-- 	ship.muzzle = 4
+		-- 	proT = proCfg.rof
+		-- end
+
+		spawnEnemy(eTypes.alien, ranInt(0, 120))
 	end
 
 	-- Fire bullet if X pressed.
@@ -173,6 +178,16 @@ function updateGame()
 		p:update()
 	end
 
+	-- Move any shockwaves.
+	for w in all(shwaves) do
+		w:update()
+	end
+
+	-- Move any sparks.
+	for s in all(sparks) do
+		s:update()
+	end
+
 	-- Move the explosions.
 	for x in all(exps) do
 		x:update()
@@ -190,7 +205,8 @@ function updateGame()
 			for p in all(projectiles) do
 				if col(e, p) and e.dead==false then
 					e:hurt(p.dam)
-					newShockWave(p.x, p.y, slSwCfg)
+					spawnShockWave(p.x, p.y, slSwCfg)
+					spawnSparks(e.x, e.y, 7)
 					del(projectiles, p)
 				end
 			end
@@ -204,17 +220,12 @@ function updateGame()
 				ship.dTimer = 15
 				ship.invul = 30
 				spawnExp(ship.x, ship.y, 0, shipCols)
-				newShockWave(ship.x, ship.y, lgSwCfg)
+				spawnShockWave(ship.x, ship.y, lgSwCfg)
 			else
 				ship.invul = 60 -- 2 secs of invulnerability.
 			end
 		end
 
-	end
-
-	-- Move any shockwaves.
-	for s in all(shwaves) do
-		s:update()
 	end
 
 	if ship.invul > 0 then
@@ -244,7 +255,7 @@ end
 
 -- Draws the game screen.
 function drawGame()
-	cls(0)
+	cls()
 	updateStarfield()
 
 	-- Debug info.
@@ -278,15 +289,21 @@ function drawGame()
 		e:draw()
 	end
 
+	-- Sparks.
+	for s in all(sparks) do
+		s:draw()
+	end
+
+	-- Shockwaves.
+	for w in all(shwaves) do
+		w:draw()
+	end
+
 	-- Explosions.
 	for x in all(exps) do
 		x:draw()
 	end
 
-	-- Shockwaves.
-	for s in all(shwaves) do
-		s:draw()
-	end
 
 	-- Muzzle flash.
 	circfill(ship.x + 3, ship.y - 2, ship.muzzle, 7)

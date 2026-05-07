@@ -5,7 +5,7 @@ function _init()
 	-- References to global scope.
 	_g=_ENV
 
-	debugMode = true
+	debugMode = false
 
 	-- Game strings.
 

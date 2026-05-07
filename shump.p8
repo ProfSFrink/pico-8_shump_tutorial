@@ -11,8 +11,9 @@ __lua__
 #include ./components/projectile.lua
 #include ./components/starfield.lua
 #include ./components/enemy.lua
-#include ./components/explosion.lua
-#include ./components/sparks.lua
+#include ./effects/explosion.lua
+#include ./effects/shockwave.lua
+#include ./effects/spark.lua
 
 __gfx__
 00000000000220000002200000022000000220000002200000000000000000000000000000000000000000000000000000000000088008800880088000000000
