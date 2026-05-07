@@ -1,33 +1,42 @@
 -- Sparks effect & logic.
 
+-- Shockwave configs.
+
+-- x: X position.
+-- y: Y position.
+-- spd: Speed of shockwave radius increase.
+-- col: Color of shockwave.
+
+slSwCfg = { r = 2, tr = 4, spd = 1, col = 9 }
+lgSwCfg = { r = 2, tr = 24, spd = 2.5, col = 7 }
+
 -- Adds a new shockwave at the given position.
 -- @param sx: X position.
 -- @param sy: Y position.
--- @param sspd: Shockwave speed.
-function newShockWave(sx, sy, sspd)
+-- @param swConfig: Shockwave config object..
+function newShockWave(sx, sy, swConfig)
     local sws = shwaves
 
     local s = {
         x = sx + 4,
         y = sy + 4,
-        spd = sspd,
-        radius = 0,
-        life = 4,
+        r = swConfig.r, -- current radius.
+        tr = swConfig.tr,
+        spd = swConfig.spd,
+        col = swConfig.col,
 
         update = function(_ENV)
-            y += spd
-            life -= 1
+            r += spd
 
-            if life <= 0 then
+            if r > tr then
                 del(sws, _ENV)
                 return
             end
 
-            radius += 1
         end,
 
         draw = function(_ENV)
-            circ(x, y, radius, 7)
+            circ(x, y, r, col)
         end
     }
 

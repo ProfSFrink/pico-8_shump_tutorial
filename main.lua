@@ -29,8 +29,6 @@ function _init()
 	-- Starting colour for blinking text.
 	blinkT = 0
 
-	-- todo: move to defs.
-
 	-- Setup and initialize starfield.
 	stars = {}
 	numOfStars = 80

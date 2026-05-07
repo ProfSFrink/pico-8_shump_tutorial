@@ -189,10 +189,8 @@ function updateGame()
 			-- Handle projectile collisions.
 			for p in all(projectiles) do
 				if col(e, p) and e.dead==false then
-					newShockWave(p.x, e.y, 3)
-
 					e:hurt(p.dam)
-
+					newShockWave(p.x, p.y, slSwCfg)
 					del(projectiles, p)
 				end
 			end
@@ -206,6 +204,7 @@ function updateGame()
 				ship.dTimer = 15
 				ship.invul = 30
 				spawnExp(ship.x, ship.y, 0, shipCols)
+				newShockWave(ship.x, ship.y, lgSwCfg)
 			else
 				ship.invul = 60 -- 2 secs of invulnerability.
 			end

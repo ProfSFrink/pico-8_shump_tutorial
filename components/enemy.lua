@@ -74,6 +74,7 @@ function newEnemy(enemyCfg, eneX)
     local ene = enemies
     local pl = player
     local newSw = newShockWave
+    local swConfig = lgSwCfg
     local exp = spawnExp
     local playSfx = sfx
     local expCols = eneCols
@@ -175,6 +176,8 @@ function newEnemy(enemyCfg, eneX)
                 pl.score += points
                 -- Spawn explosion.
                 exp(x, y, spd, expCols)
+                -- Spawn large shockwave.
+                newSw(x, y, swConfig)
             end
         end
     }
