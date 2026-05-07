@@ -30,42 +30,13 @@ function startGame()
 			spawnX = ranInt(0, 120) }
 	}
 
-	-- Set up the ship.
-	-- x: X coordinate.
-	-- y: Y coordinate.
-	-- spdX: Speed in the x direction.
-	-- spdY: Speed in the y direction.
-	-- spr: Current ship sprite.
-	-- flStrtFram: Ship flame start frame.
-	-- flEndFram: Ship flame end frame.
-	-- bullOffset: Offset for where bullets spawn from the ship.
-	ship = {
-		-- Starting position.
-		x = 64,
-		y = 108,
-		-- Speed of the ship.
-		spdX = 2,
-		spdY = 2,
-		-- Current ship sprite.
-		spr = 3,
-		-- Ship flame start & end frame.
-		flStrtFram = 7,
-		flEndFram = 11,
-		flCurrFram = 7,
-		-- Offset for bullets.
-		bullOffset = 3,
-		-- Size of muzzles flash.
-		muzzle = 0,
-		-- Invulnerability timer in frames.
-		invul = 0,
-		-- Death timer in frames.
-		dTimer = 0
-	}
+	-- Setup player ship.
+	ship = newShip()
 
 	-- Setup player.
 	player = {
 		score = 0,
-		lives = 4,
+		lives = 2,
 		bombs = 2
 	}
 
@@ -101,35 +72,29 @@ function updateGame()
 	proT -= 1
 
 	-- Reset ship sprite and speed.
-	ship.spr = 3
-	shipSpdX = 0
-	shipSpdY = 0
+	ship:reset()
 
 	-- Controls.
 
 	-- Checking for input.
 	-- Left arrow.
 	if btn(0) then
-		ship.spr = 1
-		shipSpdX = -ship.spdX
+		ship:move("left")
 	end
 
 	-- Right arrow.
 	if btn(1) then
-		ship.spr = 5
-		shipSpdX = ship.spdX
+		ship:move("right")
 	end
 
 	-- Up arrow.
 	if btn(2) then
-		ship.spr = 2
-		shipSpdY = -ship.spdY
+		ship:move("up")
 	end
 
 	-- Down arrow.
 	if btn(3) then
-		ship.spr = 2
-		shipSpdY = ship.spdY
+		ship:move("down")
 	end
 
 	-- Fire laser if Z pressed.
@@ -156,14 +121,8 @@ function updateGame()
 		end
 	end
 
-	-- Move the ship.
-	ship.x = ship.x + shipSpdX
-	ship.y = ship.y + shipSpdY
-
-	-- Check if we hit the
-	-- bounds of the screen.
-	ship.x = mid(0, ship.x, 120)
-	ship.y = mid(0 + uiHeight, ship.y, 120)
+	-- Update ship position.
+	ship:update()
 
 	-- Trigger one-shot spawn events from frame schedule.
 	local nextSpawnEvent = spawnEvent[spawnEventIndex]
@@ -214,7 +173,7 @@ function updateGame()
 			player.lives -= 1
 			e:hurt()
 			if player.lives <= 0 then
-				ship.dTimer = 15
+				ship.dTimer = 30
 				ship.invul = 30
 				spawnExp(ship.x, ship.y, 0, shipCols)
 				spawnShockWave(ship.x, ship.y, lgSwCfg)
@@ -225,25 +184,9 @@ function updateGame()
 
 	end
 
-	if ship.invul > 0 then
-		ship.invul -= 1
-	end
-
-	-- Animate ship flame.
-	ship.flCurrFram += 1
-	if ship.flCurrFram > ship.flEndFram then
-		ship.flCurrFram = ship.flStrtFram
-	end
-
-	-- Animate the muzzle flash.
-	if ship.muzzle >= 0 then
-		ship.muzzle -= 1
-	end
-
 	-- Check for game over.
 	if player.lives <= 0 then
-		ship.dTimer -= 1
-		if ship.dTimer <= 0 then
+		if ship:dead() == false then
 			showGameOver()
 			return
 		end
@@ -262,19 +205,7 @@ function drawGame()
 
 	-- Game screen.
 
-	-- Ship.
-
-	if ship.invul <= 0 then
-		spr(ship.spr, ship.x, ship.y)
-		spr(ship.flCurrFram, ship.x, ship.y + 8)
-	else
-		if sin(gameT / 5) < 0.1 then
-			pal(2,6)
-			spr(ship.spr, ship.x, ship.y)
-			spr(ship.flCurrFram, ship.x, ship.y + 8)
-			pal()
-		end
-	end
+	ship:draw(gameT)
 
 	-- Projectiles.
 	drawProjectiles()
@@ -290,11 +221,6 @@ function drawGame()
 
 	-- Explosions.
 	drawExplosions()
-
-
-	-- Muzzle flash.
-	circfill(ship.x + 3, ship.y - 2, ship.muzzle, 7)
-	circfill(ship.x + 4, ship.y - 2, ship.muzzle, 7)
 
 	-- UI.
 
