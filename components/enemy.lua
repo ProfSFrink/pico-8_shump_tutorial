@@ -73,7 +73,7 @@ function newEnemy(enemyCfg, eneX)
     -- Local references to global scope.
     local ene = enemies
     local pl = player
-    local spk = newSpark
+    local newSw = newShockWave
     local exp = spawnExp
     local playSfx = sfx
     local expCols = eneCols
@@ -168,7 +168,6 @@ function newEnemy(enemyCfg, eneX)
             dam = dam or hp
             hit = true
             hp -= dam
-            spk(x, y, spd)
 
             playSfx(5)
             if hp <= 0 then

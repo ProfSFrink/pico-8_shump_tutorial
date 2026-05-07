@@ -79,9 +79,6 @@ function startGame()
 	-- Reset explosions table.
 	exps = {}
 
-	-- Reset sparks table.
-	sparks = {}
-
 	-- Reset shockwave table.
 	shwaves = {}
 
@@ -192,9 +189,11 @@ function updateGame()
 			-- Handle projectile collisions.
 			for p in all(projectiles) do
 				if col(e, p) and e.dead==false then
-					del(projectiles, p)
+					newShockWave(p.x, e.y, 3)
 
 					e:hurt(p.dam)
+
+					del(projectiles, p)
 				end
 			end
 		end
@@ -214,8 +213,8 @@ function updateGame()
 
 	end
 
-	-- Move any sparks.
-	for s in all(sparks) do
+	-- Move any shockwaves.
+	for s in all(shwaves) do
 		s:update()
 	end
 
@@ -285,8 +284,8 @@ function drawGame()
 		x:draw()
 	end
 
-	-- Sparks.
-	for s in all(sparks) do
+	-- Shockwaves.
+	for s in all(shwaves) do
 		s:draw()
 	end
 

@@ -1,45 +1,35 @@
 -- Sparks effect & logic.
 
--- Adds a new spark at the given position.
+-- Adds a new shockwave at the given position.
 -- @param sx: X position.
 -- @param sy: Y position.
--- @param sspd: Spark speed.
-function newSpark(sx, sy, sspd)
-    local spks = sparks
+-- @param sspd: Shockwave speed.
+function newShockWave(sx, sy, sspd)
+    local sws = shwaves
 
     local s = {
-        x = sx,
+        x = sx + 4,
         y = sy + 4,
         spd = sspd,
-        life = 8,
-
-        curFram = 55,
-        endFram = 58,
-        animDelay = 2,
-        animTimer = 0,
+        radius = 0,
+        life = 4,
 
         update = function(_ENV)
             y += spd
             life -= 1
 
             if life <= 0 then
-                del(spks, _ENV)
+                del(sws, _ENV)
                 return
             end
 
-            animTimer += 1
-            if animTimer >= animDelay then
-                animTimer = 0
-                if curFram < endFram then
-                    curFram += 1
-                end
-            end
+            radius += 1
         end,
 
         draw = function(_ENV)
-            spr(curFram, x, y)
+            circ(x, y, radius, 7)
         end
     }
 
-    add(spks, s)
+    add(sws, s)
 end
