@@ -119,3 +119,17 @@ function spawnProjectile(proCfg, x, y)
     add(projectiles, newProjectile(proCfg, x, y))
     sfx(proCfg.sfx)
 end
+
+-- Update all projectiles.
+function updateProjectiles()
+    for p in all(projectiles) do
+        p:update()
+    end
+end
+
+-- Draw all projectiles.
+function drawProjectiles()
+    for p in all(projectiles) do
+        p:draw()
+    end
+end

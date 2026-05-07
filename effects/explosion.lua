@@ -126,3 +126,17 @@ function spawnExp(expX, expY, objSpdY, expCols)
 
     sfx(rnd(2) + 2)
 end
+
+-- Update all explosions.
+function updateExplosions()
+    for x in all(exps) do
+        x:update()
+    end
+end
+
+-- Draw all explosions.
+function drawExplosions()
+    for x in all(exps) do
+        x:draw()
+    end
+end

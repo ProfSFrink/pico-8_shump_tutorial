@@ -42,3 +42,17 @@ function spawnShockWave(sx, sy, swConfig)
 
     add(sws, s)
 end
+
+-- Update all shockwaves.
+function updateShockWaves()
+    for w in all(shwaves) do
+        w:update()
+    end
+end
+
+-- Draw all shockwaves.
+function drawShockWaves()
+    for w in all(shwaves) do
+        w:draw()
+    end
+end

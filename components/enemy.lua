@@ -201,3 +201,17 @@ function spawnEnemy(enemy, x)
         enemies, newEnemy(def, x)
     )
 end
+
+-- Update all enemies.
+function updateEnemies()
+    for e in all(enemies) do
+        e:update()
+    end
+end
+
+-- Draw all enemies.
+function drawEnemies()
+    for e in all(enemies) do
+        e:draw()
+    end
+end

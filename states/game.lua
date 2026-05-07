@@ -1,5 +1,7 @@
 -- Game state logic.
 
+-- todo: abstract the ship to its own component file.
+
 -- Sets up the game.
 function startGame()
 	state = stateNames.game
@@ -173,25 +175,20 @@ function updateGame()
 		spawnEventIndex += 1
 	end
 
+	-- Move the starfield.
+	updateStarfield()
+
 	-- Move the projectiles.
-	for p in all(projectiles) do
-		p:update()
-	end
+	updateProjectiles()
 
 	-- Move any shockwaves.
-	for w in all(shwaves) do
-		w:update()
-	end
+	updateShockWaves()
 
 	-- Move any sparks.
-	for s in all(sparks) do
-		s:update()
-	end
+	updateSparks()
 
 	-- Move the explosions.
-	for x in all(exps) do
-		x:update()
-	end
+	updateExplosions()
 
 	-- Move the enemies and
 	-- check for collisions.
@@ -256,7 +253,7 @@ end
 -- Draws the game screen.
 function drawGame()
 	cls()
-	updateStarfield()
+	drawStarfield()
 
 	-- Debug info.
 	if debugMode then
@@ -280,29 +277,19 @@ function drawGame()
 	end
 
 	-- Projectiles.
-	for p in all(projectiles) do
-		p:draw()
-	end
+	drawProjectiles()
 
 	-- Enemies.
-	for e in all(enemies) do
-		e:draw()
-	end
+	drawEnemies()
 
 	-- Sparks.
-	for s in all(sparks) do
-		s:draw()
-	end
+	drawSparks()
 
 	-- Shockwaves.
-	for w in all(shwaves) do
-		w:draw()
-	end
+	drawShockWaves()
 
 	-- Explosions.
-	for x in all(exps) do
-		x:draw()
-	end
+	drawExplosions()
 
 
 	-- Muzzle flash.

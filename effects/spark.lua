@@ -34,3 +34,17 @@ function spawnSparks(sx, sy, col)
 
     add(sps, s)
 end
+
+-- Update all sparks.
+function updateSparks()
+    for s in all(sparks) do
+        s:update()
+    end
+end
+
+-- Draw all sparks.
+function drawSparks()
+    for s in all(sparks) do
+        s:draw()
+    end
+end
