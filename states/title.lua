@@ -5,13 +5,15 @@ function updateTitle()
 	if btnp(4) or btnp(5) then
 		showStart()
 	end
+
+	updateStarfield()
 end
 
 -- Draws the title screen.
 function drawTitle()
 	cls(0)
 
-	updateStarfield()
+	drawStarfield()
 
 	local title = "SHUMP TUTORIAL"
 	local start = pressAKey .. "START"

@@ -7,37 +7,37 @@
 -- for the title/start screen, otherwise
 -- it's for the game/game over screen.
 -- @return: A new star object.
-function newStar(col, spd, isStart)
+function newStar(sCol, sSpd, isStart)
+    -- References to global scope.
+    local uiOffset = isStart and 0 or uiHeight
+    local midStar = midStar
+    local farStar = farStar
+    local nearStar = nearStar
+    local rnd = rnd
+    local flr = flr
+
     return {
         x = flr(rnd(118) + 10),
         y = flr(rnd(118) + 10),
-        col = col,
-        spd = spd,
-        isAsteroid = false,
+        col = sCol,
+        spd = sSpd,
 
         -- Update the star's position.
-        update = function(self)
-            self.y = self.y + self.spd
+        update = function(_ENV)
+            y += spd
 
-
-                --
-                --[[reset the star to the top of the screen
+            --[[reset the star to the top of the screen
             if it goes off the bottom.]]
-            if self.y > 128 then
-                local uiOffset = isStart and 0 or uiHeight
-
-                self.isAsteroid = self.col == midStar.col
-                        and rnd(1) < 0.005
-
-                self.y = uiOffset
-                self.x = flr(rnd(128))
+            if y > 128 then
+                y = uiOffset
+                x = flr(rnd(128))
             end
 
             -- Twinkle the star if it's a near star.
-            if self.col == nearStar.col then
-                self.col = nearStar.twinkleCol
-            elseif self.col == nearStar.twinkleCol then
-                self.col = nearStar.col
+            if col == nearStar.col then
+                col = nearStar.twinkleCol
+            elseif col == nearStar.twinkleCol then
+                col = nearStar.col
             end
         end
     }
@@ -45,8 +45,8 @@ end
 
 -- Creates starfield background.
 -- @param isStart: whether this is
--- for the title/start screen (true)
--- or the game/game over screen (false).
+-- for the title / start screen (true)
+-- or the in-game / game over screen (false).
 function createStarfield(isStart)
     for i = 1, numOfStars do
         local col = flr(rnd(3)) + 5
@@ -67,15 +67,17 @@ function createStarfield(isStart)
     end
 end
 
--- Update stars and draw them to the screen.
+-- Update star positions.
 function updateStarfield()
     for s in all(stars) do
         s:update()
-        if s.isAsteroid then
-            spr(23, s.x, s.y)
-        else
-            pset(s.x, s.y, s.col)
-        end
+    end
+end
+
+-- Draw stars to the screen.
+function drawStarfield()
+    for s in all(stars) do
+        pset(s.x, s.y, s.col)
     end
 end
 
