@@ -8,7 +8,7 @@
 
 -- No of particles used for creating
 -- an explosion when enemy / ship is destroyed.
-numOfParts = 30
+numOfParts = 50
 
 -- Colours for enemy explosions.
 eneCols = { 5, 9, 10, 7 }
@@ -37,14 +37,19 @@ function newExpObj(expX, expY, objSpdY, expCols)
         scale = ranFloat(1, 4),
         life = ranFloat(1, 4),
         maxLife = ranFloat(1, 4),
-        small = ranFloat(1,2),
+        small = ranFloat(1,2) <= 1.2,
 
         update = function(_ENV)
             x += spdX
             y += spdY
 
-            spdX *= .85
-            spdY *= .85
+            if small then
+                spdX *= 1
+                spdY *= 1
+            else
+                spdX *= .85
+                spdY *= .85
+            end
 
             scale -= .1
             life -= .1
@@ -66,8 +71,8 @@ function newExpObj(expX, expY, objSpdY, expCols)
         end,
 
         draw = function(_ENV)
-            if small <= 1.25 then
-                pset(x, y, col)
+            if small then
+                pset(x, y, 7)
             else
                 circfill(x, y, scale, col)
             end
