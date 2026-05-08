@@ -27,10 +27,10 @@ eTypes = {
         flFram = 52,
         animDelay = 3,
         spd = 0.5,
-        hp = 3,
+        hp = 2,
         points = 100,
         upFunc = function(_ENV)
-            x = x + cos(y / 16) * 0.5
+            x = x + cos(y / 16) * spd
         end
     },
     ufo = {
@@ -47,10 +47,30 @@ eTypes = {
         flFram = 36,
         animDelay = 3,
         spd = 0.75,
-        hp = 5,
+        hp = 4,
+        points = 175,
+        upFunc = function(_ENV)
+            y += spd
+        end
+    },
+    eyeball = {
+        name = "eyeball",
+        cols = {
+            { c1 = 8, c2 = 2 }, -- Red.
+            { c1 = 9, c2 = 4 }, -- Brown.
+            { c1 = 11, c2 = 3 }, -- Green.
+            { c1 = 12, c2 = 1 }, -- Blue.
+            { c1 = 14, c2 = 2 } -- Pink.
+        },
+        strtFram = 37,
+        endFram = 40,
+        flFram = 41,
+        animDelay = 3,
+        spd = 0.6,
+        hp = 3,
         points = 150,
         upFunc = function(_ENV)
-            x = x + cos(y / 16) * 0.75
+            x = x + cos(y / 16) * spd
         end
     }
 }
@@ -195,6 +215,10 @@ function spawnEnemy(enemy, x)
 
     if enemy.name == eTypes.ufo.name then
         def = eTypes.ufo
+    end
+
+    if enemy.name == eTypes.eyeball.name then
+        def = eTypes.eyeball
     end
 
     add(

@@ -107,7 +107,7 @@ function updateGame()
 		-- 	proT = proCfg.rof
 		-- end
 
-		spawnEnemy(eTypes.alien, ranInt(0, 120))
+		spawnEnemy(eTypes.eyeball, ranInt(0, 120))
 	end
 
 	-- Fire bullet if X pressed.
