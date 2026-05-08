@@ -2,8 +2,8 @@
 function _init()
 	cls()
 
-	-- References to global scope.
-	_g=_ENV
+	-- Reference to global scope.
+	_g = _ENV
 
 	debugMode = false
 
@@ -27,7 +27,7 @@ function _init()
 	bullHeight = 4
 
 	-- Starting colour for blinking text.
-	blinkT = 0
+	blinkT = 1
 
 	-- Setup and initialize starfield.
 	stars = {}
@@ -41,10 +41,12 @@ function _init()
 
 	stateNames = {
 		title = "title", start = "start",
-		game = "game", gameOver = "gameOver"
+		newWave = "newWave", game = "game",
+		gameOver = "gameOver"
 	}
 
-	state = stateNames.title
+	-- Initial game state.
+	enterTitle()
 
 	createStarfield(true)
 end
@@ -52,14 +54,14 @@ end
 -- Update is for gameplay.
 -- Hard 30fps.
 function _update()
-	blinkT += 1
-
 	if state == stateNames.game then
 		updateGame()
 	elseif state == stateNames.title then
 		updateTitle()
 	elseif state == stateNames.start then
 		updateStart()
+	elseif state == stateNames.newWave then
+		updateNewWave()
 	elseif state == stateNames.gameOver then
 		updateGameOver()
 	end
@@ -74,6 +76,8 @@ function _draw()
 		drawTitle()
 	elseif state == stateNames.start then
 		drawStart()
+	elseif state == stateNames.newWave then
+		drawNewWave()
 	elseif state == stateNames.gameOver then
 		drawGameOver()
 	end

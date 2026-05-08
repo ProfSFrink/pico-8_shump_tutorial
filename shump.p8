@@ -6,6 +6,7 @@ __lua__
 
 #include ./states/TitleState.lua
 #include ./states/StartState.lua
+#include ./states/NewWaveState.lua
 #include ./states/GameState.lua
 #include ./states/GameOverState.lua
 #include ./components/Ship.lua

@@ -1,11 +1,7 @@
 -- Game state logic.
 
--- todo: abstract the ship to its own component file.
-
 -- Sets up the game.
-function startGame()
-	state = stateNames.game
-
+function setupGame()
 	-- Setup game timer (frames).
 	gameT = 0
 
@@ -45,6 +41,9 @@ function startGame()
 
 	-- Tracks frames between shots.
 	proT = 0
+
+	-- Prevents enemies spawning until the new wave screen has finished.
+	spawnOn = false
 
 	-- Reset enemies table.
 	enemies = {}
@@ -127,7 +126,7 @@ function updateGame()
 	-- Trigger one-shot spawn events from frame schedule.
 	local nextSpawnEvent = spawnEvent[spawnEventIndex]
 
-	if nextSpawnEvent and gameT >= nextSpawnEvent.frame then
+	if spawnOn and nextSpawnEvent and gameT >= nextSpawnEvent.frame then
 		if #enemies < maxEnemies then
 			spawnEnemy(nextSpawnEvent.kind, nextSpawnEvent.spawnX)
 		end
@@ -187,7 +186,7 @@ function updateGame()
 	-- Check for game over.
 	if player.lives <= 0 then
 		if ship:dead() == false then
-			showGameOver()
+			enterGameOver()
 			return
 		end
 	end
@@ -244,4 +243,9 @@ function drawGame()
 	for i = 1, player.bombs do
 		spr(29, 90 + uiX, 1)
 	end
+end
+
+-- Enter the game state.
+function enterGame()
+	state = stateNames.game
 end

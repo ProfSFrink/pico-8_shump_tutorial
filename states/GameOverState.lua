@@ -2,8 +2,10 @@
 
 -- Update the game over screen.
 function updateGameOver()
+    blinkT += 1
+
     if btnp(4) or btnp(5) then
-        restartGame()
+        exitGameOver()
     end
 end
 
@@ -29,22 +31,21 @@ function drawGameOver()
         local gameOver = "GAME OVER"
         local restart = pressAKey .. "RESTART"
 
-        ?gameOver, calcCenX(#gameOver), 50, 7 
-        ?restart, calcCenX(#restart), 80, blink()
+        ?gameOver, calcCenX(#gameOver), 50, 7 ?restart, calcCenX(#restart), 80, blink()
     end
 end
 
--- Show the game over screen.
-function showGameOver()
+-- Enter the game over state.
+function enterGameOver()
     state = stateNames.gameOver
     bg = { x1 = 64, y1 = 64, x2 = 64, y2 = 64 }
     bgCol = 8
     startTimer = 0
 end
 
--- Restart the game and
+-- Exit the game over state and
 -- return to the title screen.
-function restartGame()
-    state = stateNames.title
+function exitGameOver()
+    enterTitle()
     createStarfield(true)
 end

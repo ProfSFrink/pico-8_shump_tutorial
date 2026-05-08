@@ -2,8 +2,10 @@
 
 -- Updates the start screen.
 function updateStart()
+	blinkT += 1
+
 	if btnp(4) or btnp(5) then
-		startGame()
+		enterNewWave()
 	end
 end
 
@@ -23,12 +25,12 @@ function drawStart()
 	-- Holds screen for 60 frames (2 secs).
 
 	if startTimer > 60 then
-		startGame()
+		enterNewWave()
 	end
 end
 
--- Start game screen.
-function showStart()
+-- enter start screen state.
+function enterStart()
 	startTimer = 0
 
 	state = stateNames.start
