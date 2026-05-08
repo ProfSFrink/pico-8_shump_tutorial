@@ -1,20 +1,20 @@
 pico-8 cartridge // http://www.pico-8.com
 version 43
 __lua__
-#include main.lua
-#include ./util/tools.lua
+#include Main.lua
+#include ./util/Tools.lua
 
-#include ./states/title.lua
-#include ./states/start.lua
-#include ./states/game.lua
-#include ./states/gameOver.lua
-#include ./components/ship.lua
-#include ./components/projectile.lua
-#include ./components/starfield.lua
-#include ./components/enemy.lua
-#include ./effects/explosion.lua
-#include ./effects/shockwave.lua
-#include ./effects/spark.lua
+#include ./states/TitleState.lua
+#include ./states/StartState.lua
+#include ./states/GameState.lua
+#include ./states/GameOverState.lua
+#include ./components/Ship.lua
+#include ./components/Projectiles.lua
+#include ./components/Starfield.lua
+#include ./components/Enemies.lua
+#include ./effects/Explosion.lua
+#include ./effects/Shockwave.lua
+#include ./effects/Spark.lua
 
 __gfx__
 00000000000220000002200000022000000220000002200000000000000000000000000000000000000000000000000000000000088008800880088000000000

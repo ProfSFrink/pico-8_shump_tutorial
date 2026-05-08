@@ -39,6 +39,7 @@
   ],
   "workbench.colorTheme": "PICO-8",
   "editor.fontSize": 14,
-  "pico8runner.pico8Path": "/Users/swpartlow/Repos/pico-8_repos/",
-  "pico8runner.cartridgePath": "/Users/swpartlow/Repos/pico-8_repos/carts/shump_tutorial/shump.p8"
+  "pico8runner.pico8Path": "/Users/swpartlow/Repos/pico-8_repos/PICO-8.app/Contents/MacOS/pico8",
+  "pico8runner.cartridgePath": "/Users/swpartlow/Repos/pico-8_repos/carts/shump_tutorial/shump.p8",
+  "pico9runner.workingDirectory": "/Users/swpartlow/Repos/pico-8_repos/carts/shump_tutorial"
 }
