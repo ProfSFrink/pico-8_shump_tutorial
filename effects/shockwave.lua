@@ -8,7 +8,7 @@
 -- col: Color of shockwave.
 
 slSwCfg = { r = 2, tr = 4, spd = 1, col = 9 }
-lgSwCfg = { r = 2, tr = 24, spd = 2.5, col = 7 }
+lgSwCfg = { r = 2, tr = 28, spd = 3.5, col = 7 }
 
 -- Spawn a shockwave at the given position.
 -- @param sx: X position.

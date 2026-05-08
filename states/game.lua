@@ -20,11 +20,11 @@ function startGame()
 			spawnX = ranInt(0, 120) },
 		{ frame = 45, kind = eTypes.ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 55, kind = eTypes.ufo,
+		{ frame = 55, kind = eTypes.eyeball,
 			spawnX = ranInt(0, 120) },
 		{ frame = 65, kind = eTypes.ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 75, kind = eTypes.ufo,
+		{ frame = 75, kind = eTypes.eyeball,
 			spawnX = ranInt(0, 120) },
 		{ frame = 100, kind = eTypes.alien,
 			spawnX = ranInt(0, 120) }
@@ -107,7 +107,7 @@ function updateGame()
 		-- 	proT = proCfg.rof
 		-- end
 
-		spawnEnemy(eTypes.eyeball, ranInt(0, 120))
+		spawnEnemy(eTypes.flame, ranInt(0, 120))
 	end
 
 	-- Fire bullet if X pressed.

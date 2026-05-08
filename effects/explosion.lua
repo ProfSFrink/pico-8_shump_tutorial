@@ -2,8 +2,6 @@
 
 -- NOTE: Explosions currently only work with 8x8 sprites. Adjustments would be needed to support larger sprites.
 
---todo: add flash effect to appear at centre of explosions.
-
 -- Initial explosion definitions.
 
 -- No of particles used for creating

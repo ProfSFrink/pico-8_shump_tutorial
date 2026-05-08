@@ -72,7 +72,48 @@ eTypes = {
         upFunc = function(_ENV)
             x = x + cos(y / 16) * spd
         end
-    }
+    },
+        redeye = {
+        name = "redeye",
+        cols = {
+            { c1 = 5, c2 = 8 }, -- Grey / Red.
+            -- { c1 = 9, c2 = 4 }, -- Brown.
+            -- { c1 = 11, c2 = 3 }, -- Green.
+            -- { c1 = 12, c2 = 1 }, -- Blue.
+            -- { c1 = 14, c2 = 2 } -- Pink.
+        },
+        strtFram = 42,
+        endFram = 46,
+        flFram = 47,
+        animDelay = 5,
+        spd = 0.3,
+        hp = 5,
+        points = 200,
+        upFunc = function(_ENV)
+            y += spd
+        end
+    },
+        flame = {
+        name = "flame",
+        cols = {
+            { c1 = 8, c2 = 2 }, -- Grey / Red.
+            -- { c1 = 9, c2 = 4 }, -- Brown.
+            -- { c1 = 11, c2 = 3 }, -- Green.
+            -- { c1 = 12, c2 = 1 }, -- Blue.
+            -- { c1 = 14, c2 = 2 } -- Pink.
+        },
+        strtFram = 53,
+        endFram = 54,
+        flFram = 55,
+        animDelay = 2,
+        spd = 0.8,
+        hp = 2,
+        points = 200,
+        upFunc = function(_ENV)
+            x = x + cos(y / 16) * spd
+            y += spd
+        end
+    },
 }
 
 -- Enemy Factory logic.
@@ -93,7 +134,7 @@ function newEnemy(enemyCfg, eneX)
     -- Local references to global scope.
     local ene = enemies
     local pl = player
-    local newSw = spawnShockWave
+    local spawnShockWave = spawnShockWave
     local swConfig = lgSwCfg
     local exp = spawnExp
     local playSfx = sfx
@@ -109,7 +150,8 @@ function newEnemy(enemyCfg, eneX)
 
         cols = enemyCfg.cols,
         -- Randomly select a color palette.
-        ranIdx = ranInt(1, #enemyCfg.cols),
+        --ranIdx = ranInt(1, #enemyCfg.cols),
+        ranIdx = 1,
 
         -- Current sprite being animated.
         curFram = enemyCfg.strtFram,
@@ -198,7 +240,7 @@ function newEnemy(enemyCfg, eneX)
                 -- Spawn explosion.
                 exp(x, y, spd, expCols)
                 -- Spawn large shockwave.
-                newSw(x, y, swConfig)
+                spawnShockWave(x, y, swConfig)
             end
         end
     }
@@ -219,6 +261,14 @@ function spawnEnemy(enemy, x)
 
     if enemy.name == eTypes.eyeball.name then
         def = eTypes.eyeball
+    end
+
+    if enemy.name == eTypes.redeye.name then
+        def = eTypes.redeye
+    end
+
+    if enemy.name == eTypes.flame.name then
+        def = eTypes.flame
     end
 
     add(
