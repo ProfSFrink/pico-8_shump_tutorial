@@ -19,14 +19,18 @@ end
 function drawNewWave()
     drawGame()
 
+    ?"Entering new wave state", 0, 20, 7
+
     local waveText = "WAVE " .. waveNum
 
-    ?waveText, calcCenX(#waveText), 30, 7
+    ?exitTimer, 0, 10, 7
+    ?waveText, calcCenX(#waveText), 30, blink()
 end
 
 -- Enter the new wave state.
 function enterNewWave()
     state = stateNames.newWave
+    spawnOn = false
     exitTimer = 60 -- 2 seconds until state change.
     waveNum += 1
 end

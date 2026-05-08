@@ -31,7 +31,8 @@ function drawGameOver()
         local gameOver = "GAME OVER"
         local restart = pressAKey .. "RESTART"
 
-        ?gameOver, calcCenX(#gameOver), 50, 7 ?restart, calcCenX(#restart), 80, blink()
+        ?gameOver, calcCenX(#gameOver), 50, 7
+        ?restart, calcCenX(#restart), 80, blink()
     end
 end
 

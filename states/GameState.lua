@@ -16,14 +16,14 @@ function setupGame()
 			spawnX = ranInt(0, 120) },
 		{ frame = 45, kind = eTypes.ufo,
 			spawnX = ranInt(0, 120) },
-		{ frame = 55, kind = eTypes.eyeball,
-			spawnX = ranInt(0, 120) },
-		{ frame = 65, kind = eTypes.ufo,
-			spawnX = ranInt(0, 120) },
-		{ frame = 75, kind = eTypes.eyeball,
-			spawnX = ranInt(0, 120) },
-		{ frame = 100, kind = eTypes.alien,
-			spawnX = ranInt(0, 120) }
+		-- { frame = 55, kind = eTypes.eyeball,
+		-- 	spawnX = ranInt(0, 120) },
+		-- { frame = 65, kind = eTypes.ufo,
+		-- 	spawnX = ranInt(0, 120) },
+		-- { frame = 75, kind = eTypes.eyeball,
+		-- 	spawnX = ranInt(0, 120) },
+		-- { frame = 100, kind = eTypes.alien,
+		-- 	spawnX = ranInt(0, 120) }
 	}
 
 	-- Setup player ship.
@@ -106,7 +106,7 @@ function updateGame()
 		-- 	proT = proCfg.rof
 		-- end
 
-		spawnEnemy(eTypes.flame, ranInt(0, 120))
+		-- spawnEnemy(eTypes.flame, ranInt(0, 120))
 	end
 
 	-- Fire bullet if X pressed.
@@ -190,6 +190,11 @@ function updateGame()
 			return
 		end
 	end
+
+	-- Check if end of wave.
+	if spawnEventIndex > #spawnEvent and #enemies == 0 then
+		enterNewWave()
+	end
 end
 
 -- Draws the game screen.
@@ -248,4 +253,7 @@ end
 -- Enter the game state.
 function enterGame()
 	state = stateNames.game
+	gameT = 0
+	proT = 0
+	spawnEventIndex = 1
 end
