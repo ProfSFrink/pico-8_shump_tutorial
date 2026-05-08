@@ -129,8 +129,9 @@ local dTimerLim = 10
 -- Factory function for creating enemies.
 -- @param enemyCfg: Enemy configuration object.
 -- @param eneX: Spawn x position.
+-- @param eneY: Spawn y position.
 -- @return: A new enemy object.
-function newEnemy(enemyCfg, eneX)
+function newEnemy(enemyCfg, eneX, eneY)
     -- Local references to global scope.
     local ene = enemies
     local pl = player
@@ -143,7 +144,7 @@ function newEnemy(enemyCfg, eneX)
     return {
         name = enemyCfg.name,
         x = eneX,
-        y = -8, -- Start just above the screen.
+        y = eneY,
         spd = enemyCfg.spd,
         hp = enemyCfg.hp,
         points = enemyCfg.points,
@@ -248,7 +249,8 @@ end
 
 -- Spawns one enemy using shared enemy config.
 -- @param x: X position.
-function spawnEnemy(enemy, x)
+-- @param y: Y position.
+function spawnEnemy(enemy, x, y)
     local def
 
     if enemy.name == eTypes.alien.name then
@@ -272,7 +274,7 @@ function spawnEnemy(enemy, x)
     end
 
     add(
-        enemies, newEnemy(def, x)
+        enemies, newEnemy(def, x, y)
     )
 end
 

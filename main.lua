@@ -29,6 +29,8 @@ function _init()
 	-- Starting colour for blinking text.
 	blinkT = 1
 
+	waveNum = 0
+
 	-- Setup and initialize starfield.
 	stars = {}
 	numOfStars = 80
@@ -42,7 +44,7 @@ function _init()
 	stateNames = {
 		title = "title", start = "start",
 		newWave = "newWave", game = "game",
-		gameOver = "gameOver"
+		win = "win", gameOver = "gameOver"
 	}
 
 	-- Initial game state.
@@ -64,6 +66,8 @@ function _update()
 		updateNewWave()
 	elseif state == stateNames.gameOver then
 		updateGameOver()
+	elseif state == stateNames.win then
+		updateWin()
 	end
 end
 
@@ -80,5 +84,7 @@ function _draw()
 		drawNewWave()
 	elseif state == stateNames.gameOver then
 		drawGameOver()
+	elseif state == stateNames.win then
+		drawWin()
 	end
 end

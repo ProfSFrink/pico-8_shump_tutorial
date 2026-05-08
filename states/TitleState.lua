@@ -25,10 +25,10 @@ function drawTitle()
 	?start, calcCenX(#start), 80, blink()
 end
 
--- Runs on state entry.
+-- Enter the title state.
 function enterTitle()
 	state = stateNames.title
-	onEntered = false
+	waveNum = 0
 
 	-- Get's game ready now so we
 	-- can show in the background

@@ -9,6 +9,7 @@ __lua__
 #include ./states/NewWaveState.lua
 #include ./states/GameState.lua
 #include ./states/GameOverState.lua
+#include ./states/WinState.lua
 #include ./components/Ship.lua
 #include ./components/Projectiles.lua
 #include ./components/Starfield.lua
