@@ -17,7 +17,7 @@ function drawTitle()
 
 	drawStarfield()
 
-	local title = "SHUMP TUTORIAL"
+	local title = "MY FIRST SHUMP!"
 	local start = pressAKey .. "START"
 
 	?title, calcCenX(#title) + 1, 41, 1
@@ -29,6 +29,7 @@ end
 function enterTitle()
 	state = stateNames.title
 	waveNum = 0
+	music(1)
 
 	-- Get's game ready now so we
 	-- can show in the background

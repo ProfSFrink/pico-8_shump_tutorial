@@ -36,7 +36,7 @@ pTypes = {
         spd = 4,
         rof = 8,
         dam = 2,
-        sfx = 1,
+        sfx = 2,
         btn = 4,
         upFunc = function(_ENV)
             if curFram < endFram then

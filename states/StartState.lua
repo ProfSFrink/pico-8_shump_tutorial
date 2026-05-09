@@ -31,7 +31,7 @@ end
 
 -- enter start screen state.
 function enterStart()
-	startTimer = 0
-
 	state = stateNames.start
+	startTimer = 0
+	music(-1,2000)
 end

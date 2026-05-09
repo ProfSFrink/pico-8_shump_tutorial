@@ -122,7 +122,7 @@ function spawnExp(expX, expY, objSpdY, expCols)
 
     add(exps, newFlash(expX, expY, 8, 4, 7))
 
-    sfx(rnd(2) + 2)
+    sfx(1)
 end
 
 -- Update all explosions.

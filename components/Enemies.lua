@@ -137,8 +137,8 @@ function newEnemy(enemyCfg, eneX, eneY)
     local pl = player
     local spawnShockWave = spawnShockWave
     local swConfig = lgSwCfg
-    local exp = spawnExp
-    local playSfx = sfx
+    local spawnExp = spawnExp
+    local sfx = sfx
     local expCols = eneCols
 
     return {
@@ -234,12 +234,12 @@ function newEnemy(enemyCfg, eneX, eneY)
             hit = true
             hp -= dam
 
-            playSfx(5)
+            sfx(3)
             if hp <= 0 then
                 dead = true
                 pl.score += points
                 -- Spawn explosion.
-                exp(x, y, spd, expCols)
+                spawnExp(x, y, spd, expCols)
                 -- Spawn large shockwave.
                 spawnShockWave(x, y, swConfig)
             end

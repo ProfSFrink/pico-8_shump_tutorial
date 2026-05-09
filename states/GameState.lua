@@ -21,13 +21,13 @@ function setupGame()
 		{ wave = 1, frame = 30, kind = eTypes.alien,
 			spawnX = 60, spawnY = 0 },
 		{ wave = 2, frame = 55, kind = eTypes.eyeball,
-			spawnX = ranInt(0, 120) },
+			spawnX = ranInt(0, 120), spawnY = 0 },
 		{ wave = 2, frame = 65, kind = eTypes.ufo,
-			spawnX = ranInt(0, 120) },
+			spawnX = ranInt(0, 120), spawnY = 0 },
 		{ wave = 2, frame = 75, kind = eTypes.eyeball,
-			spawnX = ranInt(0, 120) },
+			spawnX = ranInt(0, 120), spawnY = 0 },
 		{ wave = 2, frame = 100, kind = eTypes.alien,
-			spawnX = ranInt(0, 120) }
+			spawnX = ranInt(0, 120), spawnY = 0 }
 	}
 
 	-- Setup player ship.
@@ -36,7 +36,7 @@ function setupGame()
 	-- Setup player.
 	player = {
 		score = 0,
-		lives = 2,
+		lives = 1,
 		bombs = 2
 	}
 
