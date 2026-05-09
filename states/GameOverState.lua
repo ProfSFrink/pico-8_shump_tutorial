@@ -3,9 +3,10 @@
 -- Update the game over screen.
 function updateGameOver()
     blinkT += 1
-
-    if btnp(4) or btnp(5) then
-        exitGameOver()
+    if stoppedFiring() then
+        if btnp(4) or btnp(5) then
+            exitGameOver()
+        end
     end
 end
 

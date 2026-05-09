@@ -3,10 +3,11 @@
 -- Update the win screen.
 function updateWin()
     blinkT += 1
-
-	if btnp(4) or btnp(5) then
-		enterTitle()
-	end
+    if stoppedFiring() then
+        if btnp(4) or btnp(5) then
+            enterTitle()
+        end
+    end
 end
 
 -- Draw the win screen.

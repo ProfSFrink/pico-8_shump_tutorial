@@ -66,3 +66,13 @@ function col(a, b)
 
     return true
 end
+
+-- Returns true if the player has just stopped firing a weapon.
+-- @ return: true if both fire buttons released.
+function stoppedFiring()
+    if btnp(4) == false and btnp(5) == false then
+        return true
+    else
+        return false
+    end
+end
