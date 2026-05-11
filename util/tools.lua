@@ -72,3 +72,12 @@ end
 function stoppedFiring()
     return btn(4) == false and btn(5) == false
 end
+
+-- Logs text to a file for debugging purposes.
+-- @param text: the text to log.
+-- @param overwrite: if true, overwrites the log file instead of appending.
+function log(text, overwrite)
+    if debugMode then
+        printh(text, "logs/log", overwrite)
+    end
+end

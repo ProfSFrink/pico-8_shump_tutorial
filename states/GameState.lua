@@ -106,21 +106,25 @@ function updateGameplay()
 	-- Left arrow.
 	if btn(0) then
 		ship:move("left")
+		log("Left Button Pressed at time: " .. gameT)
 	end
 
 	-- Right arrow.
 	if btn(1) then
 		ship:move("right")
+		log("Right Button Pressed at time: " .. gameT)
 	end
 
 	-- Up arrow.
 	if btn(2) then
 		ship:move("up")
+		log("Up Button Pressed at time: " .. gameT)
 	end
 
 	-- Down arrow.
 	if btn(3) then
 		ship:move("down")
+		log("Down Button Pressed at time: " .. gameT)
 	end
 
 	-- Fire laser if Z pressed.
@@ -131,6 +135,8 @@ function updateGameplay()
 			spawnProjectile(proCfg, ship.x, ship.y - ship.bullOffset)
 			ship.muzzle = 4
 			proT = proCfg.rof
+
+			log("Fire Laser Button Pressed at time: " .. gameT)
 		end
 	end
 
@@ -142,6 +148,8 @@ function updateGameplay()
 			spawnProjectile(proCfg, ship.x, ship.y - ship.bullOffset)
 			ship.muzzle = 4
 			proT = proCfg.rof
+
+			log("Fire Bullet Button Pressed at time: " .. gameT)
 		end
 	end
 

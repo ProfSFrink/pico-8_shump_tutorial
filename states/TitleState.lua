@@ -6,6 +6,8 @@ function updateTitle()
 
 	if btnp(4) or btnp(5) then
 		enterStart()
+
+		log("Starting game at time: " .. gameT, true)
 	end
 
 	updateStarfield()
