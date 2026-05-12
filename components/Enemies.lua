@@ -1,4 +1,5 @@
 -- Enemies definitions.
+-- todo: Review animation delays.
 
     -- Setup for an enemy.
     -- name: Enemy name.
@@ -13,6 +14,9 @@
     -- hp: Enemy health points.
     -- points: Enemy score value.
     -- upFunc: Custom update function.
+    -- sprW: Sprite width in tiles (Optional).
+    -- sprH: Sprite height in tiles (Optional).
+    -- size: Size of the enemy for collision purposes(Optional).
 eTypes = {
     alien = {
         name = "alien",
@@ -141,6 +145,7 @@ eTypes = {
         flash = 100,
         delay = 0.4,
         spd = 0.5,
+        size = entSizes.lg,
         hp = 10,
         points = 1000,
         upFunc = function(_ENV)
@@ -172,6 +177,7 @@ function newEnemy(enemyCfg, eneX, eneY)
     local swConfig = lgSwCfg
     local spawnExp = spawnExp
     local sfx = sfx
+    local entSizes = entSizes
     local expCols = eneCols
 
     return {
@@ -190,6 +196,9 @@ function newEnemy(enemyCfg, eneX, eneY)
         -- Sprite Size, if provided.
         sprW = enemyCfg.sprW or 1,
         sprH = enemyCfg.sprH or 1,
+
+        -- Size of sprite, defaults to small.
+        size = enemyCfg.size or entSizes.sl,
 
         -- Sprites for animation and flash when hit.
         ani = enemyCfg.ani,
@@ -291,30 +300,18 @@ function spawnEnemy(enemy, x, y)
 
     if enemy.name == eTypes.alien.name then
         def = eTypes.alien
-    end
-
-    if enemy.name == eTypes.ufo.name then
+    elseif enemy.name == eTypes.ufo.name then
         def = eTypes.ufo
-    end
-
-    if enemy.name == eTypes.eyeball.name then
-        def = eTypes.eyeball
-    end
-
-    if enemy.name == eTypes.redeye.name then
-        def = eTypes.redeye
-    end
-
-    if enemy.name == eTypes.flame.name then
-        def = eTypes.flame
-    end
-
-    if enemy.name == eTypes.fighter.name then
-        def = eTypes.fighter
-    end
-
-    if enemy.name == eTypes.boss.name then
-        def = eTypes.boss
+    elseif enemy.name == eTypes.eyeball.name then
+            def = eTypes.eyeball
+    elseif enemy.name == eTypes.redeye.name then
+            def = eTypes.redeye
+    elseif enemy.name == eTypes.flame.name then
+            def = eTypes.flame
+    elseif enemy.name == eTypes.fighter.name then
+            def = eTypes.fighter
+    elseif enemy.name == eTypes.boss.name then
+            def = eTypes.boss
     end
 
     add(

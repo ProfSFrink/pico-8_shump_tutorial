@@ -1,33 +1,34 @@
+-- Global variables.
+
+-- Reference to global scope.
+_g = _ENV
+
+debugMode = false
+
+-- Game strings.
+
+-- Text for start and restart.
+pressAKey = "PRESS Z OR X TO "
+
+-- Projectile object literals.
+bullet = "bullet"
+laser = "laser"
+
+-- Offset for the height of the UI.
+uiHeight = 9
+
+-- Height of a bullet.
+bullHeight = 4
+
+-- Starting colour for blinking text.
+blinkT = 1
+
+-- 7 equals 8x8 sprite, 15 equals 16x16 etc.
+entSizes = { sl = 7, lg = 15}
+
 -- Runs once on startup.
 function _init()
 	cls()
-
-	-- Reference to global scope.
-	_g = _ENV
-
-	debugMode = false
-
-	-- Game strings.
-
-		-- Text for start and restart.
-		pressAKey = "PRESS Z OR X TO "
-
-		-- Projectile object literals.
-		bullet = "bullet"
-		laser = "laser"
-
-		-- Enemy object literals.
-		alien = "alien"
-		ufo = "ufo"
-
-	-- Offset for the height of the UI.
-	uiHeight = 9
-
-	-- Height of a bullet.
-	bullHeight = 4
-
-	-- Starting colour for blinking text.
-	blinkT = 1
 
 	waveNum = 0
 
