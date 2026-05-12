@@ -23,10 +23,9 @@ eTypes = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 6, c2 = 13 } -- Grey.
         },
-        ani = { start = 80,
-                fin = 83,
-                flash = 84,
-                delay = 3 },
+        ani = { 80, 81, 82, 83 },
+        flash = 84,
+        delay = 0.4,
         spd = 0.5,
         hp = 2,
         points = 100,
@@ -43,10 +42,9 @@ eTypes = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        ani = { start = 64,
-                fin = 67,
-                flash = 68,
-                delay = 3 },
+        ani = { 64, 65, 66, 67 },
+        flash = 68,
+        delay = 0.4,
         spd = 0.75,
         hp = 4,
         points = 175,
@@ -63,10 +61,9 @@ eTypes = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        ani = { start = 69,
-                fin = 72,
-                flash = 73,
-                delay = 3 },
+        ani = { 69, 70, 71, 72 },
+        flash = 73,
+        delay = 0.4,
         spd = 0.6,
         hp = 3,
         points = 150,
@@ -75,24 +72,23 @@ eTypes = {
         end
     },
         redeye = {
-        name = "redeye",
-        cols = {
-            { c1 = 5, c2 = 8 }, -- Grey / Red.
-            -- { c1 = 9, c2 = 4 }, -- Brown.
-            -- { c1 = 11, c2 = 3 }, -- Green.
-            -- { c1 = 12, c2 = 1 }, -- Blue.
-            -- { c1 = 14, c2 = 2 } -- Pink.
-        },
-        ani = { start = 88,
-                fin = 92,
-                flash = 93,
-                delay = 5 },
-        spd = 0.3,
-        hp = 5,
-        points = 200,
-        upFunc = function(_ENV)
-            y += spd
-        end
+            name = "redeye",
+            cols = {
+                { c1 = 5, c2 = 8 }, -- Grey / Red.
+                -- { c1 = 9, c2 = 4 }, -- Brown.
+                -- { c1 = 11, c2 = 3 }, -- Green.
+                -- { c1 = 12, c2 = 1 }, -- Blue.
+                -- { c1 = 14, c2 = 2 } -- Pink.
+            },
+            ani = { 88, 89, 90, 91, 92 },
+            flash = 93,
+            delay = 0.4,
+            spd = 0.3,
+            hp = 5,
+            points = 200,
+            upFunc = function(_ENV)
+                y += spd
+            end
     },
         flame = {
         name = "flame",
@@ -103,10 +99,9 @@ eTypes = {
             -- { c1 = 12, c2 = 1 }, -- Blue.
             -- { c1 = 14, c2 = 2 } -- Pink.
         },
-        ani = { start = 85,
-                fin = 86,
-                flash = 87,
-                delay = 2 },
+        ani = { 85, 86 },
+        flash = 87,
+        delay = 0.4,
         spd = 0.8,
         hp = 2,
         points = 200,
@@ -124,16 +119,32 @@ eTypes = {
             -- { c1 = 12, c2 = 1 }, -- Blue.
             -- { c1 = 14, c2 = 2 } -- Pink.
         },
-        ani = { start = 74,
-                fin = 77,
-                flash = 78,
-                delay = 2 },
+        ani = { 74, 75, 76, 77 },
+        flash = 78,
+        delay = 0.4,
         spd = 0.4,
         hp = 4,
         points = 300,
         upFunc = function(_ENV)
             x = x + cos(y / 16) * spd
             y += spd
+        end
+    },
+    boss = {
+        name = "boss",
+        cols = {
+            { c1 = 10, c2 = 0 }, -- Green.
+        },
+        sprW = 2,
+        sprH = 2,
+        ani = { 96, 98 },
+        flash = 100,
+        delay = 0.4,
+        spd = 0.5,
+        hp = 10,
+        points = 1000,
+        upFunc = function(_ENV)
+            x = x + cos(y / 16) * spd
         end
     },
 }
@@ -176,17 +187,23 @@ function newEnemy(enemyCfg, eneX, eneY)
         --ranIdx = ranInt(1, #enemyCfg.cols),
         ranIdx = 1,
 
-        -- Current sprite being animated.
-        curSpr = enemyCfg.ani.start,
+        -- Sprite Size, if provided.
+        sprW = enemyCfg.sprW or 1,
+        sprH = enemyCfg.sprH or 1,
 
-        startSpr = enemyCfg.ani.start,
-        endSpr = enemyCfg.ani.fin,
-        flSpr = enemyCfg.ani.flash,
+        -- Sprites for animation and flash when hit.
+        ani = enemyCfg.ani,
+        flash = enemyCfg.flash,
 
-        -- Frames since last animation change.
-        animTimer = 0,
+        -- Enemies current sprite.
+        EnemySpr = enemyCfg.ani[1],
 
-        animDelay = enemyCfg.ani.delay,
+        -- Current frame of animation.
+        aniFrame = 1,
+
+        -- Frames before animation advances.
+        aniDelay = enemyCfg.delay,
+
         upFunc = enemyCfg.upFunc,
         hit = false, -- if enemy in hit state.
         hTimer = hTimerLim,
@@ -214,18 +231,15 @@ function newEnemy(enemyCfg, eneX, eneY)
                 upFunc(_ENV)
             end
 
-            animTimer += 1
+            aniFrame += aniDelay
             if dead or hit then
-                curSpr = flSpr
+                EnemySpr = flash
             else
-                if animTimer >= animDelay then
-                    animTimer = 0
-                    if curSpr < endSpr then
-                        curSpr += 1
-                    else
-                        curSpr = startSpr
-                    end
+                if flr(aniFrame) > #ani then
+                    aniFrame = 1
                 end
+
+                EnemySpr = ani[flr(aniFrame)]
             end
 
             if y > 128 then
@@ -240,9 +254,9 @@ function newEnemy(enemyCfg, eneX, eneY)
             end
 
             if dead then
-                spr(curSpr, x, y, 1, 1, false, dTimer % 2 == 0)
+                spr(EnemySpr, x, y, sprW, sprH, false, dTimer % 2 == 0)
             else
-                spr(curSpr, x, y)
+                spr(EnemySpr, x, y, sprW, sprH)
             end
 
             if ranIdx >= 1 then pal() end
@@ -297,6 +311,10 @@ function spawnEnemy(enemy, x, y)
 
     if enemy.name == eTypes.fighter.name then
         def = eTypes.fighter
+    end
+
+    if enemy.name == eTypes.boss.name then
+        def = eTypes.boss
     end
 
     add(

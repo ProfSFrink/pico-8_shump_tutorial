@@ -25,7 +25,9 @@ function setupGame()
 		{ wave = 2, frame = 75, kind = eTypes.fighter,
 			spawnX = ranInt(0, 120), spawnY = 0 },
 		{ wave = 2, frame = 100, kind = eTypes.fighter,
-			spawnX = ranInt(0, 120), spawnY = 0 }
+			spawnX = ranInt(0, 120), spawnY = 0 },
+		{ wave = 3, frame = 30, kind = eTypes.boss,
+			spawnX = 67, spawnY = 0 }
 	}
 
 	-- Setup player ship.
