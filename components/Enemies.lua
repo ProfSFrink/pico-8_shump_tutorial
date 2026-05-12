@@ -296,26 +296,8 @@ end
 -- @param x: X position.
 -- @param y: Y position.
 function spawnEnemy(enemy, x, y)
-    local def
-
-    if enemy.name == eTypes.alien.name then
-        def = eTypes.alien
-    elseif enemy.name == eTypes.ufo.name then
-        def = eTypes.ufo
-    elseif enemy.name == eTypes.eyeball.name then
-            def = eTypes.eyeball
-    elseif enemy.name == eTypes.redeye.name then
-            def = eTypes.redeye
-    elseif enemy.name == eTypes.flame.name then
-            def = eTypes.flame
-    elseif enemy.name == eTypes.fighter.name then
-            def = eTypes.fighter
-    elseif enemy.name == eTypes.boss.name then
-            def = eTypes.boss
-    end
-
     add(
-        enemies, newEnemy(def, x, y)
+        enemies, newEnemy(eTypes[enemy.name], x, y)
     )
 end
 

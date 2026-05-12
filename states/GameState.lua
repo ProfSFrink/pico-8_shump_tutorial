@@ -173,7 +173,7 @@ function updateGameplay()
 		if e.y > 0 then
 			-- Handle projectile collisions.
 			for p in all(projectiles) do
-				if col(e, p) and e.dead==false then
+				if col(e, p) and e.dead == false then
 					e:hurt(p.dam)
 					spawnShockWave(p.x, p.y, slSwCfg)
 					spawnSparks(e.x, e.y, 7)

@@ -80,7 +80,5 @@ end
 -- @param text: the text to log.
 -- @param overwrite: if true, start new log file.
 function log(text, overwrite)
-    if debugMode then
-        printh(text, "logs/log", overwrite)
-    end
+    printh(text, "logs/log", overwrite)
 end
