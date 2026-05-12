@@ -1,9 +1,10 @@
 -- Projectile component data.
 
 -- Setup for bullets & lasers.
--- strtFram: Starting frame.
--- endFram: Ending frame.
--- animDelay: Frames before animation advances.
+-- ani: Table of animation settings.
+--      start: First sprite index of the animation.
+--      fin: Last sprite index of the animation.
+--      delay: Frames between animation changes.
 -- spd: Speed.
 -- rof: Rate of fire in frames.
 -- sfx: Sound effect to play when firing.
@@ -12,37 +13,37 @@
 pTypes = {
     bullet = {
         type = bullet,
-        strtFram = 16,
-        endFram = 17,
-        animDelay = 5,
+        ani = { start = 16,
+                fin = 17,
+                delay = 5 },
         spd = 3,
         rof = 4,
         dam = 1,
         sfx = 0,
         btn = 5,
         upFunc = function(_ENV)
-            if curFram == strtFram then
-                curFram = endFram
+            if curSpr == ani.start then
+                curSpr = ani.fin
             else
-                curFram = strtFram
+                curSpr = ani.start
             end
         end
     },
     laser = {
         type = laser,
-        strtFram = 18,
-        endFram = 21,
-        animDelay = 6,
+        ani = { start = 18,
+                fin = 21,
+                delay = 6 },
         spd = 4,
         rof = 8,
         dam = 2,
         sfx = 2,
         btn = 4,
         upFunc = function(_ENV)
-            if curFram < endFram then
-                curFram += 1
+            if curSpr < ani.fin then
+                curSpr += 1
             else
-                curFram = strtFram
+                curSpr = ani.start
             end
         end
     }
@@ -77,13 +78,12 @@ function newProjectile(proCfg, proX, proY)
         upFunc = proCfg.upFunc,
 
         -- Current sprite being animated.
-        curFram = proCfg.strtFram,
-        strtFram = proCfg.strtFram,
-        endFram = proCfg.endFram,
+        curSpr = proCfg.ani.start,
+        ani = proCfg.ani,
         animTimer = 0,
 
         -- Frames before animation advances.
-        animDelay = proCfg.animDelay,
+        animDelay = proCfg.ani.delay,
 
         -- Update the projectile.
         update = function(_ENV)
@@ -104,7 +104,7 @@ function newProjectile(proCfg, proX, proY)
 
         -- Draw the projectile.
         draw = function(_ENV)
-            spr(curFram, x, y)
+            spr(curSpr, x, y)
         end
     }
 end

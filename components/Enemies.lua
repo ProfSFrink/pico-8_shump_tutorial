@@ -4,10 +4,11 @@
     -- name: Enemy name.
     -- cols: table of color pairs for the enemy, first is
     --       entry matches sprite colours.
-    -- strtFram: Starting sprite of the enemy's animation.
-    -- endFram: Ending sprite of the enemy's animation.
-    -- flFram: Flash sprite when hit or dead.
-    -- animDelay: Delay between animation frames.
+    -- ani: Table of animation settings.
+    --      start: First sprite index of the animation.
+    --      fin: Last sprite index of the animation.
+    --      flash: Sprite index to use when hit.
+    --      delay: Frames between animation changes.
     -- spd: Enemy speed.
     -- hp: Enemy health points.
     -- points: Enemy score value.
@@ -22,10 +23,10 @@ eTypes = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 6, c2 = 13 } -- Grey.
         },
-        strtFram = 80,
-        endFram = 83,
-        flFram = 84,
-        animDelay = 3,
+        ani = { start = 80,
+                fin = 83,
+                flash = 84,
+                delay = 3 },
         spd = 0.5,
         hp = 2,
         points = 100,
@@ -42,10 +43,10 @@ eTypes = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 64,
-        endFram = 67,
-        flFram = 68,
-        animDelay = 3,
+        ani = { start = 64,
+                fin = 67,
+                flash = 68,
+                delay = 3 },
         spd = 0.75,
         hp = 4,
         points = 175,
@@ -62,10 +63,10 @@ eTypes = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 69,
-        endFram = 72,
-        flFram = 73,
-        animDelay = 3,
+        ani = { start = 69,
+                fin = 72,
+                flash = 73,
+                delay = 3 },
         spd = 0.6,
         hp = 3,
         points = 150,
@@ -82,10 +83,10 @@ eTypes = {
             -- { c1 = 12, c2 = 1 }, -- Blue.
             -- { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 88,
-        endFram = 92,
-        flFram = 93,
-        animDelay = 5,
+        ani = { start = 88,
+                fin = 92,
+                flash = 93,
+                delay = 5 },
         spd = 0.3,
         hp = 5,
         points = 200,
@@ -102,10 +103,10 @@ eTypes = {
             -- { c1 = 12, c2 = 1 }, -- Blue.
             -- { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 85,
-        endFram = 86,
-        flFram = 87,
-        animDelay = 2,
+        ani = { start = 85,
+                fin = 86,
+                flash = 87,
+                delay = 2 },
         spd = 0.8,
         hp = 2,
         points = 200,
@@ -123,13 +124,13 @@ eTypes = {
             -- { c1 = 12, c2 = 1 }, -- Blue.
             -- { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 74,
-        endFram = 77,
-        flFram = 78,
-        animDelay = 2,
+        ani = { start = 74,
+                fin = 77,
+                flash = 78,
+                delay = 2 },
         spd = 0.4,
-        hp = 2,
-        points = 200,
+        hp = 4,
+        points = 300,
         upFunc = function(_ENV)
             x = x + cos(y / 16) * spd
             y += spd
@@ -176,16 +177,16 @@ function newEnemy(enemyCfg, eneX, eneY)
         ranIdx = 1,
 
         -- Current sprite being animated.
-        curFram = enemyCfg.strtFram,
+        curSpr = enemyCfg.ani.start,
 
-        strtFram = enemyCfg.strtFram,
-        endFram = enemyCfg.endFram,
-        flFram = enemyCfg.flFram,
+        startSpr = enemyCfg.ani.start,
+        endSpr = enemyCfg.ani.fin,
+        flSpr = enemyCfg.ani.flash,
 
         -- Frames since last animation change.
         animTimer = 0,
 
-        animDelay = enemyCfg.animDelay,
+        animDelay = enemyCfg.ani.delay,
         upFunc = enemyCfg.upFunc,
         hit = false, -- if enemy in hit state.
         hTimer = hTimerLim,
@@ -215,14 +216,14 @@ function newEnemy(enemyCfg, eneX, eneY)
 
             animTimer += 1
             if dead or hit then
-                curFram = flFram
+                curSpr = flSpr
             else
                 if animTimer >= animDelay then
                     animTimer = 0
-                    if curFram < endFram then
-                        curFram += 1
+                    if curSpr < endSpr then
+                        curSpr += 1
                     else
-                        curFram = strtFram
+                        curSpr = startSpr
                     end
                 end
             end
@@ -239,9 +240,9 @@ function newEnemy(enemyCfg, eneX, eneY)
             end
 
             if dead then
-                spr(curFram, x, y, 1, 1, false, dTimer % 2 == 0)
+                spr(curSpr, x, y, 1, 1, false, dTimer % 2 == 0)
             else
-                spr(curFram, x, y)
+                spr(curSpr, x, y)
             end
 
             if ranIdx >= 1 then pal() end
