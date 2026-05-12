@@ -75,7 +75,7 @@ end
 
 -- Logs text to a file for debugging purposes.
 -- @param text: the text to log.
--- @param overwrite: if true, overwrites the log file instead of appending.
+-- @param overwrite: if true, start new log file.
 function log(text, overwrite)
     if debugMode then
         printh(text, "logs/log", overwrite)

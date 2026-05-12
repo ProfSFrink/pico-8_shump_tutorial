@@ -33,8 +33,9 @@ function newShip()
 		muzzle = 0,
 		-- Invulnerability timer in frames.
 		invul = 0,
-		-- Death timer in frames.
-		dTimer = 0,
+		-- Delay between losing last life
+        -- showing game over screen.
+		dTimer = 30,
 
         -- Update ship position and animation.
         update = function(_ENV)
@@ -106,8 +107,9 @@ function newShip()
             currSpdY = 0
         end,
 
-        -- Trigger death state.
-        dead = function(_ENV)
+        -- Checks if death animation is complete.
+        -- @returns true if death animation is complete.
+        isDead = function(_ENV)
             dTimer -= 1
 
             if dTimer <= 0 then
