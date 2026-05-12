@@ -22,9 +22,9 @@ eTypes = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 6, c2 = 13 } -- Grey.
         },
-        strtFram = 48,
-        endFram = 51,
-        flFram = 52,
+        strtFram = 80,
+        endFram = 83,
+        flFram = 84,
         animDelay = 3,
         spd = 0.5,
         hp = 2,
@@ -42,9 +42,9 @@ eTypes = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 32,
-        endFram = 35,
-        flFram = 36,
+        strtFram = 64,
+        endFram = 67,
+        flFram = 68,
         animDelay = 3,
         spd = 0.75,
         hp = 4,
@@ -62,9 +62,9 @@ eTypes = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 37,
-        endFram = 40,
-        flFram = 41,
+        strtFram = 69,
+        endFram = 72,
+        flFram = 73,
         animDelay = 3,
         spd = 0.6,
         hp = 3,
@@ -82,9 +82,9 @@ eTypes = {
             -- { c1 = 12, c2 = 1 }, -- Blue.
             -- { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 42,
-        endFram = 46,
-        flFram = 47,
+        strtFram = 88,
+        endFram = 92,
+        flFram = 93,
         animDelay = 5,
         spd = 0.3,
         hp = 5,
@@ -102,11 +102,32 @@ eTypes = {
             -- { c1 = 12, c2 = 1 }, -- Blue.
             -- { c1 = 14, c2 = 2 } -- Pink.
         },
-        strtFram = 53,
-        endFram = 54,
-        flFram = 55,
+        strtFram = 85,
+        endFram = 86,
+        flFram = 87,
         animDelay = 2,
         spd = 0.8,
+        hp = 2,
+        points = 200,
+        upFunc = function(_ENV)
+            x = x + cos(y / 16) * spd
+            y += spd
+        end
+    },
+        fighter = {
+        name = "fighter",
+        cols = {
+            { c1 = 1, c2 = 5 }, -- Blue / Grey.
+            -- { c1 = 9, c2 = 4 }, -- Brown.
+            -- { c1 = 11, c2 = 3 }, -- Green.
+            -- { c1 = 12, c2 = 1 }, -- Blue.
+            -- { c1 = 14, c2 = 2 } -- Pink.
+        },
+        strtFram = 74,
+        endFram = 77,
+        flFram = 78,
+        animDelay = 2,
+        spd = 0.4,
         hp = 2,
         points = 200,
         upFunc = function(_ENV)
@@ -271,6 +292,10 @@ function spawnEnemy(enemy, x, y)
 
     if enemy.name == eTypes.flame.name then
         def = eTypes.flame
+    end
+
+    if enemy.name == eTypes.fighter.name then
+        def = eTypes.fighter
     end
 
     add(

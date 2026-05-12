@@ -20,13 +20,19 @@ function setupGame()
 			spawnX = 50, spawnY = 0 },
 		{ wave = 1, frame = 30, kind = eTypes.alien,
 			spawnX = 60, spawnY = 0 },
-		{ wave = 2, frame = 55, kind = eTypes.eyeball,
+		{ wave = 1, frame = 30, kind = eTypes.alien,
+			spawnX = 70, spawnY = 0 },
+		{ wave = 1, frame = 30, kind = eTypes.alien,
+			spawnX = 80, spawnY = 0 },
+		{ wave = 1, frame = 30, kind = eTypes.alien,
+			spawnX = 90, spawnY = 0 },
+		{ wave = 2, frame = 55, kind = eTypes.fighter,
 			spawnX = ranInt(0, 120), spawnY = 0 },
-		{ wave = 2, frame = 65, kind = eTypes.ufo,
+		{ wave = 2, frame = 65, kind = eTypes.fighter,
 			spawnX = ranInt(0, 120), spawnY = 0 },
-		{ wave = 2, frame = 75, kind = eTypes.eyeball,
+		{ wave = 2, frame = 75, kind = eTypes.fighter,
 			spawnX = ranInt(0, 120), spawnY = 0 },
-		{ wave = 2, frame = 100, kind = eTypes.alien,
+		{ wave = 2, frame = 100, kind = eTypes.fighter,
 			spawnX = ranInt(0, 120), spawnY = 0 }
 	}
 
