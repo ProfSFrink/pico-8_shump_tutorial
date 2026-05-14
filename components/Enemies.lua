@@ -163,6 +163,13 @@ local fTimerLim = 3
 -- Death state frame timer.
 local dTimerLim = 10
 
+-- State name for enemy state machine.
+local eneState = {
+    normal = "normal",
+    flashing = "flashing",
+    dead = "dead"
+}
+
 -- TODO: Add projectiles and firing patterns for enemies.
 -- TODO: Add spawning animation for enemies.
 -- TODO: Improve enemy movement patterns.
@@ -219,10 +226,11 @@ function newEnemy(enemyCfg, eneX, eneY)
         aniDelay = enemyCfg.delay,
 
         move = enemyCfg.move,
-        isFlashing = false, -- If enemy is flashing.
         fTimer = fTimerLim,
-        isDead = false, -- if enemy in dead state.
         dTimer = dTimerLim,
+
+        -- Enemy state, can be normal, flashing, or dead.
+        state = eneState.normal,
 
         -- Animate enemy sprite.
         animate = function(_ENV)
@@ -241,12 +249,12 @@ function newEnemy(enemyCfg, eneX, eneY)
         hit = function(_ENV, dam)
             -- If no damage value is provided, use the enemy's remaining hp to ensure kill.
             dam = dam or hp
-            isFlashing = true -- Switch to hit state.
+            state = eneState.flashing
             hp -= dam
 
             sfx(3)
             if hp <= 0 then
-                isDead = true
+                state = eneState.dead
                 pl.score += points
                 -- Spawn explosion.
                 spawnExp(x, y, spd, expCols)
@@ -260,7 +268,7 @@ function newEnemy(enemyCfg, eneX, eneY)
             EnemySpr = flashSpr
             fTimer -= 1
             if fTimer <= 0 then
-                isFlashing = false
+                state = eneState.normal
                 fTimer = fTimerLim
             end
         end,
@@ -274,12 +282,17 @@ function newEnemy(enemyCfg, eneX, eneY)
             end
         end,
 
+        -- Getter function for checking if the enemy is dead.
+        isDead = function(_ENV)
+            return state == eneState.dead
+        end,
+
         -- Update function for the enemy.
         update = function(_ENV)
             y += spd
 
             -- Animate enemy if in normal state.
-            if not isDead and not isFlashing then
+            if state == eneState.normal then
                 animate(_ENV)
             end
 
@@ -294,9 +307,9 @@ function newEnemy(enemyCfg, eneX, eneY)
             move(_ENV)
 
             -- Update depending on state.
-            if isDead then
+            if state == eneState.dead then
                 dead(_ENV)
-            elseif isFlashing then
+            elseif state == eneState.flashing then
                 flash(_ENV)
             end
         end,
@@ -308,7 +321,7 @@ function newEnemy(enemyCfg, eneX, eneY)
                 pal(cols[1].c2, cols[ranIdx].c2)
             end
 
-            if isDead then
+            if state == eneState.dead then
                 spr(EnemySpr, x, y, sprSize, sprSize, false, dTimer % 2 == 0)
             else
                 spr(EnemySpr, x, y, sprSize, sprSize)
