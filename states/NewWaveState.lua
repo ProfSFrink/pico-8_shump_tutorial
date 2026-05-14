@@ -31,4 +31,9 @@ function enterNewWave()
     spawnOn = false
     exitTimer = 60 -- 2 seconds until state change.
     waveNum += 1
+    if waveNum == 1 then
+        music(0)
+    else
+        music(3)
+    end
 end

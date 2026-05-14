@@ -46,33 +46,37 @@ end
 -- @param a: The first object with x and y properties.
 -- @param b: The second object with x and y properties.
 -- @return: true if the objects are colliding, false otherwise.
-function col(a, b )
-    -- Use provided size or default to small size.
-    local a_size = a.size or entSizes.sl
+function col(a, b)
+    -- Use provided size or default 8x8 sprites.
+    local a_colW = a.colW or colDefault
+    local a_colH = a.colH or colDefault
+
     local a_left = a.x
     local a_top = a.y
-    local a_right = a.x + a_size
-    local a_bottom = a.y + a_size
+    local a_right = a.x + a_colW
+    local a_bottom = a.y + a_colH
 
-    local b_size = b.size or entSizes.sl
+    local b_colW = b.colW or colDefault
+    local b_colH = b.colH or colDefault
+
     local b_left = b.x
     local b_top = b.y
-    local b_right = b.x + b_size
-    local b_bottom = b.y + b_size
+    local b_right = b.x + b_colW
+    local b_bottom = b.y + b_colH
 
-    if a_top > b_bottom or
-       b_top > a_bottom or
-       a_left > b_right or
-       b_left > a_right then
+    if a_top > b_bottom
+            or b_top > a_bottom
+            or a_left > b_right
+            or b_left > a_right then
         return false
     end
 
     return true
 end
 
--- Returns true if the player has just stopped firing a weapon.
--- @ return: true if both fire buttons released.
-function stoppedFiring()
+-- Checks if both fire buttons are released.
+-- @return: true if both fire buttons released.
+function hasStoppedFiring()
     return btn(4) == false and btn(5) == false
 end
 

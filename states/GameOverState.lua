@@ -4,7 +4,7 @@
 function updateGameOver()
     blinkT += 1
     if not readyForInput then
-        if stoppedFiring() then
+        if hasStoppedFiring() then
             readyForInput = true
         end
         return

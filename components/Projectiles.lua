@@ -17,6 +17,8 @@ pTypes = {
                 fin = 17,
                 delay = 5 },
         spd = 3,
+        colW = 3,
+        colH = 3,
         rof = 4,
         dam = 1,
         sfx = 0,
@@ -31,6 +33,8 @@ pTypes = {
     },
     laser = {
         type = laser,
+        colW = 3,
+        colH = 3,
         ani = { start = 18,
                 fin = 21,
                 delay = 6 },
@@ -71,7 +75,7 @@ function newProjectile(proCfg, proX, proY)
 
     return {
         type = proCfg.type,
-        x = proX,
+        x = proX + 2,
         y = proY,
         spd = proCfg.spd,
         dam = proCfg.dam,

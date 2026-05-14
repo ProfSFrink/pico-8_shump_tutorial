@@ -5,7 +5,7 @@ function updateWin()
     blinkT += 1
 
     if not readyForInput then
-        if stoppedFiring() then
+        if hasStoppedFiring() then
             readyForInput = true
         end
         return
@@ -32,5 +32,5 @@ end
 function enterWin()
     state = stateNames.win
     readyForInput = false
-    music(5)
+    music(4)
 end

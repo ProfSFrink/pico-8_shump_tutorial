@@ -29,7 +29,7 @@ end
 function enterTitle()
 	state = stateNames.title
 	waveNum = 0
-	music(1)
+	music(7)
 
 	-- Get's game ready now so we
 	-- can show in the background

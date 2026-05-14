@@ -14,9 +14,9 @@
     -- hp: Enemy health points.
     -- points: Enemy score value.
     -- upFunc: Custom update function.
-    -- sprW: Sprite width in tiles (Optional).
-    -- sprH: Sprite height in tiles (Optional).
-    -- size: Size of the enemy for collision purposes(Optional).
+    -- colW: Collision width - defaults to 7 (Optional).
+    -- colH: Collision height - defaults to 7 (Optional).
+    -- sprSize: Size the sprite - defaults to 7x7 (Optional).
 eTypes = {
     alien = {
         name = "alien",
@@ -84,6 +84,8 @@ eTypes = {
                 -- { c1 = 12, c2 = 1 }, -- Blue.
                 -- { c1 = 14, c2 = 2 } -- Pink.
             },
+            colW = 6,
+            colH = 6,
             ani = { 88, 89, 90, 91, 92 },
             flash = 93,
             delay = 0.4,
@@ -139,13 +141,13 @@ eTypes = {
         cols = {
             { c1 = 10, c2 = 0 }, -- Green.
         },
-        sprW = 2,
-        sprH = 2,
+        colW = 14,
+        colH = 14,
+        sprSize = 2,
         ani = { 96, 98 },
         flash = 100,
         delay = 0.4,
         spd = 0.5,
-        size = entSizes.lg,
         hp = 10,
         points = 1000,
         upFunc = function(_ENV)
@@ -161,7 +163,9 @@ local hTimerLim = 3
 -- Death state frame timer.
 local dTimerLim = 10
 
--- TODO: Add projectiles for enemies.
+-- TODO: Add projectiles and firing patterns for enemies.
+-- TODO: Add spawning animation for enemies.
+-- TODO: Improve enemy movement patterns.
 -- TODO: Get rid of boolean hit and dead values and just use timers.
 
 -- Factory function for creating enemies.
@@ -177,7 +181,6 @@ function newEnemy(enemyCfg, eneX, eneY)
     local swConfig = lgSwCfg
     local spawnExp = spawnExp
     local sfx = sfx
-    local entSizes = entSizes
     local expCols = eneCols
 
     return {
@@ -193,12 +196,8 @@ function newEnemy(enemyCfg, eneX, eneY)
         --ranIdx = ranInt(1, #enemyCfg.cols),
         ranIdx = 1,
 
-        -- Sprite Size, if provided.
-        sprW = enemyCfg.sprW or 1,
-        sprH = enemyCfg.sprH or 1,
-
         -- Size of sprite, defaults to small.
-        size = enemyCfg.size or entSizes.sl,
+        sprSize = enemyCfg.sprSize or 1,
 
         -- Sprites for animation and flash when hit.
         ani = enemyCfg.ani,
@@ -263,9 +262,9 @@ function newEnemy(enemyCfg, eneX, eneY)
             end
 
             if dead then
-                spr(EnemySpr, x, y, sprW, sprH, false, dTimer % 2 == 0)
+                spr(EnemySpr, x, y, sprSize, sprSize, false, dTimer % 2 == 0)
             else
-                spr(EnemySpr, x, y, sprW, sprH)
+                spr(EnemySpr, x, y, sprSize, sprSize)
             end
 
             if ranIdx >= 1 then pal() end

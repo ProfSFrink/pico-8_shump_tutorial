@@ -18,13 +18,13 @@ laser = "laser"
 uiHeight = 9
 
 -- Height of a bullet.
-bullHeight = 4
+bullHeight = 3
 
 -- Starting colour for blinking text.
 blinkT = 1
 
--- 7 equals 8x8 sprite, 15 equals 16x16 etc.
-entSizes = { sl = 7, lg = 15}
+-- Default collision box size - 8x8 sprite.
+colDefault = 7
 
 -- Runs once on startup.
 function _init()
