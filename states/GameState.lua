@@ -175,8 +175,8 @@ function updateGameplay()
 		if e.y > 0 then
 			-- Handle projectile collisions.
 			for p in all(projectiles) do
-				if col(e, p) and e.dead == false then
-					e:hurt(p.dam)
+				if col(e, p) and not e.isDead then
+					e:hit(p.dam)
 					spawnShockWave(p.x, p.y, slSwCfg)
 					spawnSparks(e.x, e.y, 7)
 					del(projectiles, p)
@@ -187,7 +187,7 @@ function updateGameplay()
 		-- Handle collision with ship.
 		if col(e, ship) and ship.invul <= 0 then
 			player.lives -= 1
-			e:hurt()
+			e:hit()
 			if player.lives <= 0 then
 				ship.invul = 30
 				spawnExp(ship.x, ship.y, 0, shipCols)

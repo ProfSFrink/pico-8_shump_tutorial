@@ -12,3 +12,73 @@ Spawning enemy: alien points: 100 hp: 2 at x:20 y:0
 Spawning enemy: alien points: 100 hp: 2 at x:30 y:0
 Spawning enemy: alien points: 100 hp: 2 at x:40 y:0
 Spawning enemy: alien points: 100 hp: 2 at x:50 y:0
+flash
+flash
+flash
+flash
+flash
+flash
+flash
+flash
+flash
+fTimer: 3
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true
+fTimer: 3
+isFlashing: true
+fTimer: 2
+isFlashing: true
+fTimer: 1
+isFlashing: true

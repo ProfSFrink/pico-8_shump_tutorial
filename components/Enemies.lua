@@ -13,10 +13,10 @@
     -- spd: Enemy speed.
     -- hp: Enemy health points.
     -- points: Enemy score value.
-    -- upFunc: Custom update function.
     -- colW: Collision width - defaults to 7 (Optional).
     -- colH: Collision height - defaults to 7 (Optional).
     -- sprSize: Size the sprite - defaults to 7x7 (Optional).
+    -- move: Custom move function.
 eTypes = {
     alien = {
         name = "alien",
@@ -33,7 +33,7 @@ eTypes = {
         spd = 0.5,
         hp = 2,
         points = 100,
-        upFunc = function(_ENV)
+        move = function(_ENV)
             x = x + cos(y / 16) * spd
         end
     },
@@ -52,7 +52,7 @@ eTypes = {
         spd = 0.75,
         hp = 4,
         points = 175,
-        upFunc = function(_ENV)
+        move = function(_ENV)
             y += spd
         end
     },
@@ -71,7 +71,7 @@ eTypes = {
         spd = 0.6,
         hp = 3,
         points = 150,
-        upFunc = function(_ENV)
+        move = function(_ENV)
             x = x + cos(y / 16) * spd
         end
     },
@@ -92,7 +92,7 @@ eTypes = {
             spd = 0.3,
             hp = 5,
             points = 200,
-            upFunc = function(_ENV)
+            move = function(_ENV)
                 y += spd
             end
     },
@@ -111,7 +111,7 @@ eTypes = {
         spd = 0.8,
         hp = 2,
         points = 200,
-        upFunc = function(_ENV)
+        move = function(_ENV)
             x = x + cos(y / 16) * spd
             y += spd
         end
@@ -131,7 +131,7 @@ eTypes = {
         spd = 0.4,
         hp = 4,
         points = 300,
-        upFunc = function(_ENV)
+        move = function(_ENV)
             x = x + cos(y / 16) * spd
             y += spd
         end
@@ -150,7 +150,7 @@ eTypes = {
         spd = 0.5,
         hp = 10,
         points = 1000,
-        upFunc = function(_ENV)
+        move = function(_ENV)
             x = x + cos(y / 16) * spd
         end
     },
@@ -158,8 +158,8 @@ eTypes = {
 
 -- Enemy Factory logic.
 
--- Hit state frame timer.
-local hTimerLim = 3
+-- Flash state frame timer.
+local fTimerLim = 3
 -- Death state frame timer.
 local dTimerLim = 10
 
@@ -196,12 +196,18 @@ function newEnemy(enemyCfg, eneX, eneY)
         --ranIdx = ranInt(1, #enemyCfg.cols),
         ranIdx = 1,
 
+        -- Collision box size, defaults to 8x8.
+        colW = enemyCfg.colW or colDefault,
+        colH = enemyCfg.colH or colDefault,
+
         -- Size of sprite, defaults to small.
         sprSize = enemyCfg.sprSize or 1,
 
         -- Sprites for animation and flash when hit.
         ani = enemyCfg.ani,
-        flash = enemyCfg.flash,
+
+        -- Sprite to use when flashing.
+        flashSpr = enemyCfg.flash,
 
         -- Enemies current sprite.
         EnemySpr = enemyCfg.ani[1],
@@ -212,81 +218,103 @@ function newEnemy(enemyCfg, eneX, eneY)
         -- Frames before animation advances.
         aniDelay = enemyCfg.delay,
 
-        upFunc = enemyCfg.upFunc,
-        hit = false, -- if enemy in hit state.
-        hTimer = hTimerLim,
-        dead = false, -- if enemy in dead state.
+        move = enemyCfg.move,
+        isFlashing = false, -- If enemy is flashing.
+        fTimer = fTimerLim,
+        isDead = false, -- if enemy in dead state.
         dTimer = dTimerLim,
 
-        update = function(_ENV)
-            y += spd
-
-            -- Check if in dead state.
-            if dead then
-                dTimer -= 1
-                if dTimer <= 0 then
-                    del(ene, _ENV)
-                end
-                -- Check if in hit state.
-            elseif hit then
-                hTimer -= 1
-                if hTimer <= 0 then
-                    hit = false
-                    hTimer = hTimerLim
-                end
-                -- Otherwise, run normal animation function.
-            else
-                upFunc(_ENV)
-            end
-
+        -- Animate enemy sprite.
+        animate = function(_ENV)
             aniFrame += aniDelay
-            if dead or hit then
-                EnemySpr = flash
-            else
-                if flr(aniFrame) > #ani then
-                    aniFrame = 1
-                end
-
-                EnemySpr = ani[flr(aniFrame)]
+            if flr(aniFrame) > #ani then
+                aniFrame = 1
             end
 
-            if y > 128 then
-                del(ene, _ENV)
-            end
+            EnemySpr = ani[flr(aniFrame)]
         end,
 
-        draw = function(_ENV)
-            if ranIdx >= 1 then
-                pal(cols[1].c1, cols[ranIdx].c1)
-                pal(cols[1].c2, cols[ranIdx].c2)
-            end
+        -- TODO: Add firing state and logic for enemies.
 
-            if dead then
-                spr(EnemySpr, x, y, sprSize, sprSize, false, dTimer % 2 == 0)
-            else
-                spr(EnemySpr, x, y, sprSize, sprSize)
-            end
-
-            if ranIdx >= 1 then pal() end
-        end,
-
-        -- Handle being hurt.
+        -- Handle being Damaged.
         -- @param dam: Damage to apply to the enemy.
-        hurt = function(_ENV, dam)
+        hit = function(_ENV, dam)
             -- If no damage value is provided, use the enemy's remaining hp to ensure kill.
             dam = dam or hp
-            hit = true
+            isFlashing = true -- Switch to hit state.
             hp -= dam
 
             sfx(3)
             if hp <= 0 then
-                dead = true
+                isDead = true
                 pl.score += points
                 -- Spawn explosion.
                 spawnExp(x, y, spd, expCols)
                 -- Spawn large shockwave.
                 spawnShockWave(x, y, swConfig)
             end
+        end,
+
+        -- Handle flash state timing and transition back to normal state.
+        flash = function(_ENV)
+            EnemySpr = flashSpr
+            fTimer -= 1
+            if fTimer <= 0 then
+                isFlashing = false
+                fTimer = fTimerLim
+            end
+        end,
+
+        -- Handle dead state timing and removal.
+        dead = function(_ENV)
+            EnemySpr = flashSpr
+            dTimer -= 1
+            if dTimer <= 0 then
+                del(ene, _ENV)
+            end
+        end,
+
+        -- Update function for the enemy.
+        update = function(_ENV)
+            y += spd
+
+            -- Animate enemy if in normal state.
+            if not isDead and not isFlashing then
+                animate(_ENV)
+            end
+
+            -- TODO: Call spawning logic.
+
+            -- Remove if off-screen.
+            if y > 128 then
+                del(ene, _ENV)
+            end
+
+            -- Handle normal movement.
+            move(_ENV)
+
+            -- Update depending on state.
+            if isDead then
+                dead(_ENV)
+            elseif isFlashing then
+                flash(_ENV)
+            end
+        end,
+
+        -- Draw function for the enemy.
+        draw = function(_ENV)
+            if ranIdx >= 1 then
+                pal(cols[1].c1, cols[ranIdx].c1)
+                pal(cols[1].c2, cols[ranIdx].c2)
+            end
+
+            if isDead then
+                spr(EnemySpr, x, y, sprSize, sprSize, false, dTimer % 2 == 0)
+            else
+                spr(EnemySpr, x, y, sprSize, sprSize)
+            end
+
+            if ranIdx >= 1 then pal() end
         end
     }
 end
