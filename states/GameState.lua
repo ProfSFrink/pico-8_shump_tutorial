@@ -95,6 +95,9 @@ function updateGameplay()
 	-- advance game timer.
 	gameT += 1
 
+	-- Decrease projectile timer.
+	proT -= 1
+
 	-- Reset ship sprite and speed.
 	ship:reset()
 
@@ -125,10 +128,10 @@ function updateGameplay()
 	if btn(5) then
 		local proCfg = getConfig(bullet)
 
-		if proT <= gameT then
+		if proT <= 0 then
 			spawnProjectile(proCfg, ship.x, ship.y - ship.bullOffset)
 			ship.muzzle = 4
-			proT = gameT + proCfg.rof
+			proT = proCfg.rof
 		end
 	end
 
@@ -136,10 +139,10 @@ function updateGameplay()
 	if btn(4) then
 		local proCfg = getConfig(laser)
 
-		if proT <= gameT then
+		if proT <= 0 then
 			spawnProjectile(proCfg, ship.x, ship.y - ship.bullOffset)
 			ship.muzzle = 4
-			proT = gameT + proCfg.rof
+			proT = proCfg.rof
 		end
 	end
 
