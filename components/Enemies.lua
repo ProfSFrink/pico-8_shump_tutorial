@@ -35,6 +35,7 @@ eTypes = {
         points = 100,
         move = function(_ENV)
             x = x + cos(y / 16) * spd
+            y += spd
         end
     },
     ufo = {
@@ -73,6 +74,7 @@ eTypes = {
         points = 150,
         move = function(_ENV)
             x = x + cos(y / 16) * spd
+            y += spd
         end
     },
         redeye = {
@@ -152,6 +154,7 @@ eTypes = {
         points = 1000,
         move = function(_ENV)
             x = x + cos(y / 16) * spd
+            y += spd
         end
     },
 }
@@ -163,7 +166,7 @@ local fTimerLim = 3
 -- Death state frame timer.
 local dTimerLim = 10
 
--- State name for enemy state machine.
+-- State names for enemy state machine.
 local eneState = {
     normal = "normal",
     flashing = "flashing",
@@ -182,8 +185,8 @@ local eneState = {
 -- @return: A new enemy object.
 function newEnemy(enemyCfg, eneX, eneY)
     -- Local references to global scope.
-    local ene = enemies
-    local pl = player
+    local enemies = enemies
+    local player = player
     local spawnShockWave = spawnShockWave
     local swConfig = lgSwCfg
     local spawnExp = spawnExp
@@ -210,7 +213,7 @@ function newEnemy(enemyCfg, eneX, eneY)
         -- Size of sprite, defaults to small.
         sprSize = enemyCfg.sprSize or 1,
 
-        -- Sprites for animation and flash when hit.
+        -- Sprites for animation.
         ani = enemyCfg.ani,
 
         -- Sprite to use when flashing.
@@ -244,22 +247,24 @@ function newEnemy(enemyCfg, eneX, eneY)
 
         -- TODO: Add firing state and logic for enemies.
 
-        -- Handle being Damaged.
+        -- Handle enemy being hit, determines switch
+        -- to flashing or dead state.
         -- @param dam: Damage to apply to the enemy.
         hit = function(_ENV, dam)
             -- If no damage value is provided, use the enemy's remaining hp to ensure kill.
             dam = dam or hp
-            state = eneState.flashing
             hp -= dam
 
             sfx(3)
             if hp <= 0 then
                 state = eneState.dead
-                pl.score += points
+                player.score += points
                 -- Spawn explosion.
                 spawnExp(x, y, spd, expCols)
                 -- Spawn large shockwave.
                 spawnShockWave(x, y, swConfig)
+            else
+                state = eneState.flashing
             end
         end,
 
@@ -278,7 +283,7 @@ function newEnemy(enemyCfg, eneX, eneY)
             EnemySpr = flashSpr
             dTimer -= 1
             if dTimer <= 0 then
-                del(ene, _ENV)
+                del(enemies, _ENV)
             end
         end,
 
@@ -287,30 +292,23 @@ function newEnemy(enemyCfg, eneX, eneY)
             return state == eneState.dead
         end,
 
+        -- TODO: Call spawning logic.
+
         -- Update function for the enemy.
         update = function(_ENV)
-            y += spd
-
-            -- Animate enemy if in normal state.
-            if state == eneState.normal then
-                animate(_ENV)
-            end
-
-            -- TODO: Call spawning logic.
-
-            -- Remove if off-screen.
-            if y > 128 then
-                del(ene, _ENV)
-            end
-
-            -- Handle normal movement.
-            move(_ENV)
-
             -- Update depending on state.
             if state == eneState.dead then
                 dead(_ENV)
             elseif state == eneState.flashing then
                 flash(_ENV)
+            elseif state == eneState.normal then
+                animate(_ENV)
+                move(_ENV)
+
+                -- Remove if off-screen.
+                if y > 128 then
+                    del(enemies, _ENV)
+                end
             end
         end,
 
