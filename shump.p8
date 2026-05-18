@@ -3,6 +3,9 @@ version 43
 __lua__
 #include Main.lua
 #include ./util/Tools.lua
+#include ./util/Collisions.lua
+
+#include ./scenes/GameScene.lua
 
 #include ./states/TitleState.lua
 #include ./states/StartState.lua
@@ -10,10 +13,10 @@ __lua__
 #include ./states/GameState.lua
 #include ./states/GameOverState.lua
 #include ./states/WinState.lua
-#include ./components/Ship.lua
-#include ./components/Projectiles.lua
-#include ./components/Starfield.lua
-#include ./components/Enemies.lua
+#include ./entities/Ship.lua
+#include ./entities/Projectiles.lua
+#include ./entities/Starfield.lua
+#include ./entities/Enemies.lua
 #include ./effects/Explosion.lua
 #include ./effects/Shockwave.lua
 #include ./effects/Spark.lua

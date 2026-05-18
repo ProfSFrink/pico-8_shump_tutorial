@@ -17,7 +17,7 @@ end
 
 -- Draws the game over screen.
 function drawGameOver()
-    drawGame()
+    drawGameScene()
 
     startTimer += 1
 

@@ -7,7 +7,7 @@ function updateNewWave()
     blinkT += 1
     exitTimer -= 1
 
-    updateGameplay()
+    updateGameScene()
 
     if exitTimer <= 0 then
         enterGame()
@@ -17,7 +17,7 @@ end
 
 -- Draw the new wave screen.
 function drawNewWave()
-    drawGame()
+    drawGameScene()
 
     local waveText = "WAVE " .. waveNum
 

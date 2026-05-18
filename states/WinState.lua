@@ -18,7 +18,7 @@ end
 
 -- Draw the win screen.
 function drawWin()
-    drawGame()
+    drawGameScene()
 
     local winText = "YOU WIN!"
     local restart = pressAKey .. "RESTART"

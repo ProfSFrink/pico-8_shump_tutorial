@@ -76,7 +76,7 @@ end
 -- drawn to the screen (30fps).
 function _draw()
 	if state == stateNames.game then
-		drawGame()
+		drawGameScene()
 	elseif state == stateNames.title then
 		drawTitle()
 	elseif state == stateNames.start then
