@@ -4,7 +4,9 @@ __lua__
 #include Main.lua
 #include ./util/Tools.lua
 #include ./util/Collisions.lua
-
+#include ./util/Async.lua
+#include ./util/Animate.lua
+#include ./util/Ease.lua
 #include ./scenes/GameScene.lua
 
 #include ./states/TitleState.lua

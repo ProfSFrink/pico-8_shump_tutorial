@@ -240,7 +240,7 @@ function newEnemy(enemyCfg, eneX, eneY)
             state = eneState.normal
         end,
 
-        -- Animate enemy sprite.
+        -- Run looping enemy animation.
         animate = function(_ENV)
             aniFrame += aniDelay
             if flr(aniFrame) > #ani then
@@ -304,13 +304,7 @@ function newEnemy(enemyCfg, eneX, eneY)
             return state == eneState.spawning
         end,
 
-
-        -- Getter function for if the enemy can be hit by projectiles.
-        canBeHit = function(_ENV)
-            return state ~= eneState.dead and state ~= eneState.spawning
-        end,
-
-        -- Getter function for if the enemy can collide with the player.
+        -- Getter function for if the enemy can collide with the player or projectiles.
         canCollide = function(_ENV)
             return state ~= eneState.dead and state ~= eneState.spawning
         end,
@@ -356,10 +350,14 @@ end
 -- Spawns one enemy using shared enemy config.
 -- @param x: X position.
 -- @param y: Y position.
+-- @param enemy: New enemy object.
 function spawnEnemy(enemy, x, y)
+    local newEnemy = newEnemy(eTypes[enemy.name], x, y)
     add(
-        enemies, newEnemy(eTypes[enemy.name], x, y)
+        enemies, newEnemy
     )
+
+    return newEnemy
 end
 
 -- Update all enemies.

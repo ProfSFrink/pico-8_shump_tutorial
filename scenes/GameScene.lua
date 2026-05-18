@@ -81,12 +81,14 @@ function updateGameScene()
 	for e in all(enemies) do
 		e:update()
 
+        local canCollide = e:canCollide()
+
 		-- Prevents enemy being hit
 		-- before it appears on screen.
 		if e.y > 0 then
 			-- Handle projectile collisions.
 			for p in all(projectiles) do
-				if hasCollided(e, p) and e:canBeHit() then
+				if canCollide and hasCollided(e, p) then
 					e:hit(p.dam)
 					spawnShockWave(p.x, p.y, slSwCfg)
 					spawnSparks(e.x, e.y, 7)
@@ -96,7 +98,7 @@ function updateGameScene()
 		end
 
 		-- Handle collision with ship.
-		if hasCollided(e, ship) and ship.invul <= 0 and e:canCollide() then
+		if hasCollided(e, ship) and ship.invul <= 0 and canCollide then
 			player.lives -= 1
 			e:hit()
 			if player.lives <= 0 then
@@ -106,14 +108,6 @@ function updateGameScene()
 			else
 				ship.invul = 60 -- 2 secs of invulnerability.
 			end
-		end
-	end
-
-	-- Check for game over.
-	if player.lives <= 0 then
-		if ship:isDead() then
-			enterGameOver()
-			return
 		end
 	end
 end

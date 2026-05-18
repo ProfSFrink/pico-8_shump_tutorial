@@ -30,9 +30,12 @@ colDefault = 7
 function _init()
 	cls()
 
+	routines = {}
+
 	waveNum = 0
 
 	-- Setup and initialize starfield.
+	-- TODO: Move to starfield module.
 	stars = {}
 	numOfStars = 80
 
