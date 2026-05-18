@@ -8,26 +8,20 @@ function setupGame()
 	-- Points towards next spawn event.
 	spawnEventIndex = 1
 
-	-- Spawn timelines in frames (30fps).
 	spawnEvent = {
-		{ wave = 1, frame = 30, kind = eTypes.alien,
-			spawnX = 20, spawnY = 0 },
-		{ wave = 1, frame = 30, kind = eTypes.alien,
-			spawnX = 30, spawnY = 0 },
-		{ wave = 1, frame = 30, kind = eTypes.alien,
-			spawnX = 40, spawnY = 0 },
-		{ wave = 1, frame = 30, kind = eTypes.alien,
-			spawnX = 50, spawnY = 0 },
-		{ wave = 2, frame = 55, kind = eTypes.fighter,
-			spawnX = ranInt(0, 120), spawnY = 0 },
-		{ wave = 2, frame = 65, kind = eTypes.fighter,
-			spawnX = ranInt(0, 120), spawnY = 0 },
-		{ wave = 2, frame = 75, kind = eTypes.fighter,
-			spawnX = ranInt(0, 120), spawnY = 0 },
-		{ wave = 2, frame = 100, kind = eTypes.fighter,
-			spawnX = ranInt(0, 120), spawnY = 0 },
-		{ wave = 3, frame = 30, kind = eTypes.boss,
-			spawnX = 67, spawnY = 0 }
+
+		{ wave = 1, x = 20, y = 8, num = 10, dur = 20,
+		kind = eTypes.alien },
+		{ wave = 1, x =  20, y = 18, num = 7, dur = 20,
+		kind = eTypes.flame },
+
+		{ wave = 2, x = 20, y = 8, num = 5, dur = 20,
+		kind = eTypes.ufo },
+		{ wave = 2, x =  20, y = 18, num = 5, dur = 20,
+		kind = eTypes.redeye },
+
+		{ wave = 3, x = 20, y = 8, num = 1, dur = 20,
+		kind = eTypes.boss },
 	}
 
 	-- Setup player ship.
@@ -101,6 +95,8 @@ function updateGameplay()
 	-- Reset ship sprite and speed.
 	ship:reset()
 
+	local inGame = state == stateNames.game
+
 	-- Controls.
 
 	-- Checking for input.
@@ -125,7 +121,7 @@ function updateGameplay()
 	end
 
 	-- Fire bullet if X pressed.
-	if btn(5) then
+	if btn(5) and inGame then
 		local proCfg = getConfig(bullet)
 
 		if proT <= 0 then
@@ -136,7 +132,7 @@ function updateGameplay()
 	end
 
 	-- Fire laser if Z pressed.
-	if btn(4) then
+	if btn(4) and inGame then
 		local proCfg = getConfig(laser)
 
 		if proT <= 0 then
@@ -210,8 +206,6 @@ end
 
 -- Updates the game screen.
 function updateGame()
-	-- Trigger one-shot spawn events from frame schedule.
-
 	-- Index of the next spawn event.
 	local nextSpawnIndex =
 		getNextWaveEventIndex(waveNum, spawnEventIndex)
@@ -221,22 +215,27 @@ function updateGame()
 		and spawnEvent[nextSpawnIndex]
 
 	--  True if the next spawn event is ready to trigger.
-	local newSpawnReady = nextSpawnEvent
-		and gameT >= nextSpawnEvent.frame and spawnOn
+	local newSpawnReady = nextSpawnEvent and spawnOn
 
 	-- Trigger the spawn event if ready.
 	if newSpawnReady then
-		spawnEnemy(nextSpawnEvent.kind, nextSpawnEvent.spawnX, nextSpawnEvent.spawnY)
+		local xOff = 8
+		for i = 1, nextSpawnEvent.num do
+			local spawnX = nextSpawnEvent.x + xOff
+			local spawnY = nextSpawnEvent.y
+			spawnEnemy(nextSpawnEvent.kind, spawnX, spawnY)
+			xOff += 8
+		end
 		spawnEventIndex = nextSpawnIndex + 1
 	end
 
 	updateGameplay()
 
 	-- Check for end of wave.
-	local noMoreWaves = getNextWaveEventIndex(waveNum, spawnEventIndex) == nil and #enemies == 0
+	local moreWaves = getNextWaveEventIndex(waveNum, spawnEventIndex) == nil and #enemies == 0
 
 	-- Either start next wave or go to win screen.
-	if noMoreWaves then
+	if moreWaves then
 		if hasWaveSpawnEvents(waveNum + 1) then
 			enterNewWave()
 			return
