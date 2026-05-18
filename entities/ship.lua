@@ -6,7 +6,7 @@
 -- @return: A new ship object.
 function newShip()
     -- Local reference to global scope.
-    local g = _g
+    local g = _ENV
 
     return {
 		-- Starting position.

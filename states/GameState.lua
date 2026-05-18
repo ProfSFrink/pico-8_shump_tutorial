@@ -5,21 +5,30 @@ function setupGame()
 	-- Setup game timer (frames).
 	gameT = 0
 
+	-- Enemy spawn events for each wave.
+	-- wave: wave number.
+	-- x: starting x position for the row.
+	-- y: starting y position for the row.
+	-- num: number of enemies in the row.
+	-- enemy: type of enemy to spawn (from eTypes).
 	spawnEvents = {
 		{ wave = 1,
-			{ x = 30, y = 14, num = 6, kind = eTypes.alien },
-			{ x = 30, y = 26, num = 6, kind = eTypes.alien },
-			{ x = 30, y = 38, num = 6, kind = eTypes.alien }
+			{ x = -8, y = 24, num = 7, enemy = eTypes.alien, spawnDur = 50 },
+			{ x = 136, y = 34, num = 6, enemy = eTypes.alien, spawnDur = 50 },
+			{ x = -8, y = 44, num = 5, enemy = eTypes.alien, spawnDur = 50 },
 		},
 
 		{ wave = 2,
-			{ x = 30, y = 12, num = 5, kind = eTypes.ufo },
-			{ x = 30, y = 24, num = 5, kind = eTypes.redeye }
+			{ x = 64, y = -12, num = 5,
+			enemy = eTypes.ufo, spawnDur = 55 },
+			{ x = 64, y = -12, num = 5,
+			enemy = eTypes.eyeball, spawnDur = 55 },
 		},
 
 		{ wave = 3,
-			{ x = 49, y = 12, num = 1, kind = eTypes.boss }
-		}
+			{ x = 60, y = -12, num = 1,
+			enemy = eTypes.boss, spawnDur = 55 }
+		},
 	}
 
 	-- Setup player ship.
@@ -69,25 +78,52 @@ end
 
 -- Spawns all enemy rows for a wave.
 function spawnWaveRows(wave)
-	local waveData = getWaveData(wave)
+    local waveData = getWaveData(wave)
 
-	if not waveData then
-		return
-	end
+    if not waveData then
+        return
+    end
 
-	-- Iterate through each row in the wave.
-	for rowIdx = 1, #waveData do
-		local row = waveData[rowIdx]
-		local xOff = 0
+    -- Delay for spawning rows.
+    local baseGapDelay = 10
+    local delayReduction = 2
 
-		-- Spawn each enemy in the row.
-		for i = 1, row.num do
-			local spawnX = row.x + xOff
-			local spawnY = row.y
-			spawnEnemy(row.kind, spawnX, spawnY)
-			xOff += 9
-		end
-	end
+    local centerX = 64 -- Center of the screen on x-axis.
+    local spacing = 11 -- Spacing between small sprites in a row.
+
+    -- Iterate through each row in the wave.
+    for rowIdx = 1, #waveData do
+        local row = waveData[rowIdx]
+
+        local spriteW = (row.enemy.sprSize or 1) * 8
+
+        local rowSpacing = max(spacing, spriteW + 3)
+
+        local rowDelay = (rowIdx - 1) * baseGapDelay - ((rowIdx - 1) * (rowIdx - 2) * delayReduction) / 2
+
+        local rowWidth = (row.num - 1) * rowSpacing
+
+        local rowStartX = flr(centerX - spriteW / 2 - rowWidth / 2)
+
+        -- Spawn each enemy in the row.
+        for i = 1, row.num do
+            local newEnemy = spawnEnemy(row.enemy, row.x, row.y)
+
+            local targetX = rowStartX + (i - 1) * rowSpacing
+            local targetY = 10 + rowIdx * 10
+            local delay = flr(rowDelay)
+
+            async(function()
+                wait(delay)
+                animate(newEnemy, "x", targetX, row.spawnDur, easeOutQuad)
+            end)
+
+            async(function()
+                wait(delay)
+                animate(newEnemy, "y", targetY, row.spawnDur, easeOutQuad)
+            end)
+        end
+    end
 end
 
 -- Updates the game screen.

@@ -30,7 +30,7 @@ eTypes = {
         ani = { 80, 81, 82, 83 },
         flash = 84,
         delay = 0.4,
-        spd = 0.5,
+        spd = 0.25,
         hp = 2,
         points = 100,
         move = function(_ENV)
@@ -175,7 +175,6 @@ local eneState = {
 }
 
 -- TODO: Add projectiles and firing patterns for enemies.
--- TODO: Add spawning animation for enemies.
 -- TODO: Improve enemy movement patterns.
 
 -- Factory function for creating enemies.
@@ -348,16 +347,18 @@ function newEnemy(enemyCfg, eneX, eneY)
 end
 
 -- Spawns one enemy using shared enemy config.
--- @param x: X position.
--- @param y: Y position.
--- @param enemy: New enemy object.
-function spawnEnemy(enemy, x, y)
-    local newEnemy = newEnemy(eTypes[enemy.name], x, y)
+-- @param enemy: Enemy configuration object.
+-- @param x: Enemy spawn x position.
+-- @param y: Enemy spawn y position.
+-- @return: The spawned enemy object.
+function spawnEnemy(enemy, spawnX, spawnY)
+    local newE = newEnemy(enemy, spawnX, spawnY)
+
     add(
-        enemies, newEnemy
+        enemies, newE
     )
 
-    return newEnemy
+    return newE
 end
 
 -- Update all enemies.

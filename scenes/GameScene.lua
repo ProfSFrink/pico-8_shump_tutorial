@@ -27,7 +27,7 @@ function updateGameScene()
 	end
 
 	-- Up arrow.
-	if btn(2) then
+	if btn(2) and inGame then
 		ship:move("up")
 	end
 
@@ -57,6 +57,17 @@ function updateGameScene()
 			proT = proCfg.rof
 		end
 	end
+
+    -- NOTE: This will only allows co-routines in the game scene,
+    -- if we want to use them in other scenes we will need to move this somewhere more global.
+
+    for r in all(routines) do
+        if costatus(r) == "dead" then
+            del(routines, r)
+        else
+            coresume(r)
+        end
+    end
 
 	-- Update ship position.
 	ship:update()
