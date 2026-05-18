@@ -89,7 +89,7 @@ function getNextWaveEventIndex(wave, startIndex)
 	end
 end
 
--- Returns true when the requested wave has any spawn events.
+-- Returns true if the requested wave has any spawn events.
 function hasWaveSpawnEvents(wave)
 	return getWaveStartEventIndex(wave) ~= nil
 end

@@ -177,7 +177,6 @@ local eneState = {
 -- TODO: Add projectiles and firing patterns for enemies.
 -- TODO: Add spawning animation for enemies.
 -- TODO: Improve enemy movement patterns.
--- TODO: Get rid of boolean hit and dead values and just use timers.
 
 -- Factory function for creating enemies.
 -- @param enemyCfg: Enemy configuration object.
@@ -236,6 +235,11 @@ function newEnemy(enemyCfg, eneX, eneY)
         -- Enemy state, can be normal, flashing, or dead.
         state = eneState.spawning,
 
+        -- Activate the enemy after spawning.
+        activate = function(_ENV)
+            state = eneState.normal
+        end,
+
         -- Animate enemy sprite.
         animate = function(_ENV)
             aniFrame += aniDelay
@@ -245,8 +249,6 @@ function newEnemy(enemyCfg, eneX, eneY)
 
             enemySpr = ani[flr(aniFrame)]
         end,
-
-        -- TODO: Add firing state and logic for enemies.
 
         -- Handle enemy being hit, determines switch
         -- to flashing or dead state.
@@ -292,23 +294,23 @@ function newEnemy(enemyCfg, eneX, eneY)
             end
         end,
 
-        -- Getter function for checking if the enemy is dead.
+        -- Getter function for if the enemy is dead.
         isDead = function(_ENV)
             return state == eneState.dead
         end,
 
+        -- Getter function for if the enemy is spawning.
         isSpawning = function(_ENV)
             return state == eneState.spawning
         end,
 
-        activate = function(_ENV)
-            state = eneState.normal
-        end,
 
+        -- Getter function for if the enemy can be hit by projectiles.
         canBeHit = function(_ENV)
             return state ~= eneState.dead and state ~= eneState.spawning
         end,
 
+        -- Getter function for if the enemy can collide with the player.
         canCollide = function(_ENV)
             return state ~= eneState.dead and state ~= eneState.spawning
         end,
