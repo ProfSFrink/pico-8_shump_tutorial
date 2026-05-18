@@ -168,6 +168,7 @@ local dTimerLim = 10
 
 -- State names for enemy state machine.
 local eneState = {
+    spawning = "spawning",
     normal = "normal",
     flashing = "flashing",
     dead = "dead"
@@ -220,7 +221,7 @@ function newEnemy(enemyCfg, eneX, eneY)
         flashSpr = enemyCfg.flash,
 
         -- Enemies current sprite.
-        EnemySpr = enemyCfg.ani[1],
+        enemySpr = enemyCfg.ani[1],
 
         -- Current frame of animation.
         aniFrame = 1,
@@ -233,7 +234,7 @@ function newEnemy(enemyCfg, eneX, eneY)
         dTimer = dTimerLim,
 
         -- Enemy state, can be normal, flashing, or dead.
-        state = eneState.normal,
+        state = eneState.spawning,
 
         -- Animate enemy sprite.
         animate = function(_ENV)
@@ -242,7 +243,7 @@ function newEnemy(enemyCfg, eneX, eneY)
                 aniFrame = 1
             end
 
-            EnemySpr = ani[flr(aniFrame)]
+            enemySpr = ani[flr(aniFrame)]
         end,
 
         -- TODO: Add firing state and logic for enemies.
@@ -251,6 +252,10 @@ function newEnemy(enemyCfg, eneX, eneY)
         -- to flashing or dead state.
         -- @param dam: Damage to apply to the enemy.
         hit = function(_ENV, dam)
+            if state == eneState.spawning or state == eneState.dead then
+                return
+            end
+
             -- If no damage value is provided, use the enemy's remaining hp to ensure kill.
             dam = dam or hp
             hp -= dam
@@ -270,7 +275,7 @@ function newEnemy(enemyCfg, eneX, eneY)
 
         -- Handle flash state timing and transition back to normal state.
         flash = function(_ENV)
-            EnemySpr = flashSpr
+            enemySpr = flashSpr
             fTimer -= 1
             if fTimer <= 0 then
                 state = eneState.normal
@@ -280,7 +285,7 @@ function newEnemy(enemyCfg, eneX, eneY)
 
         -- Handle dead state timing and removal.
         dead = function(_ENV)
-            EnemySpr = flashSpr
+            enemySpr = flashSpr
             dTimer -= 1
             if dTimer <= 0 then
                 del(enemies, _ENV)
@@ -292,6 +297,22 @@ function newEnemy(enemyCfg, eneX, eneY)
             return state == eneState.dead
         end,
 
+        isSpawning = function(_ENV)
+            return state == eneState.spawning
+        end,
+
+        activate = function(_ENV)
+            state = eneState.normal
+        end,
+
+        canBeHit = function(_ENV)
+            return state ~= eneState.dead and state ~= eneState.spawning
+        end,
+
+        canCollide = function(_ENV)
+            return state ~= eneState.dead and state ~= eneState.spawning
+        end,
+
         -- TODO: Call spawning logic.
 
         -- Update function for the enemy.
@@ -301,6 +322,8 @@ function newEnemy(enemyCfg, eneX, eneY)
                 dead(_ENV)
             elseif state == eneState.flashing then
                 flash(_ENV)
+            elseif state == eneState.spawning then
+                animate(_ENV)
             elseif state == eneState.normal then
                 animate(_ENV)
                 move(_ENV)
@@ -320,9 +343,9 @@ function newEnemy(enemyCfg, eneX, eneY)
             end
 
             if state == eneState.dead then
-                spr(EnemySpr, x, y, sprSize, sprSize, false, dTimer % 2 == 0)
+                spr(enemySpr, x, y, sprSize, sprSize, false, dTimer % 2 == 0)
             else
-                spr(EnemySpr, x, y, sprSize, sprSize)
+                spr(enemySpr, x, y, sprSize, sprSize)
             end
 
             if ranIdx >= 1 then pal() end
