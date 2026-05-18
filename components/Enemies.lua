@@ -1,22 +1,22 @@
 -- Enemies definitions.
 -- todo: Review animation delays.
 
-    -- Setup for an enemy.
-    -- name: Enemy name.
-    -- cols: table of color pairs for the enemy, first is
-    --       entry matches sprite colours.
-    -- ani: Table of animation settings.
-    --      start: First sprite index of the animation.
-    --      fin: Last sprite index of the animation.
-    --      flash: Sprite index to use when hit.
-    --      delay: Frames between animation changes.
-    -- spd: Enemy speed.
-    -- hp: Enemy health points.
-    -- points: Enemy score value.
-    -- colW: Collision width - defaults to 7 (Optional).
-    -- colH: Collision height - defaults to 7 (Optional).
-    -- sprSize: Size the sprite - defaults to 7x7 (Optional).
-    -- move: Custom move function.
+-- Setup for an enemy.
+-- name: Enemy name.
+-- cols: table of color pairs for the enemy, first is
+--       entry matches sprite colours.
+-- ani: Table of animation settings.
+--      start: First sprite index of the animation.
+--      fin: Last sprite index of the animation.
+--      flash: Sprite index to use when hit.
+--      delay: Frames between animation changes.
+-- spd: Enemy speed.
+-- hp: Enemy health points.
+-- points: Enemy score value.
+-- colW: Collision width - defaults to 7 (Optional).
+-- colH: Collision height - defaults to 7 (Optional).
+-- sprSize: Size the sprite - defaults to 7x7 (Optional).
+-- move: Custom move function.
 eTypes = {
     alien = {
         name = "alien",
@@ -77,31 +77,31 @@ eTypes = {
             y += spd
         end
     },
-        redeye = {
-            name = "redeye",
-            cols = {
-                { c1 = 5, c2 = 8 }, -- Grey / Red.
-                -- { c1 = 9, c2 = 4 }, -- Brown.
-                -- { c1 = 11, c2 = 3 }, -- Green.
-                -- { c1 = 12, c2 = 1 }, -- Blue.
-                -- { c1 = 14, c2 = 2 } -- Pink.
-            },
-            colW = 6,
-            colH = 6,
-            ani = { 88, 89, 90, 91, 92 },
-            flash = 93,
-            delay = 0.4,
-            spd = 0.3,
-            hp = 5,
-            points = 200,
-            move = function(_ENV)
-                y += spd
-            end
+    redeye = {
+        name = "redeye",
+        cols = {
+            { c1 = 5, c2 = 8 } -- Grey / Red.
+            -- { c1 = 9, c2 = 4 }, -- Brown.
+            -- { c1 = 11, c2 = 3 }, -- Green.
+            -- { c1 = 12, c2 = 1 }, -- Blue.
+            -- { c1 = 14, c2 = 2 } -- Pink.
+        },
+        colW = 6,
+        colH = 6,
+        ani = { 88, 89, 90, 91, 92 },
+        flash = 93,
+        delay = 0.4,
+        spd = 0.3,
+        hp = 5,
+        points = 200,
+        move = function(_ENV)
+            y += spd
+        end
     },
-        flame = {
+    flame = {
         name = "flame",
         cols = {
-            { c1 = 8, c2 = 2 }, -- Grey / Red.
+            { c1 = 8, c2 = 2 } -- Grey / Red.
             -- { c1 = 9, c2 = 4 }, -- Brown.
             -- { c1 = 11, c2 = 3 }, -- Green.
             -- { c1 = 12, c2 = 1 }, -- Blue.
@@ -118,10 +118,10 @@ eTypes = {
             y += spd
         end
     },
-        fighter = {
+    fighter = {
         name = "fighter",
         cols = {
-            { c1 = 1, c2 = 5 }, -- Blue / Grey.
+            { c1 = 1, c2 = 5 } -- Blue / Grey.
             -- { c1 = 9, c2 = 4 }, -- Brown.
             -- { c1 = 11, c2 = 3 }, -- Green.
             -- { c1 = 12, c2 = 1 }, -- Blue.
@@ -141,7 +141,7 @@ eTypes = {
     boss = {
         name = "boss",
         cols = {
-            { c1 = 10, c2 = 0 }, -- Green.
+            { c1 = 10, c2 = 0 } -- Green.
         },
         colW = 14,
         colH = 14,
@@ -150,13 +150,13 @@ eTypes = {
         flash = 100,
         delay = 0.4,
         spd = 0.5,
-        hp = 10,
+        hp = 30,
         points = 1000,
         move = function(_ENV)
             x = x + cos(y / 16) * spd
             y += spd
         end
-    },
+    }
 }
 
 -- Enemy Factory logic.
@@ -312,8 +312,6 @@ function newEnemy(enemyCfg, eneX, eneY)
         canCollide = function(_ENV)
             return state ~= eneState.dead and state ~= eneState.spawning
         end,
-
-        -- TODO: Call spawning logic.
 
         -- Update function for the enemy.
         update = function(_ENV)

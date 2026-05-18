@@ -9,19 +9,32 @@ function setupGame()
 	spawnEventIndex = 1
 
 	spawnEvent = {
+		{
+			wave = 1, x = 20, y = 14, num = 10, dur = 20,
+			kind = eTypes.alien
+		},
+		{
+			wave = 1, x = 20, y = 26, num = 7, dur = 20,
+			kind = eTypes.alien
+		},
+		{
+			wave = 1, x = 20, y = 38, num = 7, dur = 20,
+			kind = eTypes.alien
+		},
 
-		{ wave = 1, x = 20, y = 8, num = 10, dur = 20,
-		kind = eTypes.alien },
-		{ wave = 1, x =  20, y = 18, num = 7, dur = 20,
-		kind = eTypes.flame },
+		{
+			wave = 2, x = 20, y = 12, num = 5, dur = 20,
+			kind = eTypes.ufo
+		},
+		{
+			wave = 2, x = 20, y = 24, num = 5, dur = 20,
+			kind = eTypes.redeye
+		},
 
-		{ wave = 2, x = 20, y = 8, num = 5, dur = 20,
-		kind = eTypes.ufo },
-		{ wave = 2, x =  20, y = 18, num = 5, dur = 20,
-		kind = eTypes.redeye },
-
-		{ wave = 3, x = 20, y = 8, num = 1, dur = 20,
-		kind = eTypes.boss },
+		{
+			wave = 3, x = 59, y = 12, num = 1, dur = 20,
+			kind = eTypes.boss
+		}
 	}
 
 	-- Setup player ship.
@@ -39,9 +52,6 @@ function setupGame()
 
 	-- Tracks frames between shots.
 	proT = 0
-
-	-- Prevents enemies spawning until the new wave screen has finished.
-	spawnOn = false
 
 	-- Reset enemies table.
 	enemies = {}
@@ -82,6 +92,32 @@ end
 -- Returns true when the requested wave has any spawn events.
 function hasWaveSpawnEvents(wave)
 	return getWaveStartEventIndex(wave) ~= nil
+end
+
+-- Spawns the enemies for a wave based on the spawn events.
+function spawnWaveRows(wave)
+	local eventIndex = getWaveStartEventIndex(wave)
+
+	if not eventIndex then
+		spawnEventIndex = #spawnEvent + 1
+		return
+	end
+
+	while eventIndex <= #spawnEvent and spawnEvent[eventIndex].wave == wave do
+		local event = spawnEvent[eventIndex]
+		local xOff = 9
+
+		for i = 1, event.num do
+			local spawnX = event.x + xOff
+			local spawnY = event.y
+			spawnEnemy(event.kind, spawnX, spawnY)
+			xOff += 9
+		end
+
+		eventIndex += 1
+	end
+
+	spawnEventIndex = eventIndex
 end
 
 -- Updates shared gameplay simulation.
@@ -142,7 +178,6 @@ function updateGameplay()
 		end
 	end
 
-
 	-- Update ship position.
 	ship:update()
 
@@ -171,7 +206,7 @@ function updateGameplay()
 		if e.y > 0 then
 			-- Handle projectile collisions.
 			for p in all(projectiles) do
-				if col(e, p) and not e:isDead() then
+				if col(e, p) and e:canBeHit() then
 					e:hit(p.dam)
 					spawnShockWave(p.x, p.y, slSwCfg)
 					spawnSparks(e.x, e.y, 7)
@@ -181,7 +216,7 @@ function updateGameplay()
 		end
 
 		-- Handle collision with ship.
-		if col(e, ship) and ship.invul <= 0 then
+		if col(e, ship) and ship.invul <= 0 and e:canCollide() then
 			player.lives -= 1
 			e:hit()
 			if player.lives <= 0 then
@@ -192,7 +227,6 @@ function updateGameplay()
 				ship.invul = 60 -- 2 secs of invulnerability.
 			end
 		end
-
 	end
 
 	-- Check for game over.
@@ -206,29 +240,6 @@ end
 
 -- Updates the game screen.
 function updateGame()
-	-- Index of the next spawn event.
-	local nextSpawnIndex =
-		getNextWaveEventIndex(waveNum, spawnEventIndex)
-
-	-- The actual next spawn event.
-	local nextSpawnEvent = nextSpawnIndex
-		and spawnEvent[nextSpawnIndex]
-
-	--  True if the next spawn event is ready to trigger.
-	local newSpawnReady = nextSpawnEvent and spawnOn
-
-	-- Trigger the spawn event if ready.
-	if newSpawnReady then
-		local xOff = 8
-		for i = 1, nextSpawnEvent.num do
-			local spawnX = nextSpawnEvent.x + xOff
-			local spawnY = nextSpawnEvent.y
-			spawnEnemy(nextSpawnEvent.kind, spawnX, spawnY)
-			xOff += 8
-		end
-		spawnEventIndex = nextSpawnIndex + 1
-	end
-
 	updateGameplay()
 
 	-- Check for end of wave.
@@ -307,5 +318,7 @@ function enterGame()
 	state = stateNames.game
 	gameT = 0
 	proT = 0
-	spawnEventIndex = getWaveStartEventIndex(waveNum) or (#spawnEvent + 1)
+	for e in all(enemies) do
+		e:activate()
+	end
 end
