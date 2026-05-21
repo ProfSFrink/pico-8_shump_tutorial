@@ -15,7 +15,7 @@ bullet = "bullet"
 laser = "laser"
 
 -- Offset for the height of the UI.
-uiHeight = 9
+uiHeight = 8
 
 -- Height of a bullet.
 bullHeight = 3

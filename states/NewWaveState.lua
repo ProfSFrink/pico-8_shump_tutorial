@@ -10,6 +10,7 @@ function updateNewWave()
     updateGameScene()
 
     if exitTimer <= 0 then
+        spawnWaveRows(waveNum)
         enterGame()
         return
     end
@@ -29,7 +30,6 @@ function enterNewWave()
     state = stateNames.newWave
     exitTimer = 60 -- 2 seconds until state change.
     waveNum += 1
-    spawnWaveRows(waveNum)
     if waveNum == 1 then
         music(0)
     else

@@ -92,7 +92,7 @@ eTypes = {
         flash = 93,
         delay = 0.4,
         spd = 0.3,
-        hp = 5,
+        hp = 3,
         points = 200,
         move = function(_ENV)
             y += spd
@@ -166,6 +166,7 @@ local fTimerLim = 3
 -- Death state frame timer.
 local dTimerLim = 10
 
+-- TODO: Later look at renaming normal to move state.
 -- State names for enemy state machine.
 local eneState = {
     spawning = "spawning",
@@ -191,6 +192,7 @@ function newEnemy(enemyCfg, eneX, eneY)
     local spawnExp = spawnExp
     local sfx = sfx
     local expCols = eneCols
+    local uiHeight = uiHeight
 
     return {
         name = enemyCfg.name,
@@ -293,19 +295,12 @@ function newEnemy(enemyCfg, eneX, eneY)
             end
         end,
 
-        -- Getter function for if the enemy is dead.
-        isDead = function(_ENV)
-            return state == eneState.dead
-        end,
-
-        -- Getter function for if the enemy is spawning.
-        isSpawning = function(_ENV)
-            return state == eneState.spawning
-        end,
-
         -- Getter function for if the enemy can collide with the player or projectiles.
         canCollide = function(_ENV)
-            return state ~= eneState.dead and state ~= eneState.spawning
+            -- Check if in bounds to prevent off-screen collisions.
+            local inBounds = mid(0, x, 128) == x and mid(0 + uiHeight, y, 128) == y
+
+            return state ~= eneState.dead and state ~= eneState.spawning and inBounds
         end,
 
         -- Update function for the enemy.

@@ -89,35 +89,31 @@ function updateGameScene()
 
 	-- Move the enemies and
 	-- check for collisions.
-	for e in all(enemies) do
-		e:update()
+	for enemy in all(enemies) do
+		enemy:update()
 
-        local canCollide = e:canCollide()
-
-		-- Prevents enemy being hit
-		-- before it appears on screen.
-		if e.y > 0 then
+		if enemy:canCollide() then
 			-- Handle projectile collisions.
-			for p in all(projectiles) do
-				if canCollide and hasCollided(e, p) then
-					e:hit(p.dam)
-					spawnShockWave(p.x, p.y, slSwCfg)
-					spawnSparks(e.x, e.y, 7)
-					del(projectiles, p)
+			for projectile in all(projectiles) do
+				if hasCollided(enemy, projectile) then
+					enemy:hit(projectile.dam)
+					spawnShockWave(projectile.x, projectile.y, slSwCfg)
+					spawnSparks(enemy.x, enemy.y, 7)
+					del(projectiles, projectile)
 				end
 			end
-		end
 
-		-- Handle collision with ship.
-		if hasCollided(e, ship) and ship.invul <= 0 and canCollide then
-			player.lives -= 1
-			e:hit()
-			if player.lives <= 0 then
-				ship.invul = 30
-				spawnExp(ship.x, ship.y, 0, shipCols)
-				spawnShockWave(ship.x, ship.y, lgSwCfg)
-			else
-				ship.invul = 60 -- 2 secs of invulnerability.
+			-- Handle collision with ship.
+			if hasCollided(enemy, ship) and ship.invul <= 0 then
+				player.lives -= 1
+				enemy:hit()
+				if player.lives <= 0 then
+					ship.invul = 30
+					spawnExp(ship.x, ship.y, 0, shipCols)
+					spawnShockWave(ship.x, ship.y, lgSwCfg)
+				else
+					ship.invul = 60 -- 2 secs of invulnerability.
+				end
 			end
 		end
 	end
@@ -172,9 +168,5 @@ function drawGameScene()
 		else
 			spr(14, uiX, 1)
 		end
-	end
-
-	for i = 1, player.bombs do
-		spr(29, 90 + uiX, 1)
 	end
 end

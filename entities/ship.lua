@@ -106,17 +106,5 @@ function newShip()
             currSpdX = 0
             currSpdY = 0
         end,
-
-        -- Checks if death animation is complete.
-        -- @returns true if death animation is complete.
-        isDead = function(_ENV)
-            dTimer -= 1
-
-            if dTimer <= 0 then
-                return true
-            else
-                return false
-            end
-        end
     }
 end

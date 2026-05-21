@@ -19,10 +19,12 @@ function setupGame()
 		},
 
 		{ wave = 2,
-			{ x = 64, y = -12, num = 5,
-			enemy = eTypes.ufo, spawnDur = 55 },
-			{ x = 64, y = -12, num = 5,
-			enemy = eTypes.eyeball, spawnDur = 55 },
+			{ x = -8, y = -12, num = 5,
+			enemy = eTypes.redeye, spawnDur = 55 },
+			{ x = 136, y = -12, num = 4,
+			enemy = eTypes.redeye, spawnDur = 55 },
+			{ x = 64, y = -12, num = 3,
+			enemy = eTypes.redeye, spawnDur = 55 },
 		},
 
 		{ wave = 3,
@@ -78,9 +80,11 @@ end
 
 -- Spawns all enemy rows for a wave.
 function spawnWaveRows(wave)
-    local waveData = getWaveData(wave)
+	-- TODO: Add SFX for enemy spawn.
 
-    if not waveData then
+    local waveRows = getWaveData(wave)
+
+    if not waveRows then
         return
     end
 
@@ -92,14 +96,14 @@ function spawnWaveRows(wave)
     local spacing = 11 -- Spacing between small sprites in a row.
 
     -- Iterate through each row in the wave.
-    for rowIdx = 1, #waveData do
-        local row = waveData[rowIdx]
+    for rowNum = 1, #waveRows do
+        local row = waveRows[rowNum]
 
         local spriteW = (row.enemy.sprSize or 1) * 8
 
         local rowSpacing = max(spacing, spriteW + 3)
 
-        local rowDelay = (rowIdx - 1) * baseGapDelay - ((rowIdx - 1) * (rowIdx - 2) * delayReduction) / 2
+        local rowDelay = (rowNum - 1) * baseGapDelay - ((rowNum - 1) * (rowNum - 2) * delayReduction) / 2
 
         local rowWidth = (row.num - 1) * rowSpacing
 
@@ -107,23 +111,29 @@ function spawnWaveRows(wave)
 
         -- Spawn each enemy in the row.
         for i = 1, row.num do
+			-- Spawn enemy off-screen.
             local newEnemy = spawnEnemy(row.enemy, row.x, row.y)
 
+			-- Calculate target position for the enemy.
             local targetX = rowStartX + (i - 1) * rowSpacing
-            local targetY = 10 + rowIdx * 10
+            local targetY = 10 + rowNum * 10
             local delay = flr(rowDelay)
 
+			-- Animate enemy to target x position.
             async(function()
                 wait(delay)
                 animate(newEnemy, "x", targetX, row.spawnDur, easeOutQuad)
             end)
 
+			-- Animate enemy to target y position.
             async(function()
                 wait(delay)
                 animate(newEnemy, "y", targetY, row.spawnDur, easeOutQuad)
             end)
         end
     end
+
+	sfx(28)
 end
 
 -- Updates the game screen.
