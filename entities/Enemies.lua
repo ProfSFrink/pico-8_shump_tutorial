@@ -17,9 +17,8 @@
 -- colH: Collision height - defaults to 7 (Optional).
 -- sprSize: Size the sprite - defaults to 7x7 (Optional).
 -- move: Custom move function.
-eTypes = {
+eDefs = {
     alien = {
-        name = "alien",
         cols = {
             { c1 = 11, c2 = 3 }, -- Green.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -39,7 +38,6 @@ eTypes = {
         end
     },
     ufo = {
-        name = "ufo",
         cols = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -58,7 +56,6 @@ eTypes = {
         end
     },
     eyeball = {
-        name = "eyeball",
         cols = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -78,7 +75,6 @@ eTypes = {
         end
     },
     redeye = {
-        name = "redeye",
         cols = {
             { c1 = 5, c2 = 8 } -- Grey / Red.
             -- { c1 = 9, c2 = 4 }, -- Brown.
@@ -99,7 +95,6 @@ eTypes = {
         end
     },
     flame = {
-        name = "flame",
         cols = {
             { c1 = 8, c2 = 2 } -- Grey / Red.
             -- { c1 = 9, c2 = 4 }, -- Brown.
@@ -119,7 +114,6 @@ eTypes = {
         end
     },
     fighter = {
-        name = "fighter",
         cols = {
             { c1 = 1, c2 = 5 } -- Blue / Grey.
             -- { c1 = 9, c2 = 4 }, -- Brown.
@@ -139,7 +133,6 @@ eTypes = {
         end
     },
     boss = {
-        name = "boss",
         cols = {
             { c1 = 10, c2 = 0 } -- Green.
         },

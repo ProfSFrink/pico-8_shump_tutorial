@@ -1,5 +1,21 @@
 -- Game state logic.
 
+spawnEvents = {
+	{ '1',
+		'-8,-24,alien,alien,gap,alien,alien,alien,gap,alien,alien',
+		'136,34,alien,alien,gap,alien,alien,alien,gap,alien,alien',
+		'64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
+	},
+	{ '2',
+		'-8,-12,redeye,redeye,redeye,alien,alien,alien',
+		'136,-12,redeye,redeye,redeye,alien,alien,alien',
+		'64,-12,redeye,redeye,redeye,alien,alien,alien'
+	},
+	{ '3',
+		'60,-12,boss'
+	}
+}
+
 -- Sets up the game.
 function setupGame()
 	-- Setup game timers (frames).
@@ -8,94 +24,6 @@ function setupGame()
 
 	spawnDur = 50
 	spawnT = 0
-
-	-- Enemy spawn events for each wave.
-	-- wave: wave number.
-	-- x: Spawn x position for the row (off-screen).
-	-- y: Spawn y position for the row (off-screen).
-	-- rowEnemies: list of enemies to spawn in the row.
-	local alien = eTypes.alien
-	local redeye = eTypes.redeye
-	local fighter = eTypes.fighter
-	local boss = eTypes.boss
-	spawnEvents = {
-		{ wave = 1,
-			{ x = -8, y = 24,
-			rowEnemies = {
-				alien,
-				alien,
-				alien,
-				alien,
-				redeye,
-				redeye,
-				redeye,
-				alien,
-				alien,
-				alien,
-			} },
-			{ x = 136, y = 34,
-			rowEnemies = {
-				alien,
-				alien,
-				alien,
-				alien,
-				redeye,
-				redeye,
-				redeye,
-				alien,
-				alien,
-				alien,
-			} },
-			{ x = 64, y = 130,
-			rowEnemies = {
-				fighter,
-				fighter,
-				fighter,
-				fighter,
-				fighter,
-				fighter,
-				fighter,
-				fighter,
-			} },
-		},
-
-		{ wave = 2,
-			{ x = -8, y = -12,
-			rowEnemies = {
-				redeye,
-				redeye,
-				redeye,
-				alien,
-				alien,
-				alien,
-			} },
-			{ x = 136, y = -12,
-			rowEnemies = {
-				redeye,
-				redeye,
-				redeye,
-				alien,
-				alien,
-				alien,
-			} },
-			{ x = 64, y = -12,
-			rowEnemies = {
-				redeye,
-				redeye,
-				redeye,
-				alien,
-				alien,
-				alien,
-			} },
-		},
-
-		{ wave = 3,
-			{ x = 60, y = -12,
-			rowEnemies = {
-				boss
-			},}
-		},
-	}
 
 	-- Setup player ship.
 	ship = newShip()
@@ -128,10 +56,23 @@ function setupGame()
 	createStarfield(false)
 end
 
+-- Parses a row string into row data.
+function parseWaveRow(s)
+	local parts = split(s, ',')
+	local rowEnemies = {}
+
+	for i = 3, #parts do
+		local name = parts[i]
+		add(rowEnemies, name == 'gap' and 'gap' or eDefs[name])
+	end
+
+	return { x = tonum(parts[1]), y = tonum(parts[2]), rowEnemies = rowEnemies }
+end
+
 -- Returns the wave data for the requested wave number.
 function getWaveData(wave)
 	for i = 1, #spawnEvents do
-		if spawnEvents[i].wave == wave then
+		if tonum(spawnEvents[i][1]) == wave then
 			return spawnEvents[i]
 		end
 	end
@@ -157,15 +98,20 @@ function spawnWaveRows(wave)
     local centerX = 64 -- Center of the screen on x-axis.
     local spacing = 11 -- Spacing between small sprites in a row.
 
-    -- Iterate through each row in the wave.
-    for rowNum = 1, #waveRows do
-        local row = waveRows[rowNum]
+    -- Iterate through each row in the wave (index 1 is the wave number).
+    for rowNum = 2, #waveRows do
+        local row = parseWaveRow(waveRows[rowNum])
+        local rowIdx = rowNum - 1
 
-        local spriteW = (row.rowEnemies[1].sprSize or 1) * 8
+        local firstEnemy = nil
+        for _, e in pairs(row.rowEnemies) do
+            if e ~= 'gap' then firstEnemy = e break end
+        end
+        local spriteW = (firstEnemy and firstEnemy.sprSize or 1) * 8
 
         local rowSpacing = max(spacing, spriteW + 4)
 
-        local rowDelay = (rowNum - 1) * baseGapDelay - ((rowNum - 1) * (rowNum - 2) * delayReduction) / 2
+        local rowDelay = (rowIdx-1)*baseGapDelay - ((rowIdx-1)*(rowIdx-2)*delayReduction)/2
 
         local rowWidth = (#row.rowEnemies - 1) * rowSpacing
 
@@ -173,25 +119,21 @@ function spawnWaveRows(wave)
 
         -- Spawn each enemy in the row.
         for i = 1, #row.rowEnemies do
-			-- Spawn enemy off-screen.
-            local newEnemy = spawnEnemy(row.rowEnemies[i], row.x, row.y)
+			local targetX = rowStartX + (i - 1) * rowSpacing
+			local targetY = 10 + rowIdx * 13
+			local delay = flr(rowDelay)
 
-			-- Calculate target position for the enemy.
-            local targetX = rowStartX + (i - 1) * rowSpacing
-            local targetY = 10 + rowNum * 13
-            local delay = flr(rowDelay)
-
-			-- Animate enemy to target x position.
-            async(function()
-                wait(delay)
-                animate(newEnemy, "x", targetX, spawnDur, easeOutQuad)
-            end)
-
-			-- Animate enemy to target y position.
-            async(function()
-                wait(delay)
-                animate(newEnemy, "y", targetY, spawnDur, easeOutQuad)
-            end)
+			if row.rowEnemies[i] ~= 'gap' then
+				local e = spawnEnemy(row.rowEnemies[i], row.x, row.y)
+				async(function()
+					wait(delay)
+					animate(e, "x", targetX, spawnDur, easeOutQuad)
+				end)
+				async(function()
+					wait(delay)
+					animate(e, "y", targetY, spawnDur, easeOutQuad)
+				end)
+			end
         end
     end
 
