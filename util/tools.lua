@@ -2,6 +2,7 @@
 
 -- Shows debug info on the screen.
 function showDebugUI()
+    ?state, 0, 12
     ?#projectiles, 0, 123, 7
     ?#enemies, 6, 123, 3
     ?#routines, 16, 123, 15

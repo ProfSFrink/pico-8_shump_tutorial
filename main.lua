@@ -51,6 +51,8 @@ function _init()
 		win = "win", gameOver = "gameOver"
 	}
 
+	state = stateNames.title
+
 	-- Initial game state.
 	enterTitle()
 

@@ -34,8 +34,8 @@ eTypes = {
         hp = 2,
         points = 100,
         move = function(_ENV)
-            x = x + cos(y / 16) * spd
-            y += spd
+            --x = x + cos(y / 16) * spd
+            --y += spd
         end
     },
     ufo = {
@@ -54,7 +54,7 @@ eTypes = {
         hp = 4,
         points = 175,
         move = function(_ENV)
-            y += spd
+            --y += spd
         end
     },
     eyeball = {
@@ -73,8 +73,8 @@ eTypes = {
         hp = 3,
         points = 150,
         move = function(_ENV)
-            x = x + cos(y / 16) * spd
-            y += spd
+            --x = x + cos(y / 16) * spd
+            --y += spd
         end
     },
     redeye = {
@@ -95,7 +95,7 @@ eTypes = {
         hp = 3,
         points = 200,
         move = function(_ENV)
-            y += spd
+            --y += spd
         end
     },
     flame = {
@@ -114,8 +114,8 @@ eTypes = {
         hp = 2,
         points = 200,
         move = function(_ENV)
-            x = x + cos(y / 16) * spd
-            y += spd
+            --x = x + cos(y / 16) * spd
+            --y += spd
         end
     },
     fighter = {
@@ -134,8 +134,8 @@ eTypes = {
         hp = 4,
         points = 300,
         move = function(_ENV)
-            x = x + cos(y / 16) * spd
-            y += spd
+            --x = x + cos(y / 16) * spd
+            --y += spd
         end
     },
     boss = {
@@ -153,8 +153,8 @@ eTypes = {
         hp = 30,
         points = 1000,
         move = function(_ENV)
-            x = x + cos(y / 16) * spd
-            y += spd
+            --x = x + cos(y / 16) * spd
+            --y += spd
         end
     }
 }
@@ -300,7 +300,7 @@ function newEnemy(enemyCfg, eneX, eneY)
             -- Check if in bounds to prevent off-screen collisions.
             local inBounds = mid(0, x, 128) == x and mid(0 + uiHeight, y, 128) == y
 
-            return state ~= eneState.dead and state ~= eneState.spawning and inBounds
+            return state != eneState.dead and state != eneState.spawning and inBounds
         end,
 
         -- Update function for the enemy.
@@ -317,7 +317,7 @@ function newEnemy(enemyCfg, eneX, eneY)
                 move(_ENV)
 
                 -- Remove if off-screen.
-                if y > 128 then
+                if y > 128 and state != eneState.spawning then
                     del(enemies, _ENV)
                 end
             end

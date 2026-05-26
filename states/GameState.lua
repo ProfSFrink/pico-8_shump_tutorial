@@ -2,34 +2,98 @@
 
 -- Sets up the game.
 function setupGame()
-	-- Setup game timer (frames).
+	-- Setup game timers (frames).
 	gameT = 0
+	proT = 0
+
+	spawnDur = 50
+	spawnT = 0
 
 	-- Enemy spawn events for each wave.
 	-- wave: wave number.
-	-- x: starting x position for the row.
-	-- y: starting y position for the row.
-	-- num: number of enemies in the row.
-	-- enemy: type of enemy to spawn (from eTypes).
+	-- x: Spawn x position for the row (off-screen).
+	-- y: Spawn y position for the row (off-screen).
+	-- rowEnemies: list of enemies to spawn in the row.
+	local alien = eTypes.alien
+	local redeye = eTypes.redeye
+	local fighter = eTypes.fighter
+	local boss = eTypes.boss
 	spawnEvents = {
 		{ wave = 1,
-			{ x = -8, y = 24, num = 7, enemy = eTypes.alien, spawnDur = 50 },
-			{ x = 136, y = 34, num = 6, enemy = eTypes.alien, spawnDur = 50 },
-			{ x = -8, y = 44, num = 5, enemy = eTypes.alien, spawnDur = 50 },
+			{ x = -8, y = 24,
+			rowEnemies = {
+				alien,
+				alien,
+				alien,
+				alien,
+				redeye,
+				redeye,
+				redeye,
+				alien,
+				alien,
+				alien,
+			} },
+			{ x = 136, y = 34,
+			rowEnemies = {
+				alien,
+				alien,
+				alien,
+				alien,
+				redeye,
+				redeye,
+				redeye,
+				alien,
+				alien,
+				alien,
+			} },
+			{ x = 64, y = 130,
+			rowEnemies = {
+				fighter,
+				fighter,
+				fighter,
+				fighter,
+				fighter,
+				fighter,
+				fighter,
+				fighter,
+			} },
 		},
 
 		{ wave = 2,
-			{ x = -8, y = -12, num = 5,
-			enemy = eTypes.redeye, spawnDur = 55 },
-			{ x = 136, y = -12, num = 4,
-			enemy = eTypes.redeye, spawnDur = 55 },
-			{ x = 64, y = -12, num = 3,
-			enemy = eTypes.redeye, spawnDur = 55 },
+			{ x = -8, y = -12,
+			rowEnemies = {
+				redeye,
+				redeye,
+				redeye,
+				alien,
+				alien,
+				alien,
+			} },
+			{ x = 136, y = -12,
+			rowEnemies = {
+				redeye,
+				redeye,
+				redeye,
+				alien,
+				alien,
+				alien,
+			} },
+			{ x = 64, y = -12,
+			rowEnemies = {
+				redeye,
+				redeye,
+				redeye,
+				alien,
+				alien,
+				alien,
+			} },
 		},
 
 		{ wave = 3,
-			{ x = 60, y = -12, num = 1,
-			enemy = eTypes.boss, spawnDur = 55 }
+			{ x = 60, y = -12,
+			rowEnemies = {
+				boss
+			},}
 		},
 	}
 
@@ -80,8 +144,6 @@ end
 
 -- Spawns all enemy rows for a wave.
 function spawnWaveRows(wave)
-	-- TODO: Add SFX for enemy spawn.
-
     local waveRows = getWaveData(wave)
 
     if not waveRows then
@@ -99,36 +161,36 @@ function spawnWaveRows(wave)
     for rowNum = 1, #waveRows do
         local row = waveRows[rowNum]
 
-        local spriteW = (row.enemy.sprSize or 1) * 8
+        local spriteW = (row.rowEnemies[1].sprSize or 1) * 8
 
-        local rowSpacing = max(spacing, spriteW + 3)
+        local rowSpacing = max(spacing, spriteW + 4)
 
         local rowDelay = (rowNum - 1) * baseGapDelay - ((rowNum - 1) * (rowNum - 2) * delayReduction) / 2
 
-        local rowWidth = (row.num - 1) * rowSpacing
+        local rowWidth = (#row.rowEnemies - 1) * rowSpacing
 
         local rowStartX = flr(centerX - spriteW / 2 - rowWidth / 2)
 
         -- Spawn each enemy in the row.
-        for i = 1, row.num do
+        for i = 1, #row.rowEnemies do
 			-- Spawn enemy off-screen.
-            local newEnemy = spawnEnemy(row.enemy, row.x, row.y)
+            local newEnemy = spawnEnemy(row.rowEnemies[i], row.x, row.y)
 
 			-- Calculate target position for the enemy.
             local targetX = rowStartX + (i - 1) * rowSpacing
-            local targetY = 10 + rowNum * 10
+            local targetY = 10 + rowNum * 13
             local delay = flr(rowDelay)
 
 			-- Animate enemy to target x position.
             async(function()
                 wait(delay)
-                animate(newEnemy, "x", targetX, row.spawnDur, easeOutQuad)
+                animate(newEnemy, "x", targetX, spawnDur, easeOutQuad)
             end)
 
 			-- Animate enemy to target y position.
             async(function()
                 wait(delay)
-                animate(newEnemy, "y", targetY, row.spawnDur, easeOutQuad)
+                animate(newEnemy, "y", targetY, spawnDur, easeOutQuad)
             end)
         end
     end
@@ -139,6 +201,14 @@ end
 -- Updates the game screen.
 function updateGame()
 	updateGameScene()
+
+	spawnT += 1
+
+	if spawnT == spawnDur then
+		for e in all(enemies) do
+			e:activate()
+		end
+	end
 
 	-- Check for end of wave.
 	if #enemies == 0 then
@@ -164,9 +234,4 @@ end
 -- Enter the game state.
 function enterGame()
 	state = stateNames.game
-	gameT = 0
-	proT = 0
-	for e in all(enemies) do
-		e:activate()
-	end
 end
