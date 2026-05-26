@@ -33,8 +33,8 @@ eDefs = {
         hp = 2,
         points = 100,
         move = function(_ENV)
-            --x = x + cos(y / 16) * spd
-            --y += spd
+            x = x + cos(y / 16) * spd
+            y += spd
         end
     },
     ufo = {
@@ -159,11 +159,11 @@ local fTimerLim = 3
 -- Death state frame timer.
 local dTimerLim = 10
 
--- TODO: Later look at renaming normal to move state.
 -- State names for enemy state machine.
 local eneState = {
     spawning = "spawning",
-    normal = "normal",
+    stopped = "stopped",
+    moving = "moving",
     flashing = "flashing",
     dead = "dead"
 }
@@ -223,15 +223,17 @@ function newEnemy(enemyCfg, eneX, eneY)
         aniDelay = enemyCfg.delay,
 
         move = enemyCfg.move,
+        mTimer = 60,
+        sTimer = 30,
         fTimer = fTimerLim,
         dTimer = dTimerLim,
 
-        -- Enemy state, can be normal, flashing, or dead.
+        -- Enemy current state.
         state = eneState.spawning,
 
         -- Activate the enemy after spawning.
         activate = function(_ENV)
-            state = eneState.normal
+            state = eneState.stopped
         end,
 
         -- Run looping enemy animation.
@@ -274,7 +276,7 @@ function newEnemy(enemyCfg, eneX, eneY)
             enemySpr = flashSpr
             fTimer -= 1
             if fTimer <= 0 then
-                state = eneState.normal
+                state = eneState.moving
                 fTimer = fTimerLim
             end
         end,
@@ -305,14 +307,28 @@ function newEnemy(enemyCfg, eneX, eneY)
                 flash(_ENV)
             elseif state == eneState.spawning then
                 animate(_ENV)
-            elseif state == eneState.normal then
+            elseif state == eneState.stopped then
+                animate(_ENV)
+                mTimer -= 1
+
+                if mTimer <= 0 then
+                    mTimer = 60
+                    state = eneState.moving
+                end
+            elseif state == eneState.moving then
                 animate(_ENV)
                 move(_ENV)
 
-                -- Remove if off-screen.
-                if y > 128 and state != eneState.spawning then
-                    del(enemies, _ENV)
+                sTimer -= 1
+                if sTimer <= 0 then
+                    sTimer = 30
+                    state = eneState.stopped
                 end
+            end
+
+            -- Remove if off-screen.
+            if y > 128 and state != eneState.spawning then
+                del(enemies, _ENV)
             end
         end,
 
