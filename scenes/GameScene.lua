@@ -15,12 +15,12 @@ function updateGameScene()
 
 	-- Checking for input.
 	-- Left arrow.
-	if btn(0) then
+	if btn(0) and canPlay then
 		ship:move("left")
 	end
 
 	-- Right arrow.
-	if btn(1) then
+	if btn(1) and canPlay then
 		ship:move("right")
 	end
 
@@ -30,7 +30,7 @@ function updateGameScene()
 	end
 
 	-- Down arrow.
-	if btn(3) then
+	if btn(3) and canPlay then
 		ship:move("down")
 	end
 

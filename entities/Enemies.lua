@@ -1,5 +1,4 @@
 -- Enemies definitions.
--- todo: Review animation delays.
 
 -- Setup for an enemy.
 -- name: Enemy name.
@@ -36,7 +35,7 @@ eDefs = {
         stopTime = 2,
         hp = 2,
         points = 100,
-        move = downLeftRight
+        move = downWave
     },
     ufo = {
         cols = {
@@ -54,7 +53,7 @@ eDefs = {
         stopTime = 0,
         hp = 2,
         points = 175,
-        move = downLeftRight
+        move = down
     },
     eyeball = {
         cols = {
@@ -72,7 +71,7 @@ eDefs = {
         stopTime = 5,
         hp = 3,
         points = 150,
-        move = downLeftRight
+        move = downWave
     },
     redeye = {
         cols = {
@@ -110,7 +109,7 @@ eDefs = {
         stopTime = 3,
         hp = 2,
         points = 200,
-        move = downLeftRight
+        move = downWave
     },
     fighter = {
         cols = {
@@ -151,7 +150,7 @@ eDefs = {
         points = 1000,
         moveTime = 45,
         stopTime = 5,
-        move = downLeftRightSlow
+        move = downWaveSlow
     }
 }
 
@@ -206,6 +205,8 @@ function newEnemy(enemyCfg, eneX, eneY)
         cols = enemyCfg.cols,
         -- Randomly select a color palette.
         --colId = ranInt(1, #enemyCfg.cols),
+
+        -- Use default colour palette.
         colId = 1,
 
         -- Collision box size, defaults to 8x8.
@@ -319,8 +320,6 @@ function newEnemy(enemyCfg, eneX, eneY)
                 animate(_ENV)
                 stopTime -= 1
 
-                colId = 2
-
                 if stopTime <= 0 then
                     stopTime = enemyCfg.stopTime or stopTimerDefault
                     state = eneState.moving
@@ -328,8 +327,6 @@ function newEnemy(enemyCfg, eneX, eneY)
             elseif state == eneState.moving then
                 animate(_ENV)
                 move(_ENV)
-
-                colId = 1
 
                 moveTime -= 1
                 if moveTime <= 0 then
@@ -347,8 +344,8 @@ function newEnemy(enemyCfg, eneX, eneY)
         -- Draw function for the enemy.
         draw = function(_ENV)
 
-            -- pal(cols[1].c1, cols[colId].c1)
-            -- pal(cols[1].c2, cols[colId].c2)
+            pal(cols[1].c1, cols[colId].c1)
+            pal(cols[1].c2, cols[colId].c2)
 
             if state == eneState.dead then
                 spr(enemySpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
@@ -356,7 +353,7 @@ function newEnemy(enemyCfg, eneX, eneY)
                 spr(enemySpr, x, y, sprSize, sprSize)
             end
 
-            -- pal()
+            pal()
         end
     }
 end

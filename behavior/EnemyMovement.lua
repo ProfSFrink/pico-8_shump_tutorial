@@ -5,14 +5,14 @@ function down(_ENV)
 end
 
 -- Enemy moves down the screen, while also moving left and right in a wave pattern.
-function downLeftRight(_ENV)
+function downWave(_ENV)
     x = x + cos(y / 16) * spd
     y += spd
 end
 
 -- Enemy moves down the screen, while also moving left and right in a wave pattern, but slower than the above.
-function downLeftRightSlow(_ENV)
-    x = x + cos(y / 16) * spd
+function downWaveSlow(_ENV)
+    x = x + cos(y / 32) * spd
     y += spd / 2
 end
 

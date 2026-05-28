@@ -37,6 +37,7 @@
     "SPRSTART",
     "sspd",
     "strt",
+    "tonum",
     "tostr"
   ],
   "workbench.colorTheme": "PICO-8",

@@ -30,6 +30,15 @@ function enterNewWave()
     state = stateNames.newWave
     canPlay = false
     exitTimer = 60 -- 2 seconds until state change.
+
+    async(function()
+        animate(ship,"x", 64, 60, easeOutQuad)
+    end)
+
+    async(function()
+        animate(ship,"y", 108, 60, easeOutQuad)
+    end)
+
     waveNum += 1
     if waveNum == 1 then
         music(0)

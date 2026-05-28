@@ -7,20 +7,26 @@ spawnEvents = {
 		'64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
 	},
 	{ '2',
-		'-8,-24,ufo,ufo,gap,ufo,ufo,ufo,gap,ufo,ufo',
-		'136,34,ufo,ufo,gap,ufo,ufo,ufo,gap,ufo,ufo',
-		'64,-12,ufo,ufo,gap,gap,gap,gap,ufo,ufo'
+		'-8,-24,ufo,ufo,ufo,ufo,ufo,',
+		'136,34,ufo,gap,gap,gap,ufo,',
+		'64,-12,ufo,ufo,ufo,ufo,ufo,'
 	},
 	{ '3',
 		'-8,-24,fighter,gap,gap,flame,flame,gap,gap,fighter',
 		'136,34,fighter,gap,gap,flame,flame,gap,gap,fighter',
 	},
 	{ '4',
-		'-8,-24,eyeball,gap,redeye,redeye,gap,eyeball',
-		'136,34,eyeball,gap,redeye,redeye,gap,eyeball',
-		'64,-12,eyeball,gap,redeye,redeye,gap,eyeball'
+		'-8,-24,redeye,redeye,redeye',
+		'136,34,redeye,gap,redeye',
+		'64,-12,redeye,redeye,redeye'
 	},
-	{ '5',
+	{
+		'5',
+		'-8,-24,eyeball,eyeball,eyeball',
+		'136,34,eyeball,eyeball,eyeball',
+		'64,-12,eyeball,eyeball,eyeball'
+	},
+	{ '6',
 		'60,-12,boss'
 	}
 }
