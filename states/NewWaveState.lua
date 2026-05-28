@@ -29,14 +29,14 @@ end
 function enterNewWave()
     state = stateNames.newWave
     canPlay = false
-    exitTimer = 60 -- 2 seconds until state change.
+    exitTimer = 50 -- 2 seconds until state change.
 
     async(function()
-        animate(ship,"x", 64, 60, easeOutQuad)
+        animate(ship,"x", shipStartX, 60, easeOutQuad)
     end)
 
     async(function()
-        animate(ship,"y", 108, 60, easeOutQuad)
+        animate(ship,"y", shipStartY, 60, easeOutQuad)
     end)
 
     waveNum += 1

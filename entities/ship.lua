@@ -10,37 +10,37 @@ function newShip()
 
     return {
 		-- Starting position.
-		x = 64,
-		y = 108,
-		-- Speed the ship can move on each axis.
-		spdX = 2,
-		spdY = 2,
-        -- Ships current speed on each axis.
-        currSpdX = 0,
-		currSpdY = 0,
+		x = g.shipStartX,
+		y = g.shipStartY,
+		-- Speed the ship is allowed to move on each axis.
+		xMaxSpeed = 2,
+		yMaxSpeed = 2,
+        -- Ship's current speed on each axis.
+        xSpeed = 0,
+		ySpeed = 0,
         -- Starting ship sprite.
-        strtSpr = 3,
+        startSprite = 3,
 		-- Current ship sprite.
-		currSpr = 3,
+		sprite = 3,
 		-- Ship flame start & end sprites.
-		flStrtSpr = 7,
-		flEndSpr = 11,
+		flameStartSprite = 7,
+		flameEndSprite = 11,
         -- Current ship flame sprite.
-		flCurrSpr = 7,
+		flameSprite = 7,
 		-- Offset for bullets.
-		bullOffset = 3,
+		bulletOffset = 3,
 		-- Size of muzzles flash.
 		muzzle = 0,
 		-- Invulnerability timer in frames.
 		invul = 0,
 		-- Delay between losing last life
         -- showing game over screen.
-		dTimer = 30,
+		deathTimer = 30,
 
         -- Update ship position and animation.
         update = function(_ENV)
-            x += currSpdX
-            y += currSpdY
+            x += xSpeed
+            y += ySpeed
 
             -- Check if we hit the
             -- bounds of the screen.
@@ -52,9 +52,9 @@ function newShip()
             end
 
             -- Animate ship flame.
-            flCurrSpr += 1
-            if flCurrSpr > flEndSpr then
-                flCurrSpr = flStrtSpr
+            flameSprite += 1
+            if flameSprite > flameEndSprite then
+                flameSprite = flameStartSprite
             end
 
             -- Animate the muzzle flash.
@@ -66,13 +66,13 @@ function newShip()
         -- Draw the ship and its flame.
         draw = function(_ENV, gameT)
             if invul <= 0 then
-                spr(currSpr, x, y)
-                spr(flCurrSpr, x, y + 8)
+                spr(sprite, x, y)
+                spr(flameSprite, x, y + 8)
             else
                 if sin(gameT / 5) < 0.1 then
                     pal(2,6)
-                    spr(currSpr, x, y)
-                    spr(flCurrSpr, x, y + 8)
+                    spr(sprite, x, y)
+                    spr(flameSprite, x, y + 8)
                     pal()
                 end
             end
@@ -86,25 +86,25 @@ function newShip()
         -- @param button: The button index for the direction to move.
         move = function(_ENV, button)
             if button == "left" then
-                currSpr = 1
-                currSpdX = -spdX
+                sprite = 1
+                xSpeed = -xMaxSpeed
             elseif button == "right" then
-                currSpr = 5
-                currSpdX = spdX
+                sprite = 5
+                xSpeed = xMaxSpeed
             elseif button == "up" then
-                currSpr = strtSpr
-                currSpdY = -spdY
+                sprite = startSprite
+                ySpeed = -yMaxSpeed
             elseif button == "down" then
-                currSpr = strtSpr
-                currSpdY = spdY
+                sprite = startSprite
+                ySpeed = yMaxSpeed
             end
         end,
 
         -- Reset ship properties to default.
         reset = function(_ENV)
-            currSpr = strtSpr
-            currSpdX = 0
-            currSpdY = 0
+            sprite = startSprite
+            xSpeed = 0
+            ySpeed = 0
         end,
     }
 end

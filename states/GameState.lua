@@ -33,11 +33,11 @@ spawnEvents = {
 
 -- Sets up the game.
 function setupGame()
-	-- Setup game timers (frames).
+	-- Setup game & Projectile timers (frames).
 	gameT = 0
 	proT = 0
 
-	spawnDur = 50
+	spawnDur = 40
 
 	-- Setup player ship.
 	ship = newShip()

@@ -3,7 +3,7 @@
 -- Reference to global scope.
 _g = _ENV
 
-debugMode = true
+debugMode = false
 
 -- Game strings.
 
@@ -31,6 +31,9 @@ function _init()
 	cls()
 
 	routines = {}
+
+	shipStartX = 64
+	shipStartY = 108
 
 	waveNum = 0
 
