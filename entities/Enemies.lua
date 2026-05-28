@@ -91,7 +91,7 @@ eDefs = {
         hp = 3,
         points = 200,
         move = function(_ENV)
-            --y += spd
+            y += spd
         end
     },
     flame = {
@@ -165,6 +165,7 @@ local eneState = {
     stopped = "stopped",
     moving = "moving",
     flashing = "flashing",
+    firing = "firing",
     dead = "dead"
 }
 

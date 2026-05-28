@@ -1,8 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
 version 43
 __lua__
-#include main.lua
-#include ./util/tools.lua
+#include Main.lua
+#include ./util/Tools.lua
 #include ./util/Collisions.lua
 #include ./util/Async.lua
 #include ./util/Animate.lua

@@ -15,11 +15,11 @@ function animate(obj, key, value, frame, ease)
     end
 end
 
--- Linear interpolation between a and b by t.
--- param a: start value.
--- param b: end value.
--- param t: interpolation factor (between 0 and 1).
+-- Linear interpolation between start and finish by time.
+-- param start: start value.
+-- param finish: end value.
+-- param time: interpolation factor (between 0 and 1).
 -- returns: interpolated value.
-function lerp(a, b, t)
-    return a + (b - a) * t
+function lerp(start, finish, time)
+    return start + (finish - start) * time
 end

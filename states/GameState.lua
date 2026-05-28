@@ -23,7 +23,6 @@ function setupGame()
 	proT = 0
 
 	spawnDur = 50
-	spawnT = 0
 
 	-- Setup player ship.
 	ship = newShip()
@@ -176,4 +175,5 @@ end
 -- Enter the game state.
 function enterGame()
 	state = stateNames.game
+	spawnT = 0
 end
