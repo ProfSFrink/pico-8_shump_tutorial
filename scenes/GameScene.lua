@@ -11,8 +11,6 @@ function updateGameScene()
 	-- Reset ship sprite and speed.
 	ship:reset()
 
-	local inGame = state == stateNames.game
-
 	-- Controls.
 
 	-- Checking for input.
@@ -27,7 +25,7 @@ function updateGameScene()
 	end
 
 	-- Up arrow.
-	if btn(2) and inGame then
+	if btn(2) and canPlay then
 		ship:move("up")
 	end
 
@@ -37,7 +35,7 @@ function updateGameScene()
 	end
 
 	-- Fire bullet if X pressed.
-	if btn(5) and inGame then
+	if btn(5) and canPlay then
 		local proCfg = getConfig(bullet)
 
 		if proT <= 0 then
@@ -48,7 +46,7 @@ function updateGameScene()
 	end
 
 	-- Fire laser if Z pressed.
-	if btn(4) and inGame then
+	if btn(4) and canPlay then
 		local proCfg = getConfig(laser)
 
 		if proT <= 0 then

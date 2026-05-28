@@ -28,6 +28,7 @@ end
 -- Enter the new wave state.
 function enterNewWave()
     state = stateNames.newWave
+    canPlay = false
     exitTimer = 60 -- 2 seconds until state change.
     waveNum += 1
     if waveNum == 1 then

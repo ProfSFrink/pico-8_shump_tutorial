@@ -7,11 +7,21 @@ spawnEvents = {
 		'64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
 	},
 	{ '2',
-		'-8,-12,redeye,redeye,redeye,alien,alien,alien',
-		'136,-12,redeye,redeye,redeye,alien,alien,alien',
-		'64,-12,redeye,redeye,redeye,alien,alien,alien'
+		'-8,-24,ufo,ufo,gap,ufo,ufo,ufo,gap,ufo,ufo',
+		'136,34,ufo,ufo,gap,ufo,ufo,ufo,gap,ufo,ufo',
+		'64,-12,ufo,ufo,gap,gap,gap,gap,ufo,ufo'
 	},
 	{ '3',
+		'-8,-24,fighter,gap,gap,flame,flame,gap,gap,fighter',
+		'136,34,fighter,gap,gap,flame,flame,gap,gap,fighter',
+		'64,-12,fighter,gap,gap,flame,flame,gap,gap,fighter'
+	},
+	{ '4',
+		'-8,-24,eyeball,gap,redeye,redeye,gap,eyeball',
+		'136,34,eyeball,gap,redeye,redeye,gap,eyeball',
+		'64,-12,eyeball,gap,redeye,redeye,gap,eyeball'
+	},
+	{ '5',
 		'60,-12,boss'
 	}
 }
@@ -146,6 +156,7 @@ function updateGame()
 	spawnT += 1
 
 	if spawnT == spawnDur then
+		canPlay = true
 		for e in all(enemies) do
 			e:activate()
 		end

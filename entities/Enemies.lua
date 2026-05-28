@@ -9,14 +9,16 @@
 --      start: First sprite index of the animation.
 --      fin: Last sprite index of the animation.
 --      flash: Sprite index to use when hit.
---      delay: Frames between animation changes.
--- spd: Enemy speed.
+--      aniDelay: Frames between animation changes.
+-- spd: Enemy speed when moving.
+-- moveTime: Frames enemy moves before stopping (Optional).
+-- stopTime: Frames enemy stops before moving again (Optional).
 -- hp: Enemy health points.
 -- points: Enemy score value.
 -- colW: Collision width - defaults to 7 (Optional).
 -- colH: Collision height - defaults to 7 (Optional).
 -- sprSize: Size the sprite - defaults to 7x7 (Optional).
--- move: Custom move function.
+-- move: Move function to use.
 eDefs = {
     alien = {
         cols = {
@@ -28,14 +30,13 @@ eDefs = {
         },
         ani = { 80, 81, 82, 83 },
         flash = 84,
-        delay = 0.4,
+        aniDelay = 0.4,
         spd = 0.25,
+        moveTime = 45,
+        stopTime = 5,
         hp = 2,
         points = 100,
-        move = function(_ENV)
-            x = x + cos(y / 16) * spd
-            y += spd
-        end
+        move = moveDownLeftRight
     },
     ufo = {
         cols = {
@@ -47,13 +48,13 @@ eDefs = {
         },
         ani = { 64, 65, 66, 67 },
         flash = 68,
-        delay = 0.4,
-        spd = 0.75,
-        hp = 4,
+        aniDelay = 0.4,
+        spd = 0.4,
+        moveTime = 60,
+        stopTime = 10,
+        hp = 2,
         points = 175,
-        move = function(_ENV)
-            --y += spd
-        end
+        move = moveDownLeftRight
     },
     eyeball = {
         cols = {
@@ -65,99 +66,103 @@ eDefs = {
         },
         ani = { 69, 70, 71, 72 },
         flash = 73,
-        delay = 0.4,
+        aniDelay = 0.4,
         spd = 0.6,
+        moveTime = 45,
+        stopTime = 5,
         hp = 3,
         points = 150,
-        move = function(_ENV)
-            --x = x + cos(y / 16) * spd
-            --y += spd
-        end
+        move = moveDownLeftRight
     },
     redeye = {
         cols = {
-            { c1 = 5, c2 = 8 } -- Grey / Red.
-            -- { c1 = 9, c2 = 4 }, -- Brown.
-            -- { c1 = 11, c2 = 3 }, -- Green.
-            -- { c1 = 12, c2 = 1 }, -- Blue.
-            -- { c1 = 14, c2 = 2 } -- Pink.
+            { c1 = 5, c2 = 8 }, -- Grey / Red.
+            { c1 = 9, c2 = 4 }, -- Brown.
+            { c1 = 11, c2 = 3 }, -- Green.
+            { c1 = 12, c2 = 1 }, -- Blue.
+            { c1 = 14, c2 = 2 } -- Pink.
         },
         colW = 6,
         colH = 6,
         ani = { 88, 89, 90, 91, 92 },
         flash = 93,
-        delay = 0.4,
-        spd = 0.3,
+        aniDelay = 0.4,
+        stopTime = 20,
+        moveTime = 15,
+        spd = 0.6,
         hp = 3,
         points = 200,
-        move = function(_ENV)
-            y += spd
-        end
+        move = moveDown
     },
     flame = {
         cols = {
-            { c1 = 8, c2 = 2 } -- Grey / Red.
-            -- { c1 = 9, c2 = 4 }, -- Brown.
-            -- { c1 = 11, c2 = 3 }, -- Green.
-            -- { c1 = 12, c2 = 1 }, -- Blue.
-            -- { c1 = 14, c2 = 2 } -- Pink.
+            { c1 = 8, c2 = 2 }, -- Grey / Red.
+            { c1 = 9, c2 = 4 }, -- Brown.
+            { c1 = 11, c2 = 3 }, -- Green.
+            { c1 = 12, c2 = 1 }, -- Blue.
+            { c1 = 14, c2 = 2 } -- Pink.
         },
         ani = { 85, 86 },
         flash = 87,
-        delay = 0.4,
+        aniDelay = 0.4,
         spd = 0.8,
+        moveTime = 45,
+        stopTime = 5,
         hp = 2,
         points = 200,
-        move = function(_ENV)
-            --x = x + cos(y / 16) * spd
-            --y += spd
-        end
+        move = moveDownLeftRight
     },
     fighter = {
         cols = {
-            { c1 = 1, c2 = 5 } -- Blue / Grey.
-            -- { c1 = 9, c2 = 4 }, -- Brown.
-            -- { c1 = 11, c2 = 3 }, -- Green.
-            -- { c1 = 12, c2 = 1 }, -- Blue.
-            -- { c1 = 14, c2 = 2 } -- Pink.
+            { c1 = 1, c2 = 5 }, -- Blue / Grey.
+            { c1 = 9, c2 = 4 }, -- Brown.
+            { c1 = 11, c2 = 3 }, -- Green.
+            { c1 = 12, c2 = 1 }, -- Blue.
+            { c1 = 14, c2 = 2 } -- Pink.
         },
         ani = { 74, 75, 76, 77 },
         flash = 78,
-        delay = 0.4,
+        aniDelay = 0.4,
         spd = 0.4,
+        moveTime = 45,
+        stopTime = 5,
         hp = 4,
         points = 300,
-        move = function(_ENV)
-            --x = x + cos(y / 16) * spd
-            --y += spd
-        end
+        move = moveDownLeftRight
     },
     boss = {
         cols = {
-            { c1 = 10, c2 = 0 } -- Green.
+            { c1 = 6, c2 = 14 }, -- Grey / Yellow.
+            { c1 = 9, c2 = 4 }, -- Brown.
+            { c1 = 11, c2 = 3 }, -- Green.
+            { c1 = 12, c2 = 1 }, -- Blue.
+            { c1 = 14, c2 = 2 } -- Pink.
         },
         colW = 14,
         colH = 14,
         sprSize = 2,
         ani = { 96, 98 },
         flash = 100,
-        delay = 0.4,
+        aniDelay = 0.4,
         spd = 0.5,
         hp = 30,
         points = 1000,
-        move = function(_ENV)
-            --x = x + cos(y / 16) * spd
-            --y += spd
-        end
+        moveTime = 45,
+        stopTime = 5,
+        move = moveDownLeftRightSlow
     }
 }
 
 -- Enemy Factory logic.
 
 -- Flash state frame timer.
-local fTimerLim = 3
+local flashTimerDefault = 3
 -- Death state frame timer.
-local dTimerLim = 10
+local deathTimerDefault = 10
+-- Default stop time timer.
+local stopTimerDefault = 60
+-- Default move time timer.
+local moveTimeDefault = 30
 
 -- State names for enemy state machine.
 local eneState = {
@@ -198,8 +203,8 @@ function newEnemy(enemyCfg, eneX, eneY)
 
         cols = enemyCfg.cols,
         -- Randomly select a color palette.
-        --ranIdx = ranInt(1, #enemyCfg.cols),
-        ranIdx = 1,
+        --colId = ranInt(1, #enemyCfg.cols),
+        colId = 1,
 
         -- Collision box size, defaults to 8x8.
         colW = enemyCfg.colW or colDefault,
@@ -221,13 +226,14 @@ function newEnemy(enemyCfg, eneX, eneY)
         aniFrame = 1,
 
         -- Frames before animation advances.
-        aniDelay = enemyCfg.delay,
+        aniDelay = enemyCfg.aniDelay,
 
         move = enemyCfg.move,
-        mTimer = 60,
-        sTimer = 30,
-        fTimer = fTimerLim,
-        dTimer = dTimerLim,
+
+        stopTime = enemyCfg.stopTime or stopTimerDefault,
+        moveTime = enemyCfg.moveTime or moveTimeDefault,
+        flashTimer = flashTimerDefault,
+        deathTimer = deathTimerDefault,
 
         -- Enemy current state.
         state = eneState.spawning,
@@ -249,15 +255,14 @@ function newEnemy(enemyCfg, eneX, eneY)
 
         -- Handle enemy being hit, determines switch
         -- to flashing or dead state.
-        -- @param dam: Damage to apply to the enemy.
-        hit = function(_ENV, dam)
+        -- @param damage: Damage to apply to the enemy.
+        hit = function(_ENV, damage)
             if state == eneState.spawning or state == eneState.dead then
                 return
             end
 
             -- If no damage value is provided, use the enemy's remaining hp to ensure kill.
-            dam = dam or hp
-            hp -= dam
+            hp -= damage or hp
 
             sfx(3)
             if hp <= 0 then
@@ -275,18 +280,18 @@ function newEnemy(enemyCfg, eneX, eneY)
         -- Handle flash state timing and transition back to normal state.
         flash = function(_ENV)
             enemySpr = flashSpr
-            fTimer -= 1
-            if fTimer <= 0 then
+            flashTimer -= 1
+            if flashTimer <= 0 then
                 state = eneState.moving
-                fTimer = fTimerLim
+                flashTimer = flashTimerDefault
             end
         end,
 
         -- Handle dead state timing and removal.
         dead = function(_ENV)
             enemySpr = flashSpr
-            dTimer -= 1
-            if dTimer <= 0 then
+            deathTimer -= 1
+            if deathTimer <= 0 then
                 del(enemies, _ENV)
             end
         end,
@@ -310,19 +315,23 @@ function newEnemy(enemyCfg, eneX, eneY)
                 animate(_ENV)
             elseif state == eneState.stopped then
                 animate(_ENV)
-                mTimer -= 1
+                stopTime -= 1
 
-                if mTimer <= 0 then
-                    mTimer = 60
+                colId = 2
+
+                if stopTime <= 0 then
+                    stopTime = enemyCfg.stopTime or stopTimerDefault
                     state = eneState.moving
                 end
             elseif state == eneState.moving then
                 animate(_ENV)
                 move(_ENV)
 
-                sTimer -= 1
-                if sTimer <= 0 then
-                    sTimer = 30
+                colId = 1
+
+                moveTime -= 1
+                if moveTime <= 0 then
+                    moveTime = enemyCfg.moveTime or moveTimeDefault
                     state = eneState.stopped
                 end
             end
@@ -335,18 +344,17 @@ function newEnemy(enemyCfg, eneX, eneY)
 
         -- Draw function for the enemy.
         draw = function(_ENV)
-            if ranIdx >= 1 then
-                pal(cols[1].c1, cols[ranIdx].c1)
-                pal(cols[1].c2, cols[ranIdx].c2)
-            end
+
+            pal(cols[1].c1, cols[colId].c1)
+            pal(cols[1].c2, cols[colId].c2)
 
             if state == eneState.dead then
-                spr(enemySpr, x, y, sprSize, sprSize, false, dTimer % 2 == 0)
+                spr(enemySpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
             else
                 spr(enemySpr, x, y, sprSize, sprSize)
             end
 
-            if ranIdx >= 1 then pal() end
+            pal()
         end
     }
 end
