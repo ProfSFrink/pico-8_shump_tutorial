@@ -14,7 +14,6 @@ spawnEvents = {
 	{ '3',
 		'-8,-24,fighter,gap,gap,flame,flame,gap,gap,fighter',
 		'136,34,fighter,gap,gap,flame,flame,gap,gap,fighter',
-		'64,-12,fighter,gap,gap,flame,flame,gap,gap,fighter'
 	},
 	{ '4',
 		'-8,-24,eyeball,gap,redeye,redeye,gap,eyeball',

@@ -33,10 +33,10 @@ eDefs = {
         aniDelay = 0.4,
         spd = 0.25,
         moveTime = 45,
-        stopTime = 5,
+        stopTime = 2,
         hp = 2,
         points = 100,
-        move = moveDownLeftRight
+        move = downLeftRight
     },
     ufo = {
         cols = {
@@ -49,12 +49,12 @@ eDefs = {
         ani = { 64, 65, 66, 67 },
         flash = 68,
         aniDelay = 0.4,
-        spd = 0.4,
-        moveTime = 60,
-        stopTime = 10,
+        spd = 1,
+        moveTime = 0,
+        stopTime = 0,
         hp = 2,
         points = 175,
-        move = moveDownLeftRight
+        move = downLeftRight
     },
     eyeball = {
         cols = {
@@ -72,7 +72,7 @@ eDefs = {
         stopTime = 5,
         hp = 3,
         points = 150,
-        move = moveDownLeftRight
+        move = downLeftRight
     },
     redeye = {
         cols = {
@@ -88,11 +88,11 @@ eDefs = {
         flash = 93,
         aniDelay = 0.4,
         stopTime = 20,
-        moveTime = 15,
+        moveTime = 2,
         spd = 0.6,
         hp = 3,
         points = 200,
-        move = moveDown
+        move = down
     },
     flame = {
         cols = {
@@ -107,10 +107,10 @@ eDefs = {
         aniDelay = 0.4,
         spd = 0.8,
         moveTime = 45,
-        stopTime = 5,
+        stopTime = 3,
         hp = 2,
         points = 200,
-        move = moveDownLeftRight
+        move = downLeftRight
     },
     fighter = {
         cols = {
@@ -123,12 +123,12 @@ eDefs = {
         ani = { 74, 75, 76, 77 },
         flash = 78,
         aniDelay = 0.4,
-        spd = 0.4,
+        spd = 1.4,
         moveTime = 45,
-        stopTime = 5,
-        hp = 4,
+        stopTime = 0,
+        hp = 3,
         points = 300,
-        move = moveDownLeftRight
+        move = downTowardCenter
     },
     boss = {
         cols = {
@@ -144,12 +144,14 @@ eDefs = {
         ani = { 96, 98 },
         flash = 100,
         aniDelay = 0.4,
-        spd = 0.5,
+        spd = 0.6,
+        moveTime = 30,
+        stopTime = 0,
         hp = 30,
         points = 1000,
         moveTime = 45,
         stopTime = 5,
-        move = moveDownLeftRightSlow
+        move = downLeftRightSlow
     }
 }
 
@@ -198,7 +200,7 @@ function newEnemy(enemyCfg, eneX, eneY)
         x = eneX,
         y = eneY,
         spd = enemyCfg.spd,
-        hp = enemyCfg.hp,
+        hp = enemyCfg.hp or 1,
         points = enemyCfg.points,
 
         cols = enemyCfg.cols,
@@ -345,8 +347,8 @@ function newEnemy(enemyCfg, eneX, eneY)
         -- Draw function for the enemy.
         draw = function(_ENV)
 
-            pal(cols[1].c1, cols[colId].c1)
-            pal(cols[1].c2, cols[colId].c2)
+            -- pal(cols[1].c1, cols[colId].c1)
+            -- pal(cols[1].c2, cols[colId].c2)
 
             if state == eneState.dead then
                 spr(enemySpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
@@ -354,7 +356,7 @@ function newEnemy(enemyCfg, eneX, eneY)
                 spr(enemySpr, x, y, sprSize, sprSize)
             end
 
-            pal()
+            -- pal()
         end
     }
 end
