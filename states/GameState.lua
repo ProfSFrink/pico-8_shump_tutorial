@@ -2,7 +2,7 @@
 
 spawnEvents = {
 	{ '1',
-		'-8,-24,alien,alien,gap,alien,alien,alien,gap,alien,alien',
+		'-8,14,alien,alien,gap,alien,alien,alien,gap,alien,alien',
 		'136,34,alien,alien,gap,alien,alien,alien,gap,alien,alien',
 		'64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
 	},
@@ -38,6 +38,7 @@ function setupGame()
 	proT = 0
 
 	spawnDur = 40
+	attackDur = 40
 
 	-- Setup player ship.
 	ship = newShip()
@@ -159,12 +160,21 @@ function updateGame()
 	updateGameScene()
 
 	spawnT += 1
+	attackT += 1
 
 	if spawnT == spawnDur then
 		canPlay = true
 		for e in all(enemies) do
 			e:activate()
 		end
+	end
+
+	if attackT >= attackDur then
+		local e = rnd(enemies)
+		if e and e:canCollide() then
+			e:attack()
+		end
+		attackT = 0
 	end
 
 	-- Check for end of wave.
@@ -192,4 +202,5 @@ end
 function enterGame()
 	state = stateNames.game
 	spawnT = 0
+	attackT = 0
 end

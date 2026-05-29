@@ -29,7 +29,7 @@ end
 function enterNewWave()
     state = stateNames.newWave
     canPlay = false
-    exitTimer = 50 -- 2 seconds until state change.
+    exitTimer = 50
 
     async(function()
         animate(ship,"x", shipStartX, 60, easeOutQuad)

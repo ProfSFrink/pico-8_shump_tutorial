@@ -30,9 +30,7 @@ eDefs = {
         ani = { 80, 81, 82, 83 },
         flash = 84,
         aniDelay = 0.4,
-        spd = 0.25,
-        moveTime = 45,
-        stopTime = 2,
+        spd = 1.25,
         hp = 2,
         points = 100,
         move = downWave
@@ -49,8 +47,6 @@ eDefs = {
         flash = 68,
         aniDelay = 0.4,
         spd = 1,
-        moveTime = 0,
-        stopTime = 0,
         hp = 2,
         points = 175,
         move = down
@@ -67,8 +63,6 @@ eDefs = {
         flash = 73,
         aniDelay = 0.4,
         spd = 0.6,
-        moveTime = 45,
-        stopTime = 5,
         hp = 3,
         points = 150,
         move = downWave
@@ -86,8 +80,6 @@ eDefs = {
         ani = { 88, 89, 90, 91, 92 },
         flash = 93,
         aniDelay = 0.4,
-        stopTime = 20,
-        moveTime = 2,
         spd = 0.6,
         hp = 3,
         points = 200,
@@ -105,8 +97,6 @@ eDefs = {
         flash = 87,
         aniDelay = 0.4,
         spd = 0.8,
-        moveTime = 45,
-        stopTime = 3,
         hp = 2,
         points = 200,
         move = downWave
@@ -123,8 +113,6 @@ eDefs = {
         flash = 78,
         aniDelay = 0.4,
         spd = 1.4,
-        moveTime = 45,
-        stopTime = 0,
         hp = 3,
         points = 300,
         move = downTowardCenter
@@ -144,8 +132,6 @@ eDefs = {
         flash = 100,
         aniDelay = 0.4,
         spd = 0.6,
-        moveTime = 30,
-        stopTime = 0,
         hp = 30,
         points = 1000,
         moveTime = 45,
@@ -160,18 +146,13 @@ eDefs = {
 local flashTimerDefault = 3
 -- Death state frame timer.
 local deathTimerDefault = 10
--- Default stop time timer.
-local stopTimerDefault = 60
--- Default move time timer.
-local moveTimeDefault = 30
 
 -- State names for enemy state machine.
 local eneState = {
     spawning = "spawning",
     stopped = "stopped",
-    moving = "moving",
     flashing = "flashing",
-    firing = "firing",
+    attacking = "attacking",
     dead = "dead"
 }
 
@@ -233,8 +214,6 @@ function newEnemy(enemyCfg, eneX, eneY)
 
         move = enemyCfg.move,
 
-        stopTime = enemyCfg.stopTime or stopTimerDefault,
-        moveTime = enemyCfg.moveTime or moveTimeDefault,
         flashTimer = flashTimerDefault,
         deathTimer = deathTimerDefault,
 
@@ -254,6 +233,11 @@ function newEnemy(enemyCfg, eneX, eneY)
             end
 
             enemySpr = ani[flr(aniFrame)]
+        end,
+
+        -- Handle enemy in attacking state.
+        attack = function(_ENV)
+            state = eneState.attacking
         end,
 
         -- Handle enemy being hit, determines switch
@@ -285,7 +269,7 @@ function newEnemy(enemyCfg, eneX, eneY)
             enemySpr = flashSpr
             flashTimer -= 1
             if flashTimer <= 0 then
-                state = eneState.moving
+                state = eneState.attacking
                 flashTimer = flashTimerDefault
             end
         end,
@@ -309,7 +293,6 @@ function newEnemy(enemyCfg, eneX, eneY)
 
         -- Update function for the enemy.
         update = function(_ENV)
-            -- Update depending on state.
             if state == eneState.dead then
                 dead(_ENV)
             elseif state == eneState.flashing then
@@ -318,24 +301,12 @@ function newEnemy(enemyCfg, eneX, eneY)
                 animate(_ENV)
             elseif state == eneState.stopped then
                 animate(_ENV)
-                stopTime -= 1
-
-                if stopTime <= 0 then
-                    stopTime = enemyCfg.stopTime or stopTimerDefault
-                    state = eneState.moving
-                end
-            elseif state == eneState.moving then
+            elseif state == eneState.attacking then
                 animate(_ENV)
                 move(_ENV)
-
-                moveTime -= 1
-                if moveTime <= 0 then
-                    moveTime = enemyCfg.moveTime or moveTimeDefault
-                    state = eneState.stopped
-                end
             end
 
-            -- Remove if off-screen.
+            -- Remove if off-screen and not spawning.
             if y > 128 and state != eneState.spawning then
                 del(enemies, _ENV)
             end
