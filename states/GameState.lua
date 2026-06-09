@@ -169,8 +169,6 @@ function updateGame()
 
 	canAttack = gameT % 30 == 0
 
-	rowEnemies = {}
-
 	if spawnT == spawnDur then
 		canPlay = true
 		for e in all(enemies) do
@@ -178,10 +176,29 @@ function updateGame()
 		end
 	end
 
-	-- Get enemies in the active row.
+	rowEnemies = {}
 	for e in all(enemies) do
 		if e.rowNum == activeRow then
 			add(rowEnemies, e)
+		end
+	end
+
+	if canPlay then
+		local rowActive = false
+		for e in all(rowEnemies) do
+			if e:canCollide() then
+				rowActive = true
+				break
+			end
+		end
+
+		if not rowActive then
+			activeRow += 1
+			for e in all(enemies) do
+				if e.rowNum == activeRow then
+					add(rowEnemies, e)
+				end
+			end
 		end
 	end
 
@@ -190,10 +207,6 @@ function updateGame()
 		if e and e:canCollide() then
 			e:attack()
 		end
-	end
-
-	if #rowEnemies == 0 and canPlay then
-		activeRow += 1
 	end
 
 	-- Check for end of wave.
@@ -222,5 +235,6 @@ function enterGame()
 	state = stateNames.game
 	spawnT = 0
 
+	rowEnemies = {}
 	activeRow = 1
 end
