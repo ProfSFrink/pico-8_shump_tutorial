@@ -146,11 +146,11 @@ function spawnWaveRows(wave)
 
 				async(function()
 					wait(delay)
-					animate(e, "x", targetX, spawnDur, easeOutQuad)
+					animate(e, "x", targetX, spawnDur, easeOutQuart)
 				end)
 				async(function()
 					wait(delay)
-					animate(e, "y", targetY, spawnDur, easeOutQuad)
+					animate(e, "y", targetY, spawnDur, easeOutQuart)
 				end)
 			end
         end
