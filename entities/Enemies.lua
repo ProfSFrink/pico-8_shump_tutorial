@@ -112,7 +112,7 @@ eDefs = {
         ani = { 74, 75, 76, 77 },
         flash = 78,
         aniDelay = 0.4,
-        spd = 1.4,
+        spd = 2.5,
         hp = 3,
         points = 300,
         move = downTowardCenter
@@ -333,9 +333,11 @@ end
 -- @param enemy: Enemy configuration object.
 -- @param x: Enemy spawn x position.
 -- @param y: Enemy spawn y position.
+-- @param spawnRowNum: Enemies row number.
 -- @return: The spawned enemy object.
-function spawnEnemy(enemy, spawnX, spawnY)
+function spawnEnemy(enemy, spawnX, spawnY, spawnRowNum)
     local newE = newEnemy(enemy, spawnX, spawnY)
+    newE.rowNum = spawnRowNum
 
     add(
         enemies, newE

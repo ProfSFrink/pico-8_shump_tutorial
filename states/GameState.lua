@@ -106,6 +106,8 @@ function spawnWaveRows(wave)
         return
     end
 
+	local currentRow = #waveRows - 1
+
     -- Delay for spawning rows.
     local baseGapDelay = 10
     local delayReduction = 2
@@ -122,6 +124,7 @@ function spawnWaveRows(wave)
         for _, e in pairs(row.rowEnemies) do
             if e ~= 'gap' then firstEnemy = e break end
         end
+
         local spriteW = (firstEnemy and firstEnemy.sprSize or 1) * 8
 
         local rowSpacing = max(spacing, spriteW + 4)
@@ -139,7 +142,8 @@ function spawnWaveRows(wave)
 			local delay = flr(rowDelay)
 
 			if row.rowEnemies[i] ~= 'gap' then
-				local e = spawnEnemy(row.rowEnemies[i], row.x, row.y)
+				local e = spawnEnemy(row.rowEnemies[i], row.x, row.y, currentRow)
+
 				async(function()
 					wait(delay)
 					animate(e, "x", targetX, spawnDur, easeOutQuad)
@@ -150,6 +154,8 @@ function spawnWaveRows(wave)
 				end)
 			end
         end
+
+		currentRow -= 1
     end
 
 	sfx(28)
@@ -160,7 +166,10 @@ function updateGame()
 	updateGameScene()
 
 	spawnT += 1
-	attackT += 1
+
+	canAttack = gameT % 30 == 0
+
+	rowEnemies = {}
 
 	if spawnT == spawnDur then
 		canPlay = true
@@ -169,12 +178,22 @@ function updateGame()
 		end
 	end
 
-	if attackT >= attackDur then
-		local e = rnd(enemies)
+	-- Get enemies in the active row.
+	for e in all(enemies) do
+		if e.rowNum == activeRow then
+			add(rowEnemies, e)
+		end
+	end
+
+	if canAttack then
+		local e = rnd(rowEnemies)
 		if e and e:canCollide() then
 			e:attack()
 		end
-		attackT = 0
+	end
+
+	if #rowEnemies == 0 and canPlay then
+		activeRow += 1
 	end
 
 	-- Check for end of wave.
@@ -202,5 +221,6 @@ end
 function enterGame()
 	state = stateNames.game
 	spawnT = 0
-	attackT = 0
+
+	activeRow = 1
 end
