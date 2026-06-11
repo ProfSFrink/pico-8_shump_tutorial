@@ -17,7 +17,7 @@
 -- colW: Collision width - defaults to 7 (Optional).
 -- colH: Collision height - defaults to 7 (Optional).
 -- sprSize: Size the sprite - defaults to 7x7 (Optional).
--- move: Move function to use.
+-- move: Movement function to use.
 eDefs = {
     alien = {
         cols = {
@@ -30,7 +30,8 @@ eDefs = {
         ani = { 80, 81, 82, 83 },
         flash = 84,
         aniDelay = 0.4,
-        spd = 1.25,
+        xSpd = 0,
+        ySpd = 1.25,
         hp = 2,
         points = 100,
         move = downWave
@@ -46,10 +47,11 @@ eDefs = {
         ani = { 64, 65, 66, 67 },
         flash = 68,
         aniDelay = 0.4,
-        spd = 1,
+        xSpd = 1,
+        ySpd = 1,
         hp = 2,
         points = 175,
-        move = down
+        move = downWaveSlow
     },
     eyeball = {
         cols = {
@@ -62,7 +64,8 @@ eDefs = {
         ani = { 69, 70, 71, 72 },
         flash = 73,
         aniDelay = 0.4,
-        spd = 0.6,
+        xSpd = 0.6,
+        ySpd = 0.6,
         hp = 3,
         points = 150,
         move = downWave
@@ -80,7 +83,8 @@ eDefs = {
         ani = { 88, 89, 90, 91, 92 },
         flash = 93,
         aniDelay = 0.4,
-        spd = 0.6,
+        xSpd = 0.6,
+        ySpd = 0.6,
         hp = 3,
         points = 200,
         move = down
@@ -96,7 +100,8 @@ eDefs = {
         ani = { 85, 86 },
         flash = 87,
         aniDelay = 0.4,
-        spd = 0.8,
+        xSpd = 0.8,
+        ySpd = 0.8,
         hp = 2,
         points = 200,
         move = downWave
@@ -112,7 +117,8 @@ eDefs = {
         ani = { 74, 75, 76, 77 },
         flash = 78,
         aniDelay = 0.4,
-        spd = 2.5,
+        xSpd = 2.5,
+        ySpd = 2.5,
         hp = 3,
         points = 300,
         move = downTowardCenter
@@ -131,7 +137,8 @@ eDefs = {
         ani = { 96, 98 },
         flash = 100,
         aniDelay = 0.4,
-        spd = 0.6,
+        xSpd = 0.6,
+        ySpd = 0.6,
         hp = 30,
         points = 1000,
         moveTime = 45,
@@ -163,23 +170,28 @@ local eneState = {
 -- @param enemyCfg: Enemy configuration object.
 -- @param eneX: Spawn x position.
 -- @param eneY: Spawn y position.
+-- @param eneRowNum: Spawn row number.
 -- @return: A new enemy object.
-function newEnemy(enemyCfg, eneX, eneY)
+function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
     -- Local references to global scope.
     local enemies = enemies
     local player = player
     local spawnShockWave = spawnShockWave
     local swConfig = lgSwCfg
     local spawnExp = spawnExp
+    local print = print
     local sfx = sfx
     local expCols = eneCols
     local uiHeight = uiHeight
+    local g = _g
 
     return {
         name = enemyCfg.name,
         x = eneX,
         y = eneY,
-        spd = enemyCfg.spd,
+        rowNum = eneRowNum,
+        xSpd = enemyCfg.xSpd,
+        ySpd = enemyCfg.ySpd,
         hp = enemyCfg.hp or 1,
         points = enemyCfg.points,
 
@@ -256,7 +268,7 @@ function newEnemy(enemyCfg, eneX, eneY)
                 state = eneState.dead
                 player.score += points
                 -- Spawn explosion.
-                spawnExp(x, y, spd, expCols)
+                spawnExp(x, y, ySpd, expCols)
                 -- Spawn large shockwave.
                 spawnShockWave(x, y, swConfig)
             else
@@ -303,7 +315,7 @@ function newEnemy(enemyCfg, eneX, eneY)
                 animate(_ENV)
             elseif state == eneState.attacking then
                 animate(_ENV)
-                move(_ENV)
+                move(_ENV, g.gameT)
             end
 
             -- Remove if off-screen and not spawning.
@@ -317,14 +329,16 @@ function newEnemy(enemyCfg, eneX, eneY)
 
             pal(cols[1].c1, cols[colId].c1)
             pal(cols[1].c2, cols[colId].c2)
-
+            
             if state == eneState.dead then
                 spr(enemySpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
             else
                 spr(enemySpr, x, y, sprSize, sprSize)
             end
-
+            
             pal()
+
+            print(rowNum, x+2, y+2, 14)
         end
     }
 end
@@ -336,8 +350,7 @@ end
 -- @param spawnRowNum: Enemies row number.
 -- @return: The spawned enemy object.
 function spawnEnemy(enemy, spawnX, spawnY, spawnRowNum)
-    local newE = newEnemy(enemy, spawnX, spawnY)
-    newE.rowNum = spawnRowNum
+    local newE = newEnemy(enemy, spawnX, spawnY, spawnRowNum)
 
     add(
         enemies, newE

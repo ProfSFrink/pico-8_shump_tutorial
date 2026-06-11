@@ -1,27 +1,35 @@
 -- Enemy movement patterns.
 
-function down(_ENV)
-    y += spd
+function down(e)
+    e.y += e.ySpd
 end
 
--- Enemy moves down the screen, while also moving left and right in a wave pattern.
-function downWave(_ENV)
-    x = x + cos(y / 16) * spd
-    y += spd
+-- Enemy moves down while weaving left and right in a sine wave.
+function downWave(e, t)
+    e.xSpd = sin(t / 45)
+
+    if e.x < 32 then
+        e.xSpd += 1 - (e.x / 32)
+    end
+
+    if e.x > 88 then
+        e.xSpd -= (e.x - 88) / 32
+    end
+
+    e.x += e.xSpd
+    e.y += e.ySpd
 end
 
--- Enemy moves down the screen, while also moving left and right in a wave pattern, but slower than the above.
-function downWaveSlow(_ENV)
-    x = x + cos(y / 32) * spd
-    y += spd / 2
+-- Enemy moves down slowly while weaving left and right using cosine of its y position.
+function downWaveSlow(e)
+    e.x += cos(e.y / 32) * e.xSpd
+    e.y += e.ySpd / 2
 end
 
--- Enemy moves down the screen toward the center.
-function downTowardCenter(_ENV)
-    local centerX = 64
+-- Enemy moves down toward the horizontal center of the screen.
+function downTowardCenter(e)
+    local angle = atan2(64 - e.x, 140 - e.y)
 
-    local angle = atan2(centerX - x, 140 - y)
-
-    x += cos(angle) * spd
-    y += sin(angle) * spd
+    e.x += cos(angle) * e.xSpd
+    e.y += sin(angle) * e.ySpd
 end
