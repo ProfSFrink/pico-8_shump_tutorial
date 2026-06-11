@@ -352,9 +352,7 @@ end
 function spawnEnemy(enemy, spawnX, spawnY, spawnRowNum)
     local newE = newEnemy(enemy, spawnX, spawnY, spawnRowNum)
 
-    add(
-        enemies, newE
-    )
+    add(enemies, newE)
 
     return newE
 end

@@ -2,14 +2,14 @@
 
 spawnEvents = {
 	{ '1',
-		'10,-8,14,alien,alien,gap,alien,alien,alien,gap,alien,alien',
+		'15,-8,14,alien,alien,gap,alien,alien,alien,gap,alien,alien',
 		'10,136,34,alien,alien,gap,alien,alien,alien,gap,alien,alien',
-		'10,64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
+		'5,64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
 	},
 	{ '2',
-		'20,-8,-24,ufo,ufo,ufo,ufo,ufo,',
-		'20,136,34,ufo,gap,gap,gap,ufo,',
-		'20,64,-12,ufo,ufo,ufo,ufo,ufo,'
+		'20,-8,-24,flame,flame,flame,flame,flame,',
+		'20,136,34,flame,gap,gap,gap,flame,',
+		'20,64,-12,flame,flame,flame,flame,flame,'
 	},
 	{ '3',
 		'20,-8,-24,fighter,gap,gap,flame,flame,gap,gap,fighter',
@@ -108,6 +108,7 @@ end
 
 -- Spawns all enemy rows for a wave.
 function spawnWaveRows(wave)
+    rowAttackRate = {}
     local waveRows = getWaveData(wave)
 
     if not waveRows then
@@ -128,7 +129,7 @@ function spawnWaveRows(wave)
         local row = parseWaveRow(waveRows[rowNum])
         local rowIdx = rowNum - 1
 
-		waveAttackRate = row.attackRate
+		add(rowAttackRate, row.attackRate)
 
         local firstEnemy = nil
         for _, e in pairs(row.rowEnemies) do
@@ -177,7 +178,7 @@ function updateGame()
 
 	spawnT += 1
 
-	canAttack = gameT % waveAttackRate == 0
+	canAttack = gameT % (rowAttackRate[activeRow] or 1) == 0
 
 	if spawnT == spawnDur then
 		canPlay = true
