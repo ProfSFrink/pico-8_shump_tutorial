@@ -100,9 +100,10 @@ eDefs = {
         ani = { 85, 86 },
         flash = 87,
         aniDelay = 0.4,
-        xSpd = 0.8,
-        ySpd = 0.8,
-        hp = 2,
+        xSpd = 2.5,
+        ySpd = 2.5,
+        waveLen = 20,
+        hp = 1,
         points = 200,
         move = downWave
     },
@@ -117,11 +118,11 @@ eDefs = {
         ani = { 74, 75, 76, 77 },
         flash = 78,
         aniDelay = 0.4,
-        xSpd = 2.5,
-        ySpd = 2.5,
-        hp = 3,
+        xSpd = 0,
+        ySpd = 0,
+        hp = 2,
         points = 300,
-        move = downTowardCenter
+        move = downAcross
     },
     boss = {
         cols = {
@@ -137,13 +138,13 @@ eDefs = {
         ani = { 96, 98 },
         flash = 100,
         aniDelay = 0.4,
-        xSpd = 0.6,
-        ySpd = 0.6,
+        xSpd = 0,
+        ySpd = 0.35,
         hp = 30,
         points = 1000,
         moveTime = 45,
         stopTime = 5,
-        move = downWaveSlow
+        move = down
     }
 }
 
@@ -164,7 +165,6 @@ local eneState = {
 }
 
 -- TODO: Add projectiles and firing patterns for enemies.
--- TODO: Improve enemy movement patterns.
 
 -- Factory function for creating enemies.
 -- @param enemyCfg: Enemy configuration object.
@@ -192,7 +192,10 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         rowNum = eneRowNum,
         xSpd = enemyCfg.xSpd,
         ySpd = enemyCfg.ySpd,
+        waveLen = enemyCfg.waveLen or 45,
         hp = enemyCfg.hp or 1,
+        attDelay = 0,
+        shake = 0,
         points = enemyCfg.points,
 
         cols = enemyCfg.cols,
@@ -249,6 +252,10 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
         -- Handle enemy in attacking state.
         attack = function(_ENV)
+            if state != eneState.stopped then return end
+            aniDelay *= 3
+            attDelay = 30
+            shake = 30
             state = eneState.attacking
         end,
 
@@ -315,12 +322,19 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 animate(_ENV)
             elseif state == eneState.attacking then
                 animate(_ENV)
-                move(_ENV, g.gameT)
+
+                attDelay -= 1
+
+                if attDelay <= 0 then
+                    move(_ENV, g.gameT)
+                end
             end
 
             -- Remove if off-screen and not spawning.
-            if y > 128 and state != eneState.spawning then
-                del(enemies, _ENV)
+            if state != eneState.spawning then
+                if x < 0 or x > 128 or y > 128 then
+                    del(enemies, _ENV)
+                end
             end
         end,
 
@@ -329,16 +343,21 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
             pal(cols[1].c1, cols[colId].c1)
             pal(cols[1].c2, cols[colId].c2)
+
+            local sprX = x
+
+            if shake > 0 then
+                shake -= 1
+                sprX += g.abs(g.sin(g.gameT / 6.5))
+            end
             
             if state == eneState.dead then
                 spr(enemySpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
             else
-                spr(enemySpr, x, y, sprSize, sprSize)
+                spr(enemySpr, sprX, y, sprSize, sprSize)
             end
             
             pal()
-
-            print(rowNum, x+2, y+2, 14)
         end
     }
 end

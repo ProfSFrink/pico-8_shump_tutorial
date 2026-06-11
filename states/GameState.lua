@@ -2,9 +2,9 @@
 
 spawnEvents = {
 	{ '1',
-		'15,-8,14,alien,alien,gap,alien,alien,alien,gap,alien,alien',
-		'10,136,34,alien,alien,gap,alien,alien,alien,gap,alien,alien',
-		'5,64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
+		'45,-8,14,alien,alien,gap,alien,alien,alien,gap,alien,alien',
+		'30,136,34,alien,alien,gap,alien,alien,alien,gap,alien,alien',
+		'15,64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
 	},
 	{ '2',
 		'20,-8,-24,flame,flame,flame,flame,flame,',
@@ -245,6 +245,9 @@ end
 function enterGame()
 	state = stateNames.game
 	spawnT = 0
+
+	-- Spawn the next wave of enemies.
+	spawnWaveRows(waveNum)
 
 	rowEnemies = {}
 	activeRow = 1

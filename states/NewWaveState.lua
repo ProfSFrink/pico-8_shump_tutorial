@@ -10,7 +10,6 @@ function updateNewWave()
     updateGameScene()
 
     if exitTimer <= 0 then
-        spawnWaveRows(waveNum)
         enterGame()
         return
     end
@@ -31,6 +30,7 @@ function enterNewWave()
     canPlay = false
     exitTimer = 50
 
+    -- Move ship to starting position for new wave. 
     async(function()
         animate(ship,"x", shipStartX, 60, easeOutQuad)
     end)
