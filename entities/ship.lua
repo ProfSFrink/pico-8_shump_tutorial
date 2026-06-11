@@ -106,5 +106,17 @@ function newShip()
             xSpeed = 0
             ySpeed = 0
         end,
+
+        -- Checks if death animation is complete.
+        -- @returns true if death animation is complete.
+        isDead = function(_ENV)
+            deathTimer -= 1
+
+            if deathTimer <= 0 then
+                return true
+            else
+                return false
+            end
+        end
     }
 end
