@@ -155,7 +155,7 @@ function drawGameScene()
 
 	local scoreStr = "SCORE: " .. player.score
 
-	print(scoreStr, calcCenX(#scoreStr), 2, 12)
+	?scoreStr, calcCenX(#scoreStr), 2, 12
 
 	local uiX = 0
 

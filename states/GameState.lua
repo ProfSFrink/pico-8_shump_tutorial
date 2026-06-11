@@ -2,32 +2,32 @@
 
 spawnEvents = {
 	{ '1',
-		'-8,14,alien,alien,gap,alien,alien,alien,gap,alien,alien',
-		'136,34,alien,alien,gap,alien,alien,alien,gap,alien,alien',
-		'64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
+		'10,-8,14,alien,alien,gap,alien,alien,alien,gap,alien,alien',
+		'10,136,34,alien,alien,gap,alien,alien,alien,gap,alien,alien',
+		'10,64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
 	},
 	{ '2',
-		'-8,-24,ufo,ufo,ufo,ufo,ufo,',
-		'136,34,ufo,gap,gap,gap,ufo,',
-		'64,-12,ufo,ufo,ufo,ufo,ufo,'
+		'20,-8,-24,ufo,ufo,ufo,ufo,ufo,',
+		'20,136,34,ufo,gap,gap,gap,ufo,',
+		'20,64,-12,ufo,ufo,ufo,ufo,ufo,'
 	},
 	{ '3',
-		'-8,-24,fighter,gap,gap,flame,flame,gap,gap,fighter',
-		'136,34,fighter,gap,gap,flame,flame,gap,gap,fighter',
+		'20,-8,-24,fighter,gap,gap,flame,flame,gap,gap,fighter',
+		'20,136,34,fighter,gap,gap,flame,flame,gap,gap,fighter',
 	},
 	{ '4',
-		'-8,-24,redeye,redeye,redeye',
-		'136,34,redeye,gap,redeye',
-		'64,-12,redeye,redeye,redeye'
+		'20,-8,-24,redeye,redeye,redeye',
+		'20,136,34,redeye,gap,redeye',
+		'20,64,-12,redeye,redeye,redeye'
 	},
 	{
 		'5',
-		'-8,-24,eyeball,eyeball,eyeball',
-		'136,34,eyeball,eyeball,eyeball',
-		'64,-12,eyeball,eyeball,eyeball'
+		'20,-8,-24,eyeball,eyeball,eyeball',
+		'20,136,34,eyeball,eyeball,eyeball',
+		'20,64,-12,eyeball,eyeball,eyeball'
 	},
 	{ '6',
-		'60,-12,boss'
+		'20,60,-12,boss'
 	}
 }
 
@@ -72,16 +72,24 @@ function setupGame()
 end
 
 -- Parses a row string into row data.
+-- Format: attackRate,x,y,enemy1,enemy2,...
 function parseWaveRow(s)
 	local parts = split(s, ',')
 	local rowEnemies = {}
 
-	for i = 3, #parts do
+	-- Get enemies for the row.
+	for i = 4, #parts do
 		local name = parts[i]
 		add(rowEnemies, name == 'gap' and 'gap' or eDefs[name])
 	end
 
-	return { x = tonum(parts[1]), y = tonum(parts[2]), rowEnemies = rowEnemies }
+	-- Return row data.
+	return { 
+		attackRate = tonum(parts[1]),
+		x = tonum(parts[2]),
+		y = tonum(parts[3]),
+		rowEnemies = rowEnemies
+	}
 end
 
 -- Returns the wave data for the requested wave number.
@@ -119,6 +127,8 @@ function spawnWaveRows(wave)
     for rowNum = 2, #waveRows do
         local row = parseWaveRow(waveRows[rowNum])
         local rowIdx = rowNum - 1
+
+		waveAttackRate = row.attackRate
 
         local firstEnemy = nil
         for _, e in pairs(row.rowEnemies) do
@@ -167,7 +177,7 @@ function updateGame()
 
 	spawnT += 1
 
-	canAttack = gameT % 30 == 0
+	canAttack = gameT % waveAttackRate == 0
 
 	if spawnT == spawnDur then
 		canPlay = true
