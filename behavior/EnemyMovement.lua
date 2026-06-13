@@ -58,3 +58,29 @@ function downAcross(e)
     e.x += e.xSpd
     e.y += e.ySpd
 end
+
+-- Enemy moves down toward the horizontal center of the screen, then back up.
+-- @param e Enemy to move.
+function downTowardCenterBackUp(e)
+
+    if e.x < 64 and not e.moving then
+        e.moving = true
+        e.movingLeft = false
+        e.x += e.xSpd
+
+    elseif e.x > 64 and not e.moving then
+        e.moving = true
+        e.movingLeft = true
+        e.x -= e.xSpd
+    end
+
+    if e.moving == true then
+        if e.movingLeft == true then
+            e.x -= e.xSpd
+        else
+            e.x += e.xSpd
+        end
+    end
+
+    e.y += e.ySpd
+end

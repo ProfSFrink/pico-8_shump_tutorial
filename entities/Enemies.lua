@@ -87,7 +87,7 @@ eDefs = {
         ySpd = 0.6,
         hp = 3,
         points = 200,
-        move = down
+        move = downTowardCenterBackUp
     },
     flame = {
         cols = {
@@ -197,6 +197,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         attDelay = 0,
         shake = 0,
         points = enemyCfg.points,
+        moving = false,
+        movingLeft = false,
 
         cols = enemyCfg.cols,
         -- Randomly select a color palette.
