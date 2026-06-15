@@ -39,7 +39,7 @@ function enterNewWave()
         animate(ship,"y", shipStartY, 60, easeOutQuad)
     end)
 
-    waveNum += 4
+    waveNum += 1
     if waveNum == 1 then
         music(0)
     else

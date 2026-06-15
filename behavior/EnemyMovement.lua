@@ -63,15 +63,17 @@ end
 -- @param e Enemy to move.
 function downTowardCenterBackUp(e)
 
-    if e.x < 64 and not e.moving then
+    if e.x < 64 and e.y > 70 and not e.moving then
         e.moving = true
         e.movingLeft = false
         e.x += e.xSpd
+        e.ySpd = 0.6
 
-    elseif e.x > 64 and not e.moving then
+    elseif e.x > 64 and e.y > 70 and not e.moving then
         e.moving = true
         e.movingLeft = true
         e.x -= e.xSpd
+        e.ySpd = 0.6
     end
 
     if e.moving == true then
