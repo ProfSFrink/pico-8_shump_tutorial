@@ -13,6 +13,7 @@
 -- moveTime: Frames enemy moves before stopping (Optional).
 -- stopTime: Frames enemy stops before moving again (Optional).
 -- hp: Enemy health points.
+-- rof: Rate of fire when attacking.
 -- points: Enemy score value.
 -- colW: Collision width - defaults to 7 (Optional).
 -- colH: Collision height - defaults to 7 (Optional).
@@ -33,6 +34,7 @@ eDefs = {
         xSpd = 0,
         ySpd = 1.25,
         hp = 2,
+        rof = 10,
         points = 100,
         move = downWave
     },
@@ -50,6 +52,7 @@ eDefs = {
         xSpd = 1,
         ySpd = 1,
         hp = 2,
+        rof = 10,
         points = 175,
         move = downWaveSlow
     },
@@ -67,6 +70,7 @@ eDefs = {
         xSpd = 0.6,
         ySpd = 0.6,
         hp = 3,
+        rof = 10,
         points = 150,
         move = downWave
     },
@@ -86,6 +90,7 @@ eDefs = {
         xSpd = 1.5,
         ySpd = 1.2,
         hp = 3,
+        rof = 10,
         points = 200,
         move = downTowardCenterBackUp
     },
@@ -104,6 +109,7 @@ eDefs = {
         ySpd = 2.5,
         waveLen = 20,
         hp = 1,
+        rof = 10,
         points = 200,
         move = downWave
     },
@@ -121,6 +127,7 @@ eDefs = {
         xSpd = 0,
         ySpd = 0,
         hp = 2,
+        rof = 10,
         points = 300,
         move = downAcross
     },
@@ -141,6 +148,7 @@ eDefs = {
         xSpd = 0,
         ySpd = 0.35,
         hp = 30,
+        rof = 10,
         points = 1000,
         moveTime = 45,
         stopTime = 5,
@@ -195,6 +203,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         ySpd = enemyCfg.ySpd,
         waveLen = enemyCfg.waveLen or 45,
         hp = enemyCfg.hp or 1,
+        rof = enemyCfg.rof,
+        bullOffset = 3,
         attDelay = 0,
         shake = 0,
         points = enemyCfg.points,
@@ -229,6 +239,9 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
         -- Frames before animation advances.
         aniDelay = enemyCfg.aniDelay,
+
+        -- Delay between firing bullets.
+        bullDelay = enemyCfg.rof,
 
         move = enemyCfg.move,
 

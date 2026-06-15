@@ -52,6 +52,7 @@ function setupGame()
 
 	-- Setup for projectiles.
 	projectiles = {}
+	enemyProjectiles = {}
 
 	-- Tracks frames between shots.
 	proT = 0

@@ -19,6 +19,13 @@ function downWave(e, t)
         e.xSpd -= (e.x - 88) / 32
     end
 
+    if e.bullDelay <= 0 then
+        spawnEnemyProjectile(e.x,e.y + e.bullOffset)
+        e.bullDelay = e.rof
+    end
+
+    e.bullDelay -= 1
+
     e.x += e.xSpd
     e.y += e.ySpd
 end

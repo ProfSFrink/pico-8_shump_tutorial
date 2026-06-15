@@ -36,7 +36,7 @@ function updateGameScene()
 
 	-- Fire bullet if X pressed.
 	if btn(5) and canPlay then
-		local proCfg = getConfig(bullet)
+		local proCfg = getConfig("bullet")
 
 		if proT <= 0 then
 			spawnProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
@@ -47,7 +47,7 @@ function updateGameScene()
 
 	-- Fire laser if Z pressed.
 	if btn(4) and canPlay then
-		local proCfg = getConfig(laser)
+		local proCfg = getConfig("laser")
 
 		if proT <= 0 then
 			spawnProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
