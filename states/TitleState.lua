@@ -28,7 +28,7 @@ end
 -- Enter the title state.
 function enterTitle()
 	state = stateNames.title
-	waveNum = 3
+	waveNum = 0
 	music(7)
 
 	-- Get's game ready now so we

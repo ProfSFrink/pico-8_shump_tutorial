@@ -183,6 +183,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
     local sfx = sfx
     local expCols = eneCols
     local uiHeight = uiHeight
+    local attackPlayer = attackPlayer
     local g = _g
 
     return {
@@ -274,6 +275,15 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
             sfx(3)
             if hp <= 0 then
+                -- If player destroys attacking enemy
+                -- have new enemy start attacking.
+                if state == eneState.attacking then
+                    if g.rnd() < 0.5 then
+                        attackPlayer(enemies)
+                    end
+                    points = g.flr(points * 0.3)
+                end
+
                 state = eneState.dead
                 player.score += points
                 -- Spawn explosion.
@@ -299,6 +309,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         dead = function(_ENV)
             enemySpr = flashSpr
             deathTimer -= 1
+
             if deathTimer <= 0 then
                 del(enemies, _ENV)
             end
@@ -350,7 +361,9 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
             if shake > 0 then
                 shake -= 1
-                sprX += g.abs(g.sin(g.gameT / 6.5))
+                if g.gameT % 4 < 2 then
+                    sprX += 1
+                end
             end
             
             if state == eneState.dead then

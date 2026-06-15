@@ -172,6 +172,15 @@ function spawnWaveRows(wave)
 	sfx(28)
 end
 
+-- Have an enemy attack the player.
+-- @param ene: The table of enemies to choose from.
+function attackPlayer(ene)
+	local e = rnd(ene)
+	if e and e:canCollide() then
+		e:attack()
+	end
+end
+
 -- Updates the game screen.
 function updateGame()
 	updateGameScene()
@@ -214,10 +223,7 @@ function updateGame()
 	end
 
 	if canAttack then
-		local e = rnd(rowEnemies)
-		if e and e:canCollide() then
-			e:attack()
-		end
+		attackPlayer(rowEnemies)
 	end
 
 	-- Check for end of wave.
