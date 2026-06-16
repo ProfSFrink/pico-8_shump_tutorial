@@ -87,24 +87,24 @@ function updateGameScene()
 
 	-- Move the enemies and
 	-- check for collisions.
-	for enemy in all(enemies) do
-		enemy:update()
+	for e in all(enemies) do
+		e:update()
 
-		if enemy:canCollide() then
+		if e:canCollide() then
 			-- Handle projectile collisions.
-			for projectile in all(projectiles) do
-				if hasCollided(enemy, projectile) then
-					enemy:hit(projectile.dam)
-					spawnShockWave(projectile.x, projectile.y, slSwCfg)
-					spawnSparks(enemy.x, enemy.y, 7)
-					del(projectiles, projectile)
+			for p in all(projectiles) do
+				if hasCollided(e, p) then
+					e:hit(p.dam)
+					spawnShockWave(p.x, p.y, slSwCfg)
+					spawnSparks(e.x, e.y, 7)
+					removeProjectile(p)
 				end
 			end
 
 			-- Handle collision with ship.
-			if hasCollided(enemy, ship) and ship.invul <= 0 then
+			if hasCollided(e, ship) and ship.invul <= 0 then
 				player.lives -= 1
-				enemy:hit()
+				e:hit()
 				if player.lives <= 0 then
 					ship.invul = 30
 					spawnExp(ship.x, ship.y, 0, shipCols)

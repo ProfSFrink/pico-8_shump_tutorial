@@ -1,7 +1,6 @@
 -- Projectile component data.
 
 -- Setup for various projectiles.
--- type: Player or enemy projectile.
 -- ani: Table of animation settings.
 --      start: First sprite index of the animation.
 --      fin: Last sprite index of the animation.
@@ -14,7 +13,6 @@
 -- pattern: The firing pattern to use.
 pTypes = {
     bullet = {
-        type = "player",
         ani = { start = 16,
                 fin = 17,
                 delay = 5 },
@@ -35,7 +33,6 @@ pTypes = {
         pattern = fireUp
     },
     laser = {
-        type = "player",
         ani = { start = 18,
         fin = 21,
         delay = 6 },
@@ -56,7 +53,6 @@ pTypes = {
         pattern = fireUp,
     },
     enemyBullet = {
-        type = "enemy",
         ani = { start = 32,
                 fin = 33,
                 delay = 5 },
@@ -77,6 +73,9 @@ pTypes = {
     },
 }
 
+-- String literals for entities that can own a projectile.
+owner = { player = "player", enemy = "enemy"}
+
 -- Get the configuration for a projectile type.
 -- @param proType: The projectile type.
 -- @return: The projectile configuration.
@@ -88,32 +87,22 @@ end
 
 -- factory function for creating player projectiles.
 -- @param proCfg: Projectile type definition.
--- @param x: The x position.
--- @param y: The y position.
+-- @param proX: The x position.
+-- @param proY: The y position.
+-- @param proOwner: Player or enemy. 
 -- @return: A new projectile object.
-function newProjectile(proCfg, proX, proY)
+function newProjectile(proCfg, proX, proY, proOwner)
     -- Local references to global scope.
-    local uiHeight = uiHeight
-    local bullHeight = bullHeight
-
-    -- Point to either player or enemy
-    -- projectile table depending on type.
-    if proCfg.type == "player" then
-        typeTable = projectiles
-    else
-        typeTable = enemyProjectiles
-    end
+    local g = _g
 
     return {
-        type = proCfg.type,
         x = proX + 2,
         y = proY,
-        type = proCfg.type,
+        owner = proOwner,
         spd = proCfg.spd,
         dam = proCfg.dam,
         animate = proCfg.animate,
         pattern = proCfg.pattern,
-        typeTable = typeTable,
 
         -- Current sprite being animated.
         curSpr = proCfg.ani.start,
@@ -137,9 +126,9 @@ function newProjectile(proCfg, proX, proY)
             -- Remove if off-screen.
             if  x < 0 or
                 x > 128 or
-                y < uiHeight - bullHeight or 
+                y < g.uiHeight - g.bullHeight or 
                 y > 128 then
-                del(typeTable, _ENV)
+                    g.removeProjectile(_ENV)
             end
         end,
 
@@ -157,7 +146,8 @@ end
 -- @param x: Spawn x position.
 -- @param y: Spawn y position.
 function spawnPlayerProjectile(proCfg, x, y)
-    add(projectiles, newProjectile(proCfg, x, y))
+    add(projectiles,
+        newProjectile(proCfg, x, y, owner.player))
     sfx(proCfg.sfx)
 end
 
@@ -167,8 +157,19 @@ end
 function spawnEnemyProjectile(x, y)
     local proCfg = getConfig("enemyBullet")
 
-    add(enemyProjectiles, newProjectile(proCfg, x, y))
+    add(enemyProjectiles,
+        newProjectile(proCfg, x, y, owner.enemy))
     sfx(proCfg.sfx)
+end
+
+-- Removes a projectile based on its owner.
+-- p: Projectile to remove.
+function removeProjectile(p)
+    if p.owner == owner.player then
+        del(projectiles,p)
+    else
+        del(enemyProjectiles,p)
+    end
 end
 
 -- Update all projectiles.
