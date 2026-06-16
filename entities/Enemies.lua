@@ -15,8 +15,8 @@
 -- hp: Enemy health points.
 -- rof: Rate of fire when attacking.
 -- points: Enemy score value.
--- colW: Collision width - defaults to 7 (Optional).
--- colH: Collision height - defaults to 7 (Optional).
+-- hitBoxW: Collision width - defaults to 7 (Optional).
+-- hitBoxH: Collision height - defaults to 7 (Optional).
 -- sprSize: Size the sprite - defaults to 7x7 (Optional).
 -- move: Movement function to use.
 eDefs = {
@@ -28,6 +28,10 @@ eDefs = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 6, c2 = 13 } -- Grey.
         },
+        hitBoxW = 5,
+        hitBoxH = 5,
+        hitBoxOffX = 1,
+        hitBoxOffY = 1,
         ani = { 80, 81, 82, 83 },
         nAni = {
             start = 80,
@@ -39,7 +43,7 @@ eDefs = {
         xSpd = 0,
         ySpd = 1.25,
         hp = 2,
-        rof = 10,
+        rof = 90,
         points = 100,
         move = downWave
     },
@@ -97,8 +101,8 @@ eDefs = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        colW = 6,
-        colH = 6,
+        hitBoxW = 6,
+        hitBoxH = 6,
         ani = { 88, 89, 90, 91, 92 },
         nAni = {
             start = 88,
@@ -169,8 +173,8 @@ eDefs = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        colW = 14,
-        colH = 14,
+        hitBoxW = 14,
+        hitBoxH = 14,
         sprSize = 2,
         ani = { 96, 98 },
         nAni = {
@@ -251,9 +255,11 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         -- Use default colour palette.
         colId = 1,
 
-        -- Collision box size, defaults to 8x8.
-        colW = enemyCfg.colW or colDefault,
-        colH = enemyCfg.colH or colDefault,
+        -- Hit box size, defaults to 8x8.
+        hitBoxW = enemyCfg.hitBoxW or hitDefault,
+        hitBoxH = enemyCfg.hitBoxH or hitDefault,
+        hitBoxOffX = enemyCfg.hitBoxOffX or 0,
+        hitBoxOffY = enemyCfg.hitBoxOffY or 0,
 
         -- Size of sprite, defaults to small.
         sprSize = enemyCfg.sprSize or 1,
@@ -416,6 +422,10 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 spr(curSpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
             else
                 spr(curSpr, sprX, y, sprSize, sprSize)
+            end
+
+            if g.debugMode then
+                g.showHitBox(_ENV)
             end
             
             pal()

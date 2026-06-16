@@ -1,24 +1,24 @@
--- Check for a collision between two objects.
+-- Check for a collision between two objects
+-- based on there hit boxes.
 -- @param a: The first object with x and y properties.
 -- @param b: The second object with x and y properties.
 -- @return: true if the objects are colliding.
 function hasCollided(a, b)
-    -- Use provided size or default 8x8 sprites.
-    local aColW = a.colW or colDefault
-    local aColH = a.colH or colDefault
+    local aHitBoxW = a.hitBoxW or hitDefault
+    local aHitBoxH = a.hitBoxH or hitDefault
 
-    local aLeft = a.x
-    local aTop = a.y
-    local aRight = a.x + aColW
-    local aBottom = a.y + aColH
+    local aLeft = a.x + (a.hitBoxOffX or 0)
+    local aTop = a.y + (a.hitBoxOffY or 0)
+    local aRight = aLeft + aHitBoxW
+    local aBottom = aTop + aHitBoxH
 
-    local bColW = b.colW or colDefault
-    local bColH = b.colH or colDefault
+    local bHitBoxW = b.hitBoxW or hitDefault
+    local bHitBoxH = b.hitBoxH or hitDefault
 
-    local bLeft = b.x
-    local bTop = b.y
-    local bRight = b.x + bColW
-    local bBottom = b.y + bColH
+    local bLeft = b.x + (b.hitBoxOffX or 0)
+    local bTop = b.y + (b.hitBoxOffY or 0)
+    local bRight = bLeft + bHitBoxW
+    local bBottom = bTop + bHitBoxH
 
     if aTop > bBottom
         or bTop > aBottom

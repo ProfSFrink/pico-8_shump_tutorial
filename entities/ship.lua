@@ -27,6 +27,13 @@ function newShip()
 		flameEndSprite = 11,
         -- Current ship flame sprite.
 		flameSprite = 7,
+
+        -- Hit box size, defaults to 8x8.
+        hitBoxW = 3,
+        hitBoxH = 2,
+        hitBoxOffX = 2,
+        hitBoxOffY = 4,
+
 		-- Offset for bullets.
 		bulletOffset = 3,
 		-- Size of muzzles flash.
@@ -80,6 +87,10 @@ function newShip()
             -- Muzzle flash.
             circfill(x + 3, y - 2, muzzle, 7)
             circfill(x + 4, y - 2, muzzle, 7)
+
+            if g.debugMode then
+                g.showHitBox(_ENV)
+            end
         end,
 
         -- Move the ship in a direction based on input.

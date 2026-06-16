@@ -115,7 +115,8 @@ function updateGameScene()
 	for ep in all(enemyProjectiles) do
 		if hasCollided(ep, ship) and ship.invul <= 0 then
 			player.lives -= 1
-			ship:hit()			
+			ship:hit()
+			removeProjectile(ep)			
 		end
 	end
 end

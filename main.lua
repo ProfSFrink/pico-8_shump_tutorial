@@ -3,7 +3,7 @@
 -- Reference to global scope.
 _g = _ENV
 
-debugMode = false
+debugMode = true
 
 -- Game strings.
 
@@ -24,7 +24,7 @@ bullHeight = 3
 blinkT = 1
 
 -- Default collision box size - 8x8 sprite.
-colDefault = 7
+hitDefault = 7
 
 -- Runs once on startup.
 function _init()

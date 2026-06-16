@@ -52,6 +52,16 @@ function log(text, overwrite)
     printh(text, "logs/log", overwrite)
 end
 
+-- Draws an entity's hitbox as a filled rectangle for debugging.
+-- @param e: the entity to draw the hitbox for.
+function showHitBox(e)
+    local x = e.x + (e.hitBoxOffX or 0)
+    local y = e.y + (e.hitBoxOffY or 0)
+    local w = e.hitBoxW or hitDefault
+    local h = e.hitBoxH or hitDefault
+    rectfill(x, y, x + w, y + h, 7)
+end
+
 -- Checks if both fire buttons are released.
 -- @return: true if both fire buttons released.
 function hasStoppedFiring()

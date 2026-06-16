@@ -18,8 +18,8 @@ pTypes = {
                 delay = 5
             },
         spd = 3,
-        colW = 3,
-        colH = 3,
+        hitBoxW = 2,
+        hitBoxH = 2,
         rof = 4,
         dam = 1,
         sfx = 0,
@@ -39,8 +39,8 @@ pTypes = {
                 delay = 6
             },
         spd = 4,
-        colW = 3,
-        colH = 3,
+        hitBoxW = 2,
+        hitBoxH = 2,
         rof = 8,
         dam = 2,
         sfx = 2,
@@ -59,9 +59,11 @@ pTypes = {
                 fin = 34,
                 delay = 5
             },
-        spd = 3,
-        colW = 3,
-        colH = 3,
+        spd = 0.3,
+        hitBoxW = 1,
+        hitBoxH = 1,
+        hitBoxOffX = 2,
+        hitBoxOffY = 2,
         rof = 4,
         dam = 1,
         sfx = 0,
@@ -104,6 +106,13 @@ function newProjectile(proCfg, proX, proY, proOwner)
         owner = proOwner,
         spd = proCfg.spd,
         dam = proCfg.dam,
+
+        -- Hit box size, defaults to 8x8.
+        hitBoxW = proCfg.hitBoxW or hitDefault,
+        hitBoxH = proCfg.hitBoxH or hitDefault,
+        hitBoxOffX = proCfg.hitBoxOffX or 0,
+        hitBoxOffY = proCfg.hitBoxOffY or 0,
+
         animate = proCfg.animate,
         pattern = proCfg.pattern,
 
@@ -138,6 +147,10 @@ function newProjectile(proCfg, proX, proY, proOwner)
         -- Draw the projectile.
         draw = function(_ENV)
             spr(curSpr, x, y)
+
+            if g.debugMode then
+                g.showHitBox(_ENV)
+            end
         end
     }
 end
