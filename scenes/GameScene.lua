@@ -39,7 +39,7 @@ function updateGameScene()
 		local proCfg = getConfig("bullet")
 
 		if proT <= 0 then
-			spawnProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
+			spawnPlayerProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
 			ship.muzzle = 4
 			proT = proCfg.rof
 		end
@@ -50,7 +50,7 @@ function updateGameScene()
 		local proCfg = getConfig("laser")
 
 		if proT <= 0 then
-			spawnProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
+			spawnPlayerProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
 			ship.muzzle = 4
 			proT = proCfg.rof
 		end

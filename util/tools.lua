@@ -4,8 +4,9 @@
 function showDebugUI()
     ?state, 0, 12
     ?#projectiles, 0, 123, 7
-    ?#enemies, 6, 123, 3
-    ?#routines, 16, 123, 15
+    ?#enemyProjectiles, 10, 123, 10
+    ?#enemies, 20, 123, 3
+    ?#routines, 30, 123, 15
     ?ship.x, 0, 63, 7
     ?ship.y, 0, 70, 7
     ?"i:" .. ship.invul, 110, 113, 7
