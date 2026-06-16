@@ -15,7 +15,8 @@ pTypes = {
     bullet = {
         ani = { start = 16,
                 fin = 17,
-                delay = 5 },
+                delay = 5
+            },
         spd = 3,
         colW = 3,
         colH = 3,
@@ -34,8 +35,9 @@ pTypes = {
     },
     laser = {
         ani = { start = 18,
-        fin = 21,
-        delay = 6 },
+                fin = 21,
+                delay = 6
+            },
         spd = 4,
         colW = 3,
         colH = 3,
@@ -54,8 +56,9 @@ pTypes = {
     },
     enemyBullet = {
         ani = { start = 32,
-                fin = 33,
-                delay = 5 },
+                fin = 34,
+                delay = 5
+            },
         spd = 3,
         colW = 3,
         colH = 3,
@@ -63,8 +66,8 @@ pTypes = {
         dam = 1,
         sfx = 0,
         animate = function(_ENV)
-            if curSpr == ani.start then
-                curSpr = ani.fin
+            if curSpr < ani.fin then
+                curSpr += 1
             else
                 curSpr = ani.start
             end

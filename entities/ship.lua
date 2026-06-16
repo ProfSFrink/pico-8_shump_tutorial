@@ -100,6 +100,18 @@ function newShip()
             end
         end,
 
+        -- Handles ship being hit by an entity.
+        hit = function(_ENV)
+            g.sfx(1)
+            if g.player.lives <= 0 then
+                invul = 30
+                g.spawnExp(x, y, 0, g.shipCols)
+                g.spawnShockWave(x, y, g.lgSwCfg)
+            else
+                invul = 60 -- 2 secs of invulnerability.
+            end
+        end,
+
         -- Reset ship properties to default.
         reset = function(_ENV)
             sprite = startSprite

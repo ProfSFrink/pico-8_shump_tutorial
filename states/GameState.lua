@@ -46,7 +46,7 @@ function setupGame()
 	-- Setup player.
 	player = {
 		score = 0,
-		lives = 2,
+		lives = 4,
 		bombs = 2
 	}
 

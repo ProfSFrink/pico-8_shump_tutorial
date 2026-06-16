@@ -105,14 +105,17 @@ function updateGameScene()
 			if hasCollided(e, ship) and ship.invul <= 0 then
 				player.lives -= 1
 				e:hit()
-				if player.lives <= 0 then
-					ship.invul = 30
-					spawnExp(ship.x, ship.y, 0, shipCols)
-					spawnShockWave(ship.x, ship.y, lgSwCfg)
-				else
-					ship.invul = 60 -- 2 secs of invulnerability.
-				end
+				ship:hit()
 			end
+		end
+	end
+
+	-- Handle collisions between enemy
+	-- projectiles and ship.
+	for ep in all(enemyProjectiles) do
+		if hasCollided(ep, ship) and ship.invul <= 0 then
+			player.lives -= 1
+			ship:hit()			
 		end
 	end
 end
