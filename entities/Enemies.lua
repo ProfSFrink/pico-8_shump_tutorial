@@ -29,6 +29,11 @@ eDefs = {
             { c1 = 6, c2 = 13 } -- Grey.
         },
         ani = { 80, 81, 82, 83 },
+        nAni = {
+            start = 80,
+            fin = 81,
+            delay = 0.4
+        },
         flash = 84,
         aniDelay = 0.4,
         xSpd = 0,
@@ -47,6 +52,11 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
         ani = { 64, 65, 66, 67 },
+        nAni = {
+            start = 64,
+            fin = 67,
+            delay = 0.4
+        },
         flash = 68,
         aniDelay = 0.4,
         xSpd = 1,
@@ -65,6 +75,11 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
         ani = { 69, 70, 71, 72 },
+        nAni = {
+            start = 69,
+            fin = 72,
+            delay = 0.4
+        },
         flash = 73,
         aniDelay = 0.4,
         xSpd = 0.6,
@@ -85,6 +100,11 @@ eDefs = {
         colW = 6,
         colH = 6,
         ani = { 88, 89, 90, 91, 92 },
+        nAni = {
+            start = 88,
+            fin = 92,
+            delay = 0.4
+        },
         flash = 93,
         aniDelay = 0.4,
         xSpd = 1.5,
@@ -103,6 +123,11 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
         ani = { 85, 86 },
+        nAni = {
+            start = 85,
+            fin = 86,
+            delay = 0.4
+        },
         flash = 87,
         aniDelay = 0.4,
         xSpd = 2.5,
@@ -122,6 +147,11 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
         ani = { 74, 75, 76, 77 },
+        nAni = {
+            start = 74,
+            fin = 77,
+            delay = 0.4
+        },
         flash = 78,
         aniDelay = 0.4,
         xSpd = 0,
@@ -143,6 +173,11 @@ eDefs = {
         colH = 14,
         sprSize = 2,
         ani = { 96, 98 },
+        nAni = {
+            start = 96,
+            fin = 81,
+            delay = 0.4
+        },
         flash = 100,
         aniDelay = 0.4,
         xSpd = 0,
@@ -163,7 +198,7 @@ local flashTimerDefault = 3
 -- Death state frame timer.
 local deathTimerDefault = 10
 
--- State names for enemy state machine.
+-- String literals for enemy state names.
 local eneState = {
     spawning = "spawning",
     stopped = "stopped",
@@ -171,8 +206,6 @@ local eneState = {
     attacking = "attacking",
     dead = "dead"
 }
-
--- TODO: Add projectiles and firing patterns for enemies.
 
 -- Factory function for creating enemies.
 -- @param enemyCfg: Enemy configuration object.
@@ -232,7 +265,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         flashSpr = enemyCfg.flash,
 
         -- Enemies current sprite.
-        enemySpr = enemyCfg.ani[1],
+        curSpr = enemyCfg.ani[1],
 
         -- Current frame of animation.
         aniFrame = 1,
@@ -263,7 +296,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 aniFrame = 1
             end
 
-            enemySpr = ani[flr(aniFrame)]
+            curSpr = ani[flr(aniFrame)]
         end,
 
         -- Handle enemy in attacking state.
@@ -310,7 +343,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
         -- Handle flash state timing and transition back to normal state.
         flash = function(_ENV)
-            enemySpr = flashSpr
+            curSpr = flashSpr
             flashTimer -= 1
             if flashTimer <= 0 then
                 state = eneState.attacking
@@ -320,7 +353,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
         -- Handle dead state timing and removal.
         dead = function(_ENV)
-            enemySpr = flashSpr
+            curSpr = flashSpr
             deathTimer -= 1
 
             if deathTimer <= 0 then
@@ -380,9 +413,9 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             end
             
             if state == eneState.dead then
-                spr(enemySpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
+                spr(curSpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
             else
-                spr(enemySpr, sprX, y, sprSize, sprSize)
+                spr(curSpr, sprX, y, sprSize, sprSize)
             end
             
             pal()
