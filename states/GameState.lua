@@ -9,7 +9,7 @@ spawnEvents = {
 	{ '2',
 		'20,-8,-24,flame,flame,flame,flame,flame,',
 		'20,136,34,flame,gap,gap,gap,flame,',
-		'20,64,-12,flame,flame,flame,flame,flame,'
+		'20,64,-12,ufo,ufo,ufo,ufo,ufo,'
 	},
 	{ '3',
 		'20,-8,-24,fighter,gap,gap,flame,flame,gap,gap,fighter',

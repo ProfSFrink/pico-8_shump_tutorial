@@ -43,7 +43,7 @@ eDefs = {
         xSpd = 0,
         ySpd = 1.25,
         hp = 2,
-        rof = 90,
+        rof = 10,
         points = 100,
         move = downWave
     },
@@ -55,6 +55,10 @@ eDefs = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 14, c2 = 2 } -- Pink.
         },
+        hitBoxW = 5,
+        hitBoxH = 3,
+        hitBoxOffX = 1,
+        hitBoxOffY = 3,
         ani = { 64, 65, 66, 67 },
         nAni = {
             start = 64,
@@ -78,6 +82,10 @@ eDefs = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
+        hitBoxW = 5,
+        hitBoxH = 5,
+        hitBoxOffX = 1,
+        hitBoxOffY = 1,
         ani = { 69, 70, 71, 72 },
         nAni = {
             start = 69,
@@ -101,8 +109,10 @@ eDefs = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        hitBoxW = 6,
-        hitBoxH = 6,
+        hitBoxW = 4,
+        hitBoxH = 4,
+        hitBoxOffX = 1,
+        hitBoxOffY = 1,
         ani = { 88, 89, 90, 91, 92 },
         nAni = {
             start = 88,
@@ -126,6 +136,10 @@ eDefs = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
+        hitBoxW = 5,
+        hitBoxH = 4,
+        hitBoxOffX = 1,
+        hitBoxOffY = 3,
         ani = { 85, 86 },
         nAni = {
             start = 85,
@@ -150,6 +164,10 @@ eDefs = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
+        hitBoxW = 5,
+        hitBoxH = 4,
+        hitBoxOffX = 1,
+        hitBoxOffY = 1,
         ani = { 74, 75, 76, 77 },
         nAni = {
             start = 74,
@@ -173,8 +191,10 @@ eDefs = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 14, c2 = 2 } -- Pink.
         },
-        hitBoxW = 14,
-        hitBoxH = 14,
+        hitBoxW = 11,
+        hitBoxH = 9,
+        hitBoxOffX = 2,
+        hitBoxOffY = 3,
         sprSize = 2,
         ani = { 96, 98 },
         nAni = {

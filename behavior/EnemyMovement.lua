@@ -26,8 +26,8 @@ function downWave(e, t)
 
     e.bullDelay -= 1
 
-    -- e.x += e.xSpd
-    -- e.y += e.ySpd
+    e.x += e.xSpd
+    e.y += e.ySpd
 end
 
 -- Enemy moves down slowly while weaving left and right using cosine of its y position.
