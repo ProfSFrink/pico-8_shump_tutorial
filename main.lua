@@ -3,16 +3,12 @@
 -- Reference to global scope.
 _g = _ENV
 
-debugMode = true
+debugMode = false
 
 -- Game strings.
 
 -- Text for start and restart.
 pressAKey = "PRESS Z OR X TO "
-
--- Projectile object literals.
-bullet = "bullet"
-laser = "laser"
 
 -- Offset for the height of the UI.
 uiHeight = 8

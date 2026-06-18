@@ -1,5 +1,11 @@
 -- Enemy movement patterns.
 
+-- Enemy stays in place.
+-- @param e Enemy.
+function stationary(e)
+    e.x += e.xSpd
+end
+
 -- Enemy moves straight down.
 -- @param e Enemy to move.
 function down(e)
@@ -18,13 +24,6 @@ function downWave(e, t)
     if e.x > 88 then
         e.xSpd -= (e.x - 88) / 32
     end
-
-    if e.bullDelay <= 0 then
-        spawnEnemyProjectile(e.x,e.y + e.bullOffset)
-        e.bullDelay = e.rof
-    end
-
-    e.bullDelay -= 1
 
     e.x += e.xSpd
     e.y += e.ySpd

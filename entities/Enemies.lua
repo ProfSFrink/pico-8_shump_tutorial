@@ -43,9 +43,9 @@ eDefs = {
         xSpd = 0,
         ySpd = 1.25,
         hp = 2,
-        rof = 10,
+        rof = 15,
         points = 100,
-        move = downWave
+        move = stationary
     },
     ufo = {
         cols = {
@@ -325,7 +325,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             curSpr = ani[flr(aniFrame)]
         end,
 
-        -- Handle enemy in attacking state.
+        -- Have enemy attack player ship.
         attack = function(_ENV)
             if state != eneState.stopped then return end
             aniDelay *= 3
@@ -408,11 +408,22 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             elseif state == eneState.attacking then
                 animate(_ENV)
 
+                if bullDelay > 0 and bullDelay <= flashTimerDefault then
+                    curSpr = flashSpr
+                end
+
                 attDelay -= 1
 
                 if attDelay <= 0 then
                     move(_ENV, g.gameT)
                 end
+
+                if bullDelay <= 0 then
+                    g.spawnEnemyProjectile(x,y + bullOffset)
+                    bullDelay = rof
+                end
+
+                bullDelay -= 1
             end
 
             -- Remove if off-screen and not spawning.

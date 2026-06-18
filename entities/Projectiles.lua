@@ -68,7 +68,7 @@ pTypes = {
         hitBoxH = 1,
         hitBoxOffX = 2,
         hitBoxOffY = 2,
-        rof = 4,
+        --rof = 4,
         dam = 1,
         sfx = 0,
         animate = function(_ENV)
@@ -81,6 +81,11 @@ pTypes = {
         pattern = fireDown,
     },
 }
+
+-- Projectile string literals.
+bullet = "bullet"
+laser = "laser"
+enemyBullet = "enemyBullet"
 
 -- String literals for entities that can own a projectile.
 owner = { player = "player", enemy = "enemy"}
@@ -175,7 +180,7 @@ end
 -- @param x: Spawn x position.
 -- @param y: Spawn y position.
 function spawnEnemyProjectile(x, y)
-    local proCfg = getConfig("enemyBullet")
+    local proCfg = getConfig(enemyBullet)
 
     add(enemyProjectiles,
         newProjectile(proCfg, x, y, owner.enemy))
