@@ -36,7 +36,7 @@ function updateGameScene()
 
 	-- Fire bullet if X pressed.
 	if btn(5) and canPlay then
-		local proCfg = getConfig("bullet")
+		local proCfg = getConfig(yellowSingleBullet)
 
 		if proT <= 0 then
 			spawnPlayerProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
@@ -47,7 +47,7 @@ function updateGameScene()
 
 	-- Fire laser if Z pressed.
 	if btn(4) and canPlay then
-		local proCfg = getConfig("laser")
+		local proCfg = getConfig(yellowSingleLaser)
 
 		if proT <= 0 then
 			spawnPlayerProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
@@ -113,10 +113,12 @@ function updateGameScene()
 	-- Handle collisions between enemy
 	-- projectiles and ship.
 	for ep in all(enemyProjectiles) do
-		if hasCollided(ep, ship) and ship.invul <= 0 then
-			player.lives -= 1
-			ship:hit()
-			removeProjectile(ep)			
+		if ship:canCollide() then
+			if hasCollided(ep, ship) and ship.invul <= 0 then
+				player.lives -= 1
+				ship:hit()
+				removeProjectile(ep)			
+			end
 		end
 	end
 end

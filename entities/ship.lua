@@ -43,6 +43,63 @@ function newShip()
 		-- Delay between losing last life
         -- showing game over screen.
 		deathTimer = 30,
+        
+        -- Move the ship in a direction based on input.
+        -- @param button: The button index for the direction to move.
+        move = function(_ENV, button)
+            if button == "left" then
+                sprite = 1
+                xSpeed = -xMaxSpeed
+            elseif button == "right" then
+                sprite = 5
+                xSpeed = xMaxSpeed
+            elseif button == "up" then
+                sprite = startSprite
+                ySpeed = -yMaxSpeed
+            elseif button == "down" then
+                sprite = startSprite
+                ySpeed = yMaxSpeed
+            end
+        end,
+
+        -- Handles ship being hit by an entity.
+        hit = function(_ENV)
+            g.sfx(1)
+            if g.player.lives <= 0 then
+                invul = 30
+                g.spawnExp(x, y, 0, g.shipCols)
+                g.spawnShockWave(x, y, g.lgSwCfg)
+            else
+                invul = 60 -- 2 secs of invulnerability.
+            end
+        end,
+
+        -- Reset ship properties to default.
+        reset = function(_ENV)
+            sprite = startSprite
+            xSpeed = 0
+            ySpeed = 0
+        end,
+
+        -- Checks if death animation is complete.
+        -- @returns true if death animation is complete.
+        isDead = function(_ENV)
+            deathTimer -= 1
+
+            if deathTimer <= 0 then
+                return true
+            else
+                return false
+            end
+        end,
+
+        -- Check if collision with ship are allowed
+        -- @returns true if allowed.
+        canCollide = function(_ENV)
+            return g.state  != g.stateNames.newWave
+               --and not isDead()
+               and g.inBounds(_ENV)
+        end,
 
         -- Update ship position and animation.
         update = function(_ENV)
@@ -92,54 +149,5 @@ function newShip()
                 g.showHitBox(_ENV)
             end
         end,
-
-        -- Move the ship in a direction based on input.
-        -- @param button: The button index for the direction to move.
-        move = function(_ENV, button)
-            if button == "left" then
-                sprite = 1
-                xSpeed = -xMaxSpeed
-            elseif button == "right" then
-                sprite = 5
-                xSpeed = xMaxSpeed
-            elseif button == "up" then
-                sprite = startSprite
-                ySpeed = -yMaxSpeed
-            elseif button == "down" then
-                sprite = startSprite
-                ySpeed = yMaxSpeed
-            end
-        end,
-
-        -- Handles ship being hit by an entity.
-        hit = function(_ENV)
-            g.sfx(1)
-            if g.player.lives <= 0 then
-                invul = 30
-                g.spawnExp(x, y, 0, g.shipCols)
-                g.spawnShockWave(x, y, g.lgSwCfg)
-            else
-                invul = 60 -- 2 secs of invulnerability.
-            end
-        end,
-
-        -- Reset ship properties to default.
-        reset = function(_ENV)
-            sprite = startSprite
-            xSpeed = 0
-            ySpeed = 0
-        end,
-
-        -- Checks if death animation is complete.
-        -- @returns true if death animation is complete.
-        isDead = function(_ENV)
-            deathTimer -= 1
-
-            if deathTimer <= 0 then
-                return true
-            else
-                return false
-            end
-        end
     }
 end

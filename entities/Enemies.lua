@@ -390,9 +390,9 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         -- Getter function for if the enemy can collide with the player or projectiles.
         canCollide = function(_ENV)
             -- Check if in bounds to prevent off-screen collisions.
-            local inBounds = mid(0, x, 128) == x and mid(0 + uiHeight, y, 128) == y
-
-            return state != eneState.dead and state != eneState.spawning and inBounds
+            return state != eneState.dead 
+               and state != eneState.spawning
+               and g.inBounds(_ENV)
         end,
 
         -- Update function for the enemy.

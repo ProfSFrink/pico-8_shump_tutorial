@@ -67,3 +67,9 @@ end
 function hasStoppedFiring()
     return btn(4) == false and btn(5) == false
 end
+
+-- Check if an entity is inbounds
+-- @return: true if an entity in bounds.
+function inBounds(e)
+    return mid(0, e.x, 128) == e.x and mid(0 + uiHeight, e.y, 128) == e.y
+end

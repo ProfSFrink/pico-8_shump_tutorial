@@ -28,7 +28,7 @@ function _init()
 
 	routines = {}
 
-	shipStartX = 64
+	shipStartX = 61
 	shipStartY = 108
 
 	waveNum = 0
