@@ -12,7 +12,7 @@
 -- animate: Custom update function.
 -- pattern: The firing pattern to use.
 pTypes = {
-    bullet = {
+    yellowSingleBullet = {
         ani = { start = 16,
                 fin = 17,
                 delay = 5
@@ -35,7 +35,7 @@ pTypes = {
         end,
         pattern = fireUp
     },
-    laser = {
+    yellowSingleLaser = {
         ani = { start = 18,
                 fin = 21,
                 delay = 6
@@ -58,7 +58,7 @@ pTypes = {
         end,
         pattern = fireUp,
     },
-    enemyBullet = {
+    pinkSingleBullet = {
         ani = { start = 32,
                 fin = 34,
                 delay = 5
@@ -70,7 +70,7 @@ pTypes = {
         hitBoxOffY = 2,
         --rof = 4,
         dam = 1,
-        sfx = 0,
+        sfx = 29,
         animate = function(_ENV)
             if curSpr < ani.fin then
                 curSpr += 1
@@ -83,9 +83,9 @@ pTypes = {
 }
 
 -- Projectile string literals.
-bullet = "bullet"
-laser = "laser"
-enemyBullet = "enemyBullet"
+yellowSingleBullet = "yellowSingleBullet"
+yellowSingleLaser = "yellowSingleLaser"
+pinkSingleBullet = "pinkSingleBullet"
 
 -- String literals for entities that can own a projectile.
 owner = { player = "player", enemy = "enemy"}
@@ -180,7 +180,7 @@ end
 -- @param x: Spawn x position.
 -- @param y: Spawn y position.
 function spawnEnemyProjectile(x, y)
-    local proCfg = getConfig(enemyBullet)
+    local proCfg = getConfig(pinkSingleBullet)
 
     add(enemyProjectiles,
         newProjectile(proCfg, x, y, owner.enemy))
