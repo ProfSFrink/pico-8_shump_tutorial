@@ -419,7 +419,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 end
 
                 if bullDelay <= 0 then
-                    g.spawnEnemyProjectile(x,y + bullOffset)
+                    g.singlePinkBullet(x,y + bullOffset,
+                    g.owner.enemy)
                     bullDelay = rof + g.rnd(20)
                 end
 

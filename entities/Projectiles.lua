@@ -12,7 +12,7 @@
 -- animate: Custom update function.
 -- pattern: The firing pattern to use.
 pTypes = {
-    yellowSingleBullet = {
+    yellowBullet = {
         ani = { start = 16,
                 fin = 17,
                 delay = 5
@@ -35,7 +35,7 @@ pTypes = {
         end,
         pattern = fireUp
     },
-    yellowSingleLaser = {
+    yellowLaser = {
         ani = { start = 18,
                 fin = 21,
                 delay = 6
@@ -58,7 +58,7 @@ pTypes = {
         end,
         pattern = fireUp,
     },
-    pinkSingleBullet = {
+    pinkBullet = {
         ani = { start = 32,
                 fin = 34,
                 delay = 5
@@ -68,7 +68,7 @@ pTypes = {
         hitBoxH = 1,
         hitBoxOffX = 2,
         hitBoxOffY = 2,
-        --rof = 4,
+        rof = 4,
         dam = 1,
         sfx = 29,
         animate = function(_ENV)
@@ -83,9 +83,9 @@ pTypes = {
 }
 
 -- Projectile string literals.
-yellowSingleBullet = "yellowSingleBullet"
-yellowSingleLaser = "yellowSingleLaser"
-pinkSingleBullet = "pinkSingleBullet"
+yellowBullet = "yellowBullet"
+yellowLaser = "yellowLaser"
+pinkBullet = "pinkBullet"
 
 -- String literals for entities that can own a projectile.
 owner = { player = "player", enemy = "enemy"}
@@ -99,7 +99,7 @@ end
 
 -- Projectile Factory logic.
 
--- factory function for creating player projectiles.
+-- factory function for creating a single projectile.
 -- @param proCfg: Projectile type definition.
 -- @param proX: The x position.
 -- @param proY: The y position.
@@ -112,7 +112,7 @@ function newProjectile(proCfg, proX, proY, proOwner)
     return {
         x = proX + 2,
         y = proY,
-        owner = proOwner,
+        owner = proCfg.owner,
         spd = proCfg.spd,
         dam = proCfg.dam,
 
@@ -179,12 +179,32 @@ end
 -- Spawns a enemy projectile.
 -- @param x: Spawn x position.
 -- @param y: Spawn y position.
-function spawnEnemyProjectile(x, y)
-    local proCfg = getConfig(pinkSingleBullet)
+-- @param proOwner: The owner of the projectile.
+function singlePinkBullet(x, y, proOwner)
+    local proCfg = getConfig(pinkBullet)
 
-    add(enemyProjectiles,
-        newProjectile(proCfg, x, y, owner.enemy))
+    if proOwner == owner.player then
+        proCfg.pattern = fireUp
+        player.rof = proCfg.rof
+    else
+        proCfg.pattern = fireDown
+    end
+
+    proCfg.owner = proOwner
+
+    addProjectile(newProjectile(proCfg,x,y))
+
     sfx(proCfg.sfx)
+end
+
+-- Adds projectile to game based on its owner.
+-- p: Projectile to add.
+function addProjectile(p)
+    if p.owner == owner.player then
+        add(projectiles,p)
+    else
+        add(enemyProjectiles,p)
+    end
 end
 
 -- Removes a projectile based on its owner.

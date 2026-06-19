@@ -46,12 +46,12 @@ function setupGame()
 	-- score: The current player score.
 	-- lives: The current number of lives.
 	-- bombs: The current number of bombs.
-	-- shotDelay: The delay in frames between shots.
+	-- rof: The rate of fire of player in frames.
 	player = {
 		score = 0,
 		lives = 4,
 		bombs = 2,
-		shotDelay = 0
+		rof = 0
 	}
 
 	-- Setup for projectiles.

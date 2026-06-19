@@ -6,7 +6,7 @@ function updateGameScene()
 	gameT += 1
 
 	-- Decrease player projectile timer.
-	player.shotDelay -= 1
+	player.rof -= 1
 
 	-- Reset ship sprite and speed.
 	ship:reset()
@@ -34,25 +34,25 @@ function updateGameScene()
 		ship:move("down")
 	end
 
+	-- TODO: Switch this back to yellow bullet.
+
 	-- Fire bullet if X pressed.
 	if btn(5) and canPlay then
-		local proCfg = getConfig(yellowSingleBullet)
-
-		if player.shotDelay <= 0 then
-			spawnPlayerProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
+		if player.rof <= 0 then
+			singlePinkBullet(ship.x, ship.y - ship.bulletOffset,
+			owner.player)
 			ship.muzzle = 4
-			player.shotDelay = proCfg.rof
 		end
 	end
 
 	-- Fire laser if Z pressed.
 	if btn(4) and canPlay then
-		local proCfg = getConfig(yellowSingleLaser)
+		local proCfg = getConfig(yellowLaser)
 
-		if player.shotDelay <= 0 then
+		if player.rof <= 0 then
 			spawnPlayerProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
 			ship.muzzle = 4
-			player.shotDelay = proCfg.rof
+			player.rof = proCfg.rof
 		end
 	end
 
