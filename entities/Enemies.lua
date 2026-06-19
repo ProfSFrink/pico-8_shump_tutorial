@@ -420,7 +420,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
                 if bullDelay <= 0 then
                     g.spawnEnemyProjectile(x,y + bullOffset)
-                    bullDelay = rof
+                    bullDelay = rof + g.rnd(20)
                 end
 
                 bullDelay -= 1

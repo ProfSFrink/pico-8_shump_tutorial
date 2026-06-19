@@ -96,8 +96,7 @@ function newShip()
         -- Check if collision with ship are allowed
         -- @returns true if allowed.
         canCollide = function(_ENV)
-            return g.state  != g.stateNames.newWave
-               --and not isDead()
+            return g.state != g.stateNames.newWave
                and g.inBounds(_ENV)
         end,
 
