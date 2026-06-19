@@ -1,5 +1,10 @@
 -- Projectile component data.
 
+-- String literals for projectile types.
+yellowBullet = "yellowBullet"
+yellowLaser = "yellowLaser"
+pinkBullet = "pinkBullet"
+
 -- Setup for various projectiles.
 -- ani: Table of animation settings.
 --      start: First sprite index of the animation.
@@ -10,23 +15,16 @@
 -- sfx: Sound effect to play when firing.
 -- btn: Button to fire.
 -- animate: Custom update function.
--- pattern: The firing pattern to use.
 pTypes = {
     yellowBullet = {
         ani = { start = 16,
                 fin = 17,
                 delay = 5
             },
-        xSpd = 3,
-        ySpd = 3,
         hitBoxW = 1,
         hitBoxH = 1,
         hitBoxOffX = 1,
         hitBoxOffY = 1,
-        rof = 4,
-        dam = 1,
-        sfx = 0,
-        btn = 5,
         animate = function(_ENV)
             if curSpr == ani.start then
                 curSpr = ani.fin
@@ -34,23 +32,16 @@ pTypes = {
                 curSpr = ani.start
             end
         end,
-        pattern = up
     },
     yellowLaser = {
         ani = { start = 18,
                 fin = 21,
                 delay = 6
             },
-        xSpd = 4,
-        ySpd = 4,
         hitBoxW = 1,
         hitBoxH = 5,
         hitBoxOffX = 1,
         hitBoxOffY = 1,
-        rof = 8,
-        dam = 2,
-        sfx = 2,
-        btn = 4,
         animate = function(_ENV)
             if curSpr < ani.fin then
                 curSpr += 1
@@ -58,22 +49,16 @@ pTypes = {
                 curSpr = ani.start
             end
         end,
-        pattern = up,
     },
     pinkBullet = {
         ani = { start = 32,
                 fin = 34,
                 delay = 5
             },
-        xSpd = 3,
-        ySpd = 3,
         hitBoxW = 1,
         hitBoxH = 1,
         hitBoxOffX = 2,
         hitBoxOffY = 2,
-        rof = 4,
-        dam = 1,
-        sfx = 29,
         animate = function(_ENV)
             if curSpr < ani.fin then
                 curSpr += 1
@@ -81,14 +66,67 @@ pTypes = {
                 curSpr = ani.start
             end
         end,
-        pattern = down,
     },
 }
 
--- Projectile string literals.
-yellowBullet = "yellowBullet"
-yellowLaser = "yellowLaser"
-pinkBullet = "pinkBullet"
+-- String literals for weapon types.
+singleYellowBullet = "singleYellowBullet"
+singleYellowLaser = "singleYellowLaser"
+singlePinkBullet = "singlePinkBullet"
+spreadYellowBullet = "spreadYellowBullet"
+
+
+-- Weapon definitions.
+-- rof: Rate of fire in frames.
+-- sfx: Sound effect to play when firing.
+-- shots: Table of projectiles fired per trigger pull.
+--   pType: Projectile type key into pTypes.
+--   player: Movement pattern function used when owner is player.
+--   enemy:  Movement pattern function used when owner is enemy.
+weapons = {
+    singleYellowBullet = {
+        rof = 4,
+        sfx = 0,
+        xSpd = 0.5,
+        ySpd = 3,
+        dam = 1,
+        shots = {
+            { pType = yellowBullet, player = up, enemy = down }
+        }
+    },
+    singleYellowLaser = {
+        rof = 8,
+        sfx = 2,
+        xSpd = 4,
+        ySpd = 4,
+        dam = 2,
+        shots = {
+            { pType = yellowLaser, player = up, enemy = down }
+        }
+    },
+    singlePinkBullet = {
+        rof = 4,
+        sfx = 29,
+        xSpd = 3,
+        ySpd = 3,
+        dam = 1,
+        shots = {
+            { pType = pinkBullet, player = up, enemy = down }
+        }
+    },
+    spreadYellowBullet = {
+        rof = 4,
+        sfx = 29,
+        xSpd = 0.5,
+        ySpd = 3,
+        dam = 1,
+        shots = {
+            { pType = yellowBullet, player = upLeft,  enemy = downLeft  },
+            { pType = yellowBullet, player = up,      enemy = down      },
+            { pType = yellowBullet, player = upRight, enemy = downRight },
+        }
+    }
+}
 
 -- String literals for entities that can own a projectile.
 owner = { player = "player", enemy = "enemy"}
@@ -106,19 +144,23 @@ end
 -- @param proCfg: Projectile type config object.
 -- @param proX: The x position.
 -- @param proY: The y position.
--- @param proOwner: Player or enemy. 
+-- @param proOwner: Player or enemy.
+-- @param pattern: Movement pattern function.
+-- @param xSpd: Horizontal speed from the weapon definition.
+-- @param ySpd: Vertical speed from the weapon definition.
+-- @param dam: Damage from the weapon definition.
 -- @return: A new projectile object.
-function spawnProjectile(proCfg, proX, proY, proOwner)
+function spawnProjectile(proCfg, proX, proY, proOwner, pattern, xSpd, ySpd, dam)
     -- Local references to global scope.
     local g = _g
 
     return {
         x = proX + 2,
         y = proY,
-        xSpd = proCfg.xSpd,
-        ySpd = proCfg.ySpd,
-        owner = proCfg.owner,
-        dam = proCfg.dam,
+        xSpd = xSpd,
+        ySpd = ySpd,
+        owner = proOwner,
+        dam = dam,
 
         -- Hit box size, defaults to 8x8.
         hitBoxW = proCfg.hitBoxW or hitDefault,
@@ -127,7 +169,7 @@ function spawnProjectile(proCfg, proX, proY, proOwner)
         hitBoxOffY = proCfg.hitBoxOffY or 0,
 
         animate = proCfg.animate,
-        pattern = proCfg.pattern,
+        pattern = pattern,
 
         -- Current sprite being animated.
         curSpr = proCfg.ani.start,
@@ -168,66 +210,30 @@ function spawnProjectile(proCfg, proX, proY, proOwner)
     }
 end
 
--- Projectile spawner function.
+-- Weapon functions.
 
--- Spawns a player projectile.
--- @param proCfg: Projectile type definition.
+-- Fires a weapon definition, spawning all its shots.
+-- @param wDef: Weapon definition from the weapons table.
 -- @param x: Spawn x position.
 -- @param y: Spawn y position.
 -- @param proOwner: The owner of the projectile.
-function singleYellowBullet(x, y, proOwner)
-    local proCfg = getConfig(yellowBullet)
+function fireWeapon(wDef, x, y, proOwner)
+    local isPlayer = (proOwner == owner.player)
 
-    if proOwner == owner.player then
-        proCfg.pattern = up
-        ship.rof = proCfg.rof
-    else
-        proCfg.pattern = down
+    for shot in all(wDef.shots) do
+        local proCfg = getConfig(shot.pType)
+        local pat = isPlayer and shot.player or shot.enemy
+        addProjectile(
+                spawnProjectile(proCfg, x, y, proOwner, pat,
+                wDef.xSpd, wDef.ySpd, wDef.dam)
+            )
     end
 
-    proCfg.owner = proOwner
-
-    addProjectile(spawnProjectile(proCfg,x,y))
-
-    sfx(proCfg.sfx)
-end
-
-function singleYellowLaser(x, y, proOwner)
-    local proCfg = getConfig(yellowLaser)
-
-    if proOwner == owner.player then
-        proCfg.pattern = up
-        ship.rof = proCfg.rof
-    else
-        proCfg.pattern = down
+    if isPlayer then
+        ship.rof = wDef.rof
     end
 
-    proCfg.owner = proOwner
-
-    addProjectile(spawnProjectile(proCfg,x,y))
-
-    sfx(proCfg.sfx)
-end
-
--- Spawns a enemy projectile.
--- @param x: Spawn x position.
--- @param y: Spawn y position.
--- @param proOwner: The owner of the projectile.
-function singlePinkBullet(x, y, proOwner)
-    local proCfg = getConfig(pinkBullet)
-
-    if proOwner == owner.player then
-        proCfg.pattern = up
-        ship.rof = proCfg.rof
-    else
-        proCfg.pattern = down
-    end
-
-    proCfg.owner = proOwner
-
-    addProjectile(spawnProjectile(proCfg,x,y))
-
-    sfx(proCfg.sfx)
+    sfx(wDef.sfx)
 end
 
 -- Adds projectile to game based on its owner.

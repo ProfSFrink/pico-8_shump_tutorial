@@ -35,12 +35,11 @@ function updateGameScene()
 		ship:move("down")
 	end
 
-	-- TODO: Switch this back to yellow bullet.
-
-	-- Fire bullet if X pressed.
+	-- Fire spread shot if X pressed.
 	if btn(5) and canPlay then
 		if ship.rof <= 0 then
-			singleYellowBullet(ship.x,
+			fireWeapon(weapons.singleYellowBullet,
+					ship.x,
 					ship.y - ship.bulletOffset,
 					owner.player)
 			ship.muzzle = 4
@@ -50,7 +49,8 @@ function updateGameScene()
 	-- Fire laser if Z pressed.
 	if btn(4) and canPlay then
 		if ship.rof <= 0 then
-			singleYellowLaser(ship.x,
+			fireWeapon(weapons.singleYellowLaser,
+					ship.x,
 					ship.y - ship.bulletOffset,
 					owner.player)
 			ship.muzzle = 4

@@ -45,6 +45,7 @@ eDefs = {
         hp = 2,
         rof = 15,
         points = 100,
+        weapon = singlePinkBullet,
         move = stationary
     },
     ufo = {
@@ -72,6 +73,7 @@ eDefs = {
         hp = 2,
         rof = 10,
         points = 175,
+        weapon = singlePinkBullet,
         move = downWaveSlow
     },
     eyeball = {
@@ -99,6 +101,7 @@ eDefs = {
         hp = 3,
         rof = 10,
         points = 150,
+        weapon = singlePinkBullet,
         move = downWave
     },
     redeye = {
@@ -126,6 +129,7 @@ eDefs = {
         hp = 3,
         rof = 10,
         points = 200,
+        weapon = singlePinkBullet,
         move = downTowardCenterBackUp
     },
     flame = {
@@ -154,6 +158,7 @@ eDefs = {
         hp = 1,
         rof = 10,
         points = 200,
+        weapon = singlePinkBullet,
         move = downWave
     },
     fighter = {
@@ -181,6 +186,7 @@ eDefs = {
         hp = 2,
         rof = 10,
         points = 300,
+        weapon = singlePinkBullet,
         move = downAcross
     },
     boss = {
@@ -209,6 +215,7 @@ eDefs = {
         hp = 30,
         rof = 10,
         points = 1000,
+        weapon = "spreadShot",
         moveTime = 45,
         stopTime = 5,
         move = down
@@ -261,6 +268,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         waveLen = enemyCfg.waveLen or 45,
         hp = enemyCfg.hp or 1,
         rof = enemyCfg.rof,
+        weapon = enemyCfg.weapon,
         bullXOffset = -1,
         bullYOffset = 6,
         attDelay = 0,
@@ -420,11 +428,12 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 end
 
                 if bullDelay <= 0 then
-                    g.singlePinkBullet(
-                    x + bullXOffset,
-                    y + bullYOffset,
-                    g.owner.enemy
-                )
+                    g.fireWeapon(
+                        g.weapons[weapon],
+                        x + bullXOffset,
+                        y + bullYOffset,
+                        g.owner.enemy
+                    )
                     bullDelay = rof + g.rnd(20)
                 end
 
