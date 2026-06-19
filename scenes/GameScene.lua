@@ -49,8 +49,6 @@ function updateGameScene()
 
 	-- Fire laser if Z pressed.
 	if btn(4) and canPlay then
-		local proCfg = getConfig(yellowLaser)
-
 		if ship.rof <= 0 then
 			singleYellowLaser(ship.x,
 					ship.y - ship.bulletOffset,

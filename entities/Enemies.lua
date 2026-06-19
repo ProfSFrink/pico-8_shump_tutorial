@@ -261,7 +261,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         waveLen = enemyCfg.waveLen or 45,
         hp = enemyCfg.hp or 1,
         rof = enemyCfg.rof,
-        bullOffset = 3,
+        bullXOffset = -1,
+        bullYOffset = 6,
         attDelay = 0,
         shake = 0,
         points = enemyCfg.points,
@@ -419,8 +420,11 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 end
 
                 if bullDelay <= 0 then
-                    g.singlePinkBullet(x,y + bullOffset,
-                    g.owner.enemy)
+                    g.singlePinkBullet(
+                    x + bullXOffset,
+                    y + bullYOffset,
+                    g.owner.enemy
+                )
                     bullDelay = rof + g.rnd(20)
                 end
 

@@ -8,7 +8,7 @@ __lua__
 #include ./util/Animate.lua
 #include ./util/Ease.lua
 #include ./behavior/EnemyMovement.lua
-#include ./behavior/FiringPatterns.lua
+#include ./behavior/ProjectilePatterns.lua
 #include ./scenes/GameScene.lua
 
 #include ./states/TitleState.lua

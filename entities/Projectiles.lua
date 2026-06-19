@@ -17,7 +17,8 @@ pTypes = {
                 fin = 17,
                 delay = 5
             },
-        spd = 3,
+        xSpd = 3,
+        ySpd = 3,
         hitBoxW = 1,
         hitBoxH = 1,
         hitBoxOffX = 1,
@@ -33,14 +34,15 @@ pTypes = {
                 curSpr = ani.start
             end
         end,
-        pattern = fireUp
+        pattern = up
     },
     yellowLaser = {
         ani = { start = 18,
                 fin = 21,
                 delay = 6
             },
-        spd = 4,
+        xSpd = 4,
+        ySpd = 4,
         hitBoxW = 1,
         hitBoxH = 5,
         hitBoxOffX = 1,
@@ -56,14 +58,15 @@ pTypes = {
                 curSpr = ani.start
             end
         end,
-        pattern = fireUp,
+        pattern = up,
     },
     pinkBullet = {
         ani = { start = 32,
                 fin = 34,
                 delay = 5
             },
-        spd = 3,
+        xSpd = 3,
+        ySpd = 3,
         hitBoxW = 1,
         hitBoxH = 1,
         hitBoxOffX = 2,
@@ -78,7 +81,7 @@ pTypes = {
                 curSpr = ani.start
             end
         end,
-        pattern = fireDown,
+        pattern = down,
     },
 }
 
@@ -100,20 +103,21 @@ end
 -- Projectile Factory logic.
 
 -- factory function for creating a single projectile.
--- @param proCfg: Projectile type definition.
+-- @param proCfg: Projectile type config object.
 -- @param proX: The x position.
 -- @param proY: The y position.
 -- @param proOwner: Player or enemy. 
 -- @return: A new projectile object.
-function newProjectile(proCfg, proX, proY, proOwner)
+function spawnProjectile(proCfg, proX, proY, proOwner)
     -- Local references to global scope.
     local g = _g
 
     return {
         x = proX + 2,
         y = proY,
+        xSpd = proCfg.xSpd,
+        ySpd = proCfg.ySpd,
         owner = proCfg.owner,
-        spd = proCfg.spd,
         dam = proCfg.dam,
 
         -- Hit box size, defaults to 8x8.
@@ -175,15 +179,15 @@ function singleYellowBullet(x, y, proOwner)
     local proCfg = getConfig(yellowBullet)
 
     if proOwner == owner.player then
-        proCfg.pattern = fireUp
+        proCfg.pattern = up
         ship.rof = proCfg.rof
     else
-        proCfg.pattern = fireDown
+        proCfg.pattern = down
     end
 
     proCfg.owner = proOwner
 
-    addProjectile(newProjectile(proCfg,x,y))
+    addProjectile(spawnProjectile(proCfg,x,y))
 
     sfx(proCfg.sfx)
 end
@@ -192,15 +196,15 @@ function singleYellowLaser(x, y, proOwner)
     local proCfg = getConfig(yellowLaser)
 
     if proOwner == owner.player then
-        proCfg.pattern = fireUp
+        proCfg.pattern = up
         ship.rof = proCfg.rof
     else
-        proCfg.pattern = fireDown
+        proCfg.pattern = down
     end
 
     proCfg.owner = proOwner
 
-    addProjectile(newProjectile(proCfg,x,y))
+    addProjectile(spawnProjectile(proCfg,x,y))
 
     sfx(proCfg.sfx)
 end
@@ -213,15 +217,15 @@ function singlePinkBullet(x, y, proOwner)
     local proCfg = getConfig(pinkBullet)
 
     if proOwner == owner.player then
-        proCfg.pattern = fireUp
+        proCfg.pattern = up
         ship.rof = proCfg.rof
     else
-        proCfg.pattern = fireDown
+        proCfg.pattern = down
     end
 
     proCfg.owner = proOwner
 
-    addProjectile(newProjectile(proCfg,x,y))
+    addProjectile(spawnProjectile(proCfg,x,y))
 
     sfx(proCfg.sfx)
 end
