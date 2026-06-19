@@ -255,7 +255,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
     local sfx = sfx
     local expCols = eneCols
     local uiHeight = uiHeight
-    local attackPlayer = attackPlayer
+    local chargePlayer = chargePlayer
     local g = _g
 
     return {
@@ -271,7 +271,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         weapon = enemyCfg.weapon,
         bullXOffset = -1,
         bullYOffset = 6,
-        attDelay = 0,
+        moveDelay = 0,
         shake = 0,
         points = enemyCfg.points,
         moving = false,
@@ -309,7 +309,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         aniDelay = enemyCfg.aniDelay,
 
         -- Delay between firing bullets.
-        bullDelay = enemyCfg.rof,
+        fireDelay = enemyCfg.rof,
 
         move = enemyCfg.move,
 
@@ -334,11 +334,36 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             curSpr = ani[flr(aniFrame)]
         end,
 
-        -- Have enemy attack player ship.
+        -- Attack the player ship.
         attack = function(_ENV)
+            fireDelay -= 1
+            moveDelay -= 1
+
+            if fireDelay > 0 and fireDelay <= flashTimerDefault then
+                curSpr = flashSpr
+            end
+
+
+            if moveDelay <= 0 then
+                move(_ENV, g.gameT)
+            end
+
+            if fireDelay <= 0 then
+                g.fireWeapon(
+                    g.weapons[weapon],
+                    x + bullXOffset,
+                    y + bullYOffset,
+                    g.owner.enemy
+                )
+                fireDelay = rof + g.rnd(20)
+            end
+        end,
+
+        -- Have enemy charge player ship.
+        charge = function(_ENV)
             if state != eneState.stopped then return end
             aniDelay *= 3
-            attDelay = 30
+            moveDelay = 30
             shake = 30
             state = eneState.attacking
         end,
@@ -360,7 +385,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 -- have new enemy start attacking.
                 if state == eneState.attacking then
                     if g.rnd() < 0.5 then
-                        attackPlayer(enemies)
+                        chargePlayer(enemies)
                     end
                     points = g.flr(points * 0.3)
                 end
@@ -416,28 +441,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 animate(_ENV)
             elseif state == eneState.attacking then
                 animate(_ENV)
-
-                if bullDelay > 0 and bullDelay <= flashTimerDefault then
-                    curSpr = flashSpr
-                end
-
-                attDelay -= 1
-
-                if attDelay <= 0 then
-                    move(_ENV, g.gameT)
-                end
-
-                if bullDelay <= 0 then
-                    g.fireWeapon(
-                        g.weapons[weapon],
-                        x + bullXOffset,
-                        y + bullYOffset,
-                        g.owner.enemy
-                    )
-                    bullDelay = rof + g.rnd(20)
-                end
-
-                bullDelay -= 1
+                attack(_ENV)
             end
 
             -- Remove if off-screen and not spawning.
