@@ -33,9 +33,8 @@ spawnEvents = {
 
 -- Sets up the game.
 function setupGame()
-	-- Setup game & Projectile timers (frames).
+	-- Setup game (frames).
 	gameT = 0
-	proT = 0
 
 	spawnDur = 40
 	attackDur = 40
@@ -44,18 +43,20 @@ function setupGame()
 	ship = newShip()
 
 	-- Setup player.
+	-- score: The current player score.
+	-- lives: The current number of lives.
+	-- bombs: The current number of bombs.
+	-- shotDelay: The delay in frames between shots.
 	player = {
 		score = 0,
 		lives = 4,
-		bombs = 2
+		bombs = 2,
+		shotDelay = 0
 	}
 
 	-- Setup for projectiles.
 	projectiles = {}
 	enemyProjectiles = {}
-
-	-- Tracks frames between shots.
-	proT = 0
 
 	-- Reset enemies table.
 	enemies = {}
