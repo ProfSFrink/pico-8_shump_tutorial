@@ -185,7 +185,7 @@ function singlePinkBullet(x, y, proOwner)
 
     if proOwner == owner.player then
         proCfg.pattern = fireUp
-        player.rof = proCfg.rof
+        ship.rof = proCfg.rof
     else
         proCfg.pattern = fireDown
     end

@@ -18,6 +18,8 @@ function newShip()
         -- Ship's current speed on each axis.
         xSpeed = 0,
 		ySpeed = 0,
+        -- Ship's current rate of fire.
+        rof = 0,
         -- Starting ship sprite.
         startSprite = 3,
 		-- Current ship sprite.

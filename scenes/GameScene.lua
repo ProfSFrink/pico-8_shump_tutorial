@@ -5,8 +5,9 @@ function updateGameScene()
 	-- advance game timer.
 	gameT += 1
 
-	-- Decrease player projectile timer.
-	player.rof -= 1
+	-- Decrease time until ship can
+	-- fire again.
+	ship.rof -= 1
 
 	-- Reset ship sprite and speed.
 	ship:reset()
@@ -38,9 +39,10 @@ function updateGameScene()
 
 	-- Fire bullet if X pressed.
 	if btn(5) and canPlay then
-		if player.rof <= 0 then
-			singlePinkBullet(ship.x, ship.y - ship.bulletOffset,
-			owner.player)
+		if ship.rof <= 0 then
+			singlePinkBullet(ship.x,
+					ship.y - ship.bulletOffset,
+					owner.player)
 			ship.muzzle = 4
 		end
 	end
@@ -49,10 +51,11 @@ function updateGameScene()
 	if btn(4) and canPlay then
 		local proCfg = getConfig(yellowLaser)
 
-		if player.rof <= 0 then
-			spawnPlayerProjectile(proCfg, ship.x, ship.y - ship.bulletOffset)
+		if ship.rof <= 0 then
+			spawnPlayerProjectile(proCfg, ship.x, 
+					ship.y - ship.bulletOffset)
 			ship.muzzle = 4
-			player.rof = proCfg.rof
+			ship.rof = proCfg.rof
 		end
 	end
 
@@ -138,11 +141,11 @@ function drawGameScene()
 		ship:draw(gameT)
 	end
 
-	-- Projectiles.
-	drawProjectiles()
-
 	-- Enemies.
 	drawEnemies()
+
+	-- Projectiles.
+	drawProjectiles()
 
 	-- Sparks.
 	drawSparks()
