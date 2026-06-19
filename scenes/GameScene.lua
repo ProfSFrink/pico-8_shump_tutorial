@@ -40,7 +40,7 @@ function updateGameScene()
 	-- Fire bullet if X pressed.
 	if btn(5) and canPlay then
 		if ship.rof <= 0 then
-			singlePinkBullet(ship.x,
+			singleYellowBullet(ship.x,
 					ship.y - ship.bulletOffset,
 					owner.player)
 			ship.muzzle = 4
@@ -52,10 +52,10 @@ function updateGameScene()
 		local proCfg = getConfig(yellowLaser)
 
 		if ship.rof <= 0 then
-			spawnPlayerProjectile(proCfg, ship.x, 
-					ship.y - ship.bulletOffset)
+			singleYellowLaser(ship.x,
+					ship.y - ship.bulletOffset,
+					owner.player)
 			ship.muzzle = 4
-			ship.rof = proCfg.rof
 		end
 	end
 

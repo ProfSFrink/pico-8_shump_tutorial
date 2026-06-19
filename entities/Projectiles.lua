@@ -170,9 +170,38 @@ end
 -- @param proCfg: Projectile type definition.
 -- @param x: Spawn x position.
 -- @param y: Spawn y position.
-function spawnPlayerProjectile(proCfg, x, y)
-    add(projectiles,
-        newProjectile(proCfg, x, y, owner.player))
+-- @param proOwner: The owner of the projectile.
+function singleYellowBullet(x, y, proOwner)
+    local proCfg = getConfig(yellowBullet)
+
+    if proOwner == owner.player then
+        proCfg.pattern = fireUp
+        ship.rof = proCfg.rof
+    else
+        proCfg.pattern = fireDown
+    end
+
+    proCfg.owner = proOwner
+
+    addProjectile(newProjectile(proCfg,x,y))
+
+    sfx(proCfg.sfx)
+end
+
+function singleYellowLaser(x, y, proOwner)
+    local proCfg = getConfig(yellowLaser)
+
+    if proOwner == owner.player then
+        proCfg.pattern = fireUp
+        ship.rof = proCfg.rof
+    else
+        proCfg.pattern = fireDown
+    end
+
+    proCfg.owner = proOwner
+
+    addProjectile(newProjectile(proCfg,x,y))
+
     sfx(proCfg.sfx)
 end
 
