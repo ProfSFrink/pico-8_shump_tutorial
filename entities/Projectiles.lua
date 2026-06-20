@@ -116,7 +116,7 @@ weapons = {
     },
     spreadYellowBullet = {
         rof = 4,
-        sfx = 29,
+        sfx = 0,
         xSpd = 0.5,
         ySpd = 3,
         dam = 1,

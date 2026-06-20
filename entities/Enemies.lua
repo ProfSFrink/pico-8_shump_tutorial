@@ -200,7 +200,9 @@ eDefs = {
         hitBoxW = 11,
         hitBoxH = 9,
         hitBoxOffX = 2,
-        hitBoxOffY = 3,
+        hitBoxOffY = 4,
+        bullXOffset = 4,
+        bullYOffset = 12,
         sprSize = 2,
         ani = { 96, 98 },
         nAni = {
@@ -215,7 +217,7 @@ eDefs = {
         hp = 30,
         rof = 10,
         points = 1000,
-        weapon = "spreadShot",
+        weapon = spreadYellowBullet,
         moveTime = 45,
         stopTime = 5,
         move = down
@@ -255,7 +257,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
     local sfx = sfx
     local expCols = eneCols
     local uiHeight = uiHeight
-    local chargePlayer = chargePlayer
+    local shakeEnemy = shakeEnemy
     local g = _g
 
     return {
@@ -269,10 +271,10 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         hp = enemyCfg.hp or 1,
         rof = enemyCfg.rof,
         weapon = enemyCfg.weapon,
-        bullXOffset = -1,
-        bullYOffset = 6,
+        bullXOffset = enemyCfg.bullXOffset or -1,
+        bullYOffset = enemyCfg.bullYOffset or 6,
         moveDelay = 0,
-        shake = 0,
+        shakeTimer = 0,
         points = enemyCfg.points,
         moving = false,
         movingLeft = false,
@@ -334,6 +336,16 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             curSpr = ani[flr(aniFrame)]
         end,
 
+        -- Fire a projectile.
+        fire = function(_ENV, overP)
+            g.fireWeapon(
+                g.weapons[weapon],
+                x + bullXOffset,
+                y + bullYOffset,
+                g.owner.enemy
+            )
+        end,
+
         -- Attack the player ship.
         attack = function(_ENV)
             fireDelay -= 1
@@ -343,28 +355,24 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 curSpr = flashSpr
             end
 
-
             if moveDelay <= 0 then
                 move(_ENV, g.gameT)
             end
 
+            -- TODO: Move to firing patterns ?.
+
             if fireDelay <= 0 then
-                g.fireWeapon(
-                    g.weapons[weapon],
-                    x + bullXOffset,
-                    y + bullYOffset,
-                    g.owner.enemy
-                )
+                fire(_ENV)
                 fireDelay = rof + g.rnd(20)
             end
         end,
 
-        -- Have enemy charge player ship.
-        charge = function(_ENV)
+        -- Have enemy shake before attacking.
+        shake = function(_ENV)
             if state != eneState.stopped then return end
             aniDelay *= 3
             moveDelay = 30
-            shake = 30
+            shakeTimer = 30
             state = eneState.attacking
         end,
 
@@ -385,7 +393,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 -- have new enemy start attacking.
                 if state == eneState.attacking then
                     if g.rnd() < 0.5 then
-                        chargePlayer(enemies)
+                        shakeEnemy(enemies)
                     end
                     points = g.flr(points * 0.3)
                 end
@@ -460,8 +468,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
             local sprX = x
 
-            if shake > 0 then
-                shake -= 1
+            if shakeTimer > 0 then
+                shakeTimer -= 1
                 if g.gameT % 4 < 2 then
                     sprX += 1
                 end

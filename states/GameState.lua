@@ -174,12 +174,12 @@ function spawnWaveRows(wave)
 	sfx(28)
 end
 
--- Have an enemy charge the player.
+-- Have an enemy shake before attacking.
 -- @param ene: The table of enemies to choose from.
-function chargePlayer(ene)
+function shakeEnemy(ene)
 	local e = rnd(ene)
 	if e and e:canCollide() then
-		e:charge()
+		e:shake()
 	end
 end
 
@@ -225,7 +225,7 @@ function updateGame()
 	end
 
 	if canAttack then
-		chargePlayer(rowEnemies)
+		shakeEnemy(rowEnemies)
 	end
 
 	-- Check for end of wave.
