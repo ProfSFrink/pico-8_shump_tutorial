@@ -43,7 +43,7 @@ eDefs = {
         xSpd = 0,
         ySpd = 1.25,
         hp = 2,
-        rof = 15,
+        rof = 10,
         points = 100,
         weapon = singlePinkBullet,
         move = stationary
@@ -215,11 +215,11 @@ eDefs = {
         xSpd = 0,
         ySpd = 0.35,
         hp = 30,
-        rof = 10,
+        rof = 5,
         points = 1000,
-        weapon = spreadYellowBullet,
         moveTime = 45,
         stopTime = 5,
+        weapon = spreadYellowBullet,
         move = down
     }
 }
@@ -362,8 +362,10 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             -- TODO: Move to firing patterns ?.
 
             if fireDelay <= 0 then
-                fire(_ENV)
-                fireDelay = rof + g.rnd(20)
+                --fire(_ENV)
+                g.enemySpreadFire(x + bullXOffset, y + bullYOffset, 8, 0.5, 2, g.time() / 16 ,dam)
+                fireDelay = rof
+                g.sfx(29)
             end
         end,
 
@@ -432,7 +434,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         -- Getter function for if the enemy can collide with the player or projectiles.
         canCollide = function(_ENV)
             -- Check if in bounds to prevent off-screen collisions.
-            return state != eneState.dead 
+            return state != eneState.dead
                and state != eneState.spawning
                and g.inBounds(_ENV)
         end,
@@ -474,7 +476,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                     sprX += 1
                 end
             end
-            
+
             if state == eneState.dead then
                 spr(curSpr, x, y, sprSize, sprSize, false, deathTimer % 2 == 0)
             else
@@ -484,7 +486,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             if g.debugMode then
                 g.showHitBox(_ENV)
             end
-            
+
             pal()
         end
     }

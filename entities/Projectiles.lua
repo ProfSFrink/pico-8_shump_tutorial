@@ -140,7 +140,7 @@ end
 
 -- Projectile Factory logic.
 
--- factory function for creating a single projectile.
+-- factory function for creating a single static projectile.
 -- @param proCfg: Projectile type config object.
 -- @param proX: The x position.
 -- @param proY: The y position.
@@ -150,7 +150,7 @@ end
 -- @param ySpd: Vertical speed from the weapon definition.
 -- @param dam: Damage from the weapon definition.
 -- @return: A new projectile object.
-function spawnProjectile(proCfg, proX, proY, proOwner, pattern, xSpd, ySpd, dam)
+function spawnStaticProjectile(proCfg, proX, proY, proOwner, pattern, xSpd, ySpd, dam)
     -- Local references to global scope.
     local g = _g
 
@@ -210,6 +210,81 @@ function spawnProjectile(proCfg, proX, proY, proOwner, pattern, xSpd, ySpd, dam)
     }
 end
 
+-- factory function for creating a single aimed projectile.
+-- @param proCfg: Projectile type config object.
+-- @param proX: The x position.
+-- @param proY: The y position.
+-- @param proOwner: Player or enemy.
+-- @param pattern: Movement pattern function.
+-- @param xSpd: Horizontal speed from the weapon definition.
+-- @param ySpd: Vertical speed from the weapon definition.
+-- @param dam: Damage from the weapon definition.
+-- @return: A new projectile object.
+
+function spawnAimedProjectile(proCfg, proX, proY, proOwner, spd, ang, dam)
+    -- Local references to global scope.
+    local g = _g
+
+    return {
+        x = proX + 2,
+        y = proY,
+        spd = spd,
+        ang = ang,
+        xSpd = g.sin(ang) * spd,
+        ySpd = g.cos(ang) * spd,
+        owner = proOwner,
+        dam = dam or 1,
+
+        -- Hit box size, defaults to 8x8.
+        hitBoxW = proCfg.hitBoxW or hitDefault,
+        hitBoxH = proCfg.hitBoxH or hitDefault,
+        hitBoxOffX = proCfg.hitBoxOffX or 0,
+        hitBoxOffY = proCfg.hitBoxOffY or 0,
+
+        animate = proCfg.animate,
+        -- pattern = pattern,
+
+        -- Current sprite being animated.
+        curSpr = proCfg.ani.start,
+        ani = proCfg.ani,
+        animTimer = 0,
+
+        -- Frames before animation advances.
+        animDelay = proCfg.ani.delay,
+
+
+        -- Update the projectile.
+        update = function(_ENV)
+            --pattern(_ENV)
+            x += xSpd
+            y += ySpd
+
+            animTimer += 1
+            if animTimer >= animDelay then
+                animTimer = 0
+                animate(_ENV)
+            end
+
+            -- Remove if off-screen.
+            if  x < 0 or
+                x > 128 or
+                y < g.uiHeight - g.bullHeight or 
+                y > 128 then
+                    g.removeProjectile(_ENV)
+            end
+        end,
+
+        -- Draw the projectile.
+        draw = function(_ENV)
+            spr(curSpr, x, y)
+
+            if g.debugMode then
+                g.showHitBox(_ENV)
+            end
+        end
+    }
+end
+
 -- Weapon functions.
 
 -- Fires a weapon definition, spawning all its shots.
@@ -224,7 +299,7 @@ function fireWeapon(wDef, x, y, proOwner)
         local proCfg = getConfig(shot.pType)
         local pat = isPlayer and shot.player or shot.enemy
         addProjectile(
-                spawnProjectile(proCfg, x, y, proOwner, pat,
+                spawnStaticProjectile(proCfg, x, y, proOwner, pat,
                 wDef.xSpd, wDef.ySpd, wDef.dam)
             )
     end
@@ -234,6 +309,19 @@ function fireWeapon(wDef, x, y, proOwner)
     end
 
     sfx(wDef.sfx)
+end
+
+function enemySpreadFire(x, y, num, ang, spd, base, dam)
+   local proCfg = getConfig(pinkBullet)
+
+   local base = base or 0
+
+   for i = 1, num do
+    addProjectile(
+        spawnAimedProjectile(proCfg, x, y, owner.enemy,
+        spd, 1 / num * i + base, dam)
+       )
+   end
 end
 
 -- Adds projectile to game based on its owner.
