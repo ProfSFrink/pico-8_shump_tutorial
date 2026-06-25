@@ -21,6 +21,7 @@
 -- move: Movement function to use.
 eDefs = {
     alien = {
+        name = "alien",
         cols = {
             { c1 = 11, c2 = 3 }, -- Green.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -33,22 +34,21 @@ eDefs = {
         hitBoxOffX = 1,
         hitBoxOffY = 1,
         ani = { 80, 81, 82, 83 },
-        nAni = {
-            start = 80,
-            fin = 81,
-            delay = 0.4
-        },
         flash = 84,
         aniDelay = 0.4,
         xSpd = 0,
         ySpd = 1.25,
         hp = 2,
-        rof = 10,
+        rof = 30,
+        dam = 1,
+        ang = 1,
+        pSpd = 2,
         points = 100,
         weapon = singlePinkBullet,
         move = stationary
     },
     ufo = {
+        name = "ufo",
         cols = {
             { c1 = 12, c2 = 1 }, -- Blue.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -61,22 +61,21 @@ eDefs = {
         hitBoxOffX = 1,
         hitBoxOffY = 3,
         ani = { 64, 65, 66, 67 },
-        nAni = {
-            start = 64,
-            fin = 67,
-            delay = 0.4
-        },
         flash = 68,
         aniDelay = 0.4,
         xSpd = 1,
         ySpd = 1,
         hp = 2,
         rof = 10,
+        dam = 1,
+        ang = 0.875,
+        pSpd = 2,
         points = 175,
         weapon = singlePinkBullet,
         move = downWaveSlow
     },
     eyeball = {
+        name = "eyeball",
         cols = {
             { c1 = 8, c2 = 2 }, -- Red.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -89,22 +88,19 @@ eDefs = {
         hitBoxOffX = 1,
         hitBoxOffY = 1,
         ani = { 69, 70, 71, 72 },
-        nAni = {
-            start = 69,
-            fin = 72,
-            delay = 0.4
-        },
         flash = 73,
         aniDelay = 0.4,
         xSpd = 0.6,
         ySpd = 0.6,
         hp = 3,
         rof = 10,
+        dam = 1,
         points = 150,
         weapon = singlePinkBullet,
         move = downWave
     },
     redeye = {
+        name = "redeye",
         cols = {
             { c1 = 5, c2 = 8 }, -- Grey / Red.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -117,22 +113,19 @@ eDefs = {
         hitBoxOffX = 1,
         hitBoxOffY = 1,
         ani = { 88, 89, 90, 91, 92 },
-        nAni = {
-            start = 88,
-            fin = 92,
-            delay = 0.4
-        },
         flash = 93,
         aniDelay = 0.4,
         xSpd = 1.5,
         ySpd = 1.2,
         hp = 3,
         rof = 10,
+        dam = 1,
         points = 200,
         weapon = singlePinkBullet,
         move = downTowardCenterBackUp
     },
     flame = {
+        name= "flame",
         cols = {
             { c1 = 8, c2 = 2 }, -- Grey / Red.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -145,11 +138,6 @@ eDefs = {
         hitBoxOffX = 1,
         hitBoxOffY = 3,
         ani = { 85, 86 },
-        nAni = {
-            start = 85,
-            fin = 86,
-            delay = 0.4
-        },
         flash = 87,
         aniDelay = 0.4,
         xSpd = 2.5,
@@ -157,11 +145,13 @@ eDefs = {
         waveLen = 20,
         hp = 1,
         rof = 10,
+        dam = 1,
         points = 200,
         weapon = singlePinkBullet,
         move = downWave
     },
     fighter = {
+        name = "fighter",
         cols = {
             { c1 = 1, c2 = 5 }, -- Blue / Grey.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -174,22 +164,19 @@ eDefs = {
         hitBoxOffX = 1,
         hitBoxOffY = 1,
         ani = { 74, 75, 76, 77 },
-        nAni = {
-            start = 74,
-            fin = 77,
-            delay = 0.4
-        },
         flash = 78,
         aniDelay = 0.4,
         xSpd = 0,
         ySpd = 0,
         hp = 2,
         rof = 10,
+        dam = 1,
         points = 300,
         weapon = singlePinkBullet,
         move = downAcross
     },
     boss = {
+        name = "boss",
         cols = {
             { c1 = 6, c2 = 14 }, -- Grey / Yellow.
             { c1 = 9, c2 = 4 }, -- Brown.
@@ -205,17 +192,13 @@ eDefs = {
         bullYOffset = 12,
         sprSize = 2,
         ani = { 96, 98 },
-        nAni = {
-            start = 96,
-            fin = 81,
-            delay = 0.4
-        },
         flash = 100,
         aniDelay = 0.4,
         xSpd = 0,
         ySpd = 0.35,
         hp = 30,
         rof = 5,
+        dam = 1,
         points = 1000,
         moveTime = 45,
         stopTime = 5,
@@ -270,6 +253,9 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         waveLen = enemyCfg.waveLen or 45,
         hp = enemyCfg.hp or 1,
         rof = enemyCfg.rof,
+        dam = enemyCfg.dam,
+        ang = enemyCfg.ang or 1,
+        pSpd = enemyCfg.pSpd or 2,
         weapon = enemyCfg.weapon,
         bullXOffset = enemyCfg.bullXOffset or -1,
         bullYOffset = enemyCfg.bullYOffset or 6,
@@ -338,12 +324,16 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
         -- Fire a projectile.
         fire = function(_ENV, overP)
-            g.fireWeapon(
-                g.weapons[weapon],
-                x + bullXOffset,
-                y + bullYOffset,
-                g.owner.enemy
-            )
+            local offsetX = x + bullXOffset
+            local offsetY = y + bullYOffset
+
+            if name == "boss" then
+                g.enemySpreadShot(offsetX, offsetY,
+                                  8, 2, g.time() / 16 ,dam)
+            else
+                g.enemySingleShot(offsetX, offsetY,
+                                  ang, pSpd, dam)
+            end
         end,
 
         -- Attack the player ship.
@@ -362,8 +352,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             -- TODO: Move to firing patterns ?.
 
             if fireDelay <= 0 then
-                --fire(_ENV)
-                g.enemySpreadFire(x + bullXOffset, y + bullYOffset, 8, 0.5, 2, g.time() / 16 ,dam)
+                fire(_ENV)
+
                 fireDelay = rof
                 g.sfx(29)
             end
