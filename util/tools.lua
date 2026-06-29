@@ -45,6 +45,13 @@ function ranInt(min, max)
     return flr(rnd(max - min + 1)) + min
 end
 
+-- Calculates the angle between two objects.
+-- @param a: the first object.
+-- @param b: the second object.
+function calcAngle(a, b)
+    return atan2((b.y - a.y), (b.x - a.x))
+end
+
 -- Logs text to a file for debugging purposes.
 -- @param text: the text to log.
 -- @param overwrite: if true, start new log file.

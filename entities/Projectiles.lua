@@ -91,20 +91,21 @@ end
 -- @param proCfg: Projectile type config object.
 -- @param proX: The x position.
 -- @param proY: The y position.
--- @param spd: The base speed of the projectile.
 -- @param ang: The angle the projectile moves in.
+-- @param spd: The base speed of the projectile.
 -- @param dam: Damage value.
 -- @param proOwner: Player or enemy.
 -- @return: A new projectile object.
-function newProjectile(proCfg, proX, proY, spd, ang, dam, proOwner)
+function newProjectile(proCfg, proX, proY, ang, spd, dam, proOwner)
     local g = _g
 
     return {
         x = proX + 2,
         y = proY,
 
-        ang = ang,
         spd = spd,
+        ang = ang,
+
         xSpd = g.sin(ang) * spd,
         ySpd = g.cos(ang) * spd,
 
@@ -122,13 +123,10 @@ function newProjectile(proCfg, proX, proY, spd, ang, dam, proOwner)
         animTimer = 0,
         animDelay = proCfg.ani.delay,
 
-        move = function(_ENV)
+        update = function(_ENV)
+
             x += xSpd
             y += ySpd
-        end,
-
-        update = function(_ENV)
-            move(_ENV)
 
             animTimer += 1
             if animTimer >= animDelay then
@@ -164,13 +162,14 @@ end
 function spreadShot(proCfg, x, y, num, spd, base, dam, proOwner)
     local base = base or 0
 
-   for i = 1, num do
+    for i = 1, num do
 
     addProjectile(
         newProjectile(proCfg, x, y,
-        spd, 1 / num * i + base, dam, proOwner)
-       )
-   end
+                      1 / num * i + base, spd,
+                      dam, proOwner)
+        )
+    end
 end
 
 
@@ -185,7 +184,7 @@ end
 function singleShot(proCfg, x, y, ang, spd, dam, proOwner)
     addProjectile(
         newProjectile(proCfg, x, y,
-                        spd, ang, dam, proOwner)
+                        ang, spd, dam, proOwner)
     )
 end
 
