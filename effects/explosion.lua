@@ -23,10 +23,8 @@ shipCols = { 1, 1, 12, 7 }
 -- @return: A new explosion object.
 function newExpObj(expX, expY, objSpdY, expCols)
      -- Local references to global scope.
-     local exps = exps
+     local g = _g
 
-    -- Colours for explosions.
-    local cols = expCols
     return {
         x = expX + 4,
         y = expY + 4,
@@ -54,17 +52,17 @@ function newExpObj(expX, expY, objSpdY, expCols)
 
             -- Change colour as explosion expires.
             if life / maxLife < .25 then
-                col = cols[1]
+                col = expCols[1]
             elseif life / maxLife < .5 then
-                col = cols[2]
+                col = expCols[2]
             elseif life / maxLife < .75 then
-                col = cols[3]
+                col = expCols[3]
             else
-                col = cols[4]
+                col = expCols[4]
             end
 
             if life <= 0 then
-                del(exps, _ENV)
+                del(g.exps, _ENV)
             end
         end,
 
