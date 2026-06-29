@@ -92,7 +92,7 @@ eDefs = {
 
         hp = 2,
 
-        rof = 10,
+        rof = 30,
         dam = 1,
         ang = 0.875,
         pSpd = 2,
@@ -313,7 +313,6 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         dam = enemyCfg.dam,
         ang = enemyCfg.ang or 1,
         pSpd = enemyCfg.pSpd or 2,
-        weapon = enemyCfg.weapon,
 
         moveDelay = 0,
         shakeTimer = 0,
@@ -373,22 +372,34 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
         -- Fire a projectile.
         fire = function(_ENV, overP)
-            local offsetX = x + bullXOffset
-            local offsetY = y + bullYOffset
             local proCfg = g.getProConfig(g.pinkBullet)
 
             if name == "boss" then
-                g.spreadShot(proCfg, offsetX, offsetY,
+                g.spreadShot(proCfg, firingX, firingY,
                              8, 2, g.time() / 16, dam,
                              g.owner.enemy)
+
+            elseif name == "ufo" then
+                g.directedSpreadShot(proCfg, firingX, firingY,
+                             3, 2, 1, dam,
+                             g.owner.enemy)
+
+            elseif name == "fighter" then
+                g.singleShot(proCfg, firingX, firingY,
+                             g.calcAngle(_ENV, g.ship),
+                             pSpd, dam, g.owner.enemy)
+
             else
-                g.singleShot(proCfg, offsetX, offsetY,
+                g.singleShot(proCfg, firingX, firingY,
                              ang, pSpd, dam, g.owner.enemy)
             end
         end,
 
         -- Attack the player ship.
         attack = function(_ENV)
+            firingX = x + bullXOffset
+            firingY = y + bullYOffset
+
             fireDelay -= 1
             moveDelay -= 1
 

@@ -1,20 +1,5 @@
 -- Game Scene - Shared gameplay scene.
 
--- Fire a projectile from the ship.
--- @param x: The x position.
--- @param y: The y position.
--- @param proCfg: The projectile config to use.
--- @param wepCfg: The weapon config to use.
-function fireProjectile(x, y, proCfg, wepCfg)
-	singleShot(proCfg, x, y, ship.ang, wepCfg.spd,
-			   wepCfg.dam, owner.player)
-
-	ship.rof = wepCfg.rof
-	ship.muzzle = 4
-
-	sfx(wepCfg.sfx)
-end
-
 -- Updates gameplay simulation.
 function updateGameScene()
 	-- advance game timer.
@@ -50,25 +35,34 @@ function updateGameScene()
 		ship:move("down")
 	end
 
-	-- Fire shot if X pressed.
-	if btn(5) and canPlay then
+	-- Fire shot if Z pressed.
+	if btn(4) and canPlay then
+		local wepCfg = getWepConfig(ship.weaponOne)
+
 		if ship.rof <= 0 then
-			fireProjectile(ship.x,
+			wepCfg.fireFunc(ship.x,
 					ship.y - ship.bulletOffset,
-					getProConfig(yellowBullet),
-					getWepConfig(yellowBullet)
+					wepCfg
 			)
 		end
+
+		ship.rof = wepCfg.rof
+		ship.muzzle = 4
 	end
 
-	-- Fire laser if Z pressed.
-	if btn(4) and canPlay then
+	-- Fire laser if X pressed.
+	if btn(5) and canPlay then
+		local wepCfg = getWepConfig(ship.weaponTwo)
+
 		if ship.rof <= 0 then
-			fireProjectile(ship.x,
+			wepCfg.fireFunc(ship.x,
 					ship.y - ship.bulletOffset,
-					getProConfig(yellowLaser),
-					getWepConfig(yellowLaser))
+					wepCfg
+			)
 		end
+
+		ship.rof = wepCfg.rof
+		ship.muzzle = 4
 	end
 
     -- NOTE: This will only allows co-routines in the game scene,

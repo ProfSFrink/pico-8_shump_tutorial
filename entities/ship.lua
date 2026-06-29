@@ -1,26 +1,3 @@
--- Ship weapon definitions.
-weapons = {
-    yellowBullet = {
-        spd = 3,
-        dam = 1,
-        rof = 4,
-        sfx = 0,
-    },
-    yellowLaser = {
-        spd = 4,
-        dam = 2,
-        rof = 8,
-        sfx = 2,
-    },
-}
-
--- Get the configuration of a ship weapon type.
--- @param wepType: The weapon type.
--- @return: The weapon configuration.
-function getWepConfig(wepType)
-    return weapons[wepType]
-end
-
 -- Ship component logic.
 
 -- TODO: Animate the flame when the ship is moving up and down.
@@ -68,6 +45,9 @@ function newShip()
         rof = 0,
 		-- Size of muzzles flash.
 		muzzle = 0,
+
+        weaponOne = singleYellowBullet,
+        weaponTwo = singleYellowLaser,
 
 		-- Invulnerability timer in frames.
 		invul = 0,

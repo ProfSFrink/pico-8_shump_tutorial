@@ -53,6 +53,7 @@ function downAcross(e)
         e.ySpd = 2
         if ship.y <= e.y then
             e.ySpd = 0
+
             if ship.x < e.x then
                 e.xSpd = -2
             else

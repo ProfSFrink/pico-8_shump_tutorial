@@ -149,7 +149,7 @@ end
 
 -- Firing functions.
 
--- Fires projectile in spiral pattern.
+-- Fires a spread shot, using all 360 degrees.
 -- @param proCfg: The config of the projectile to use.
 -- @param x: Spawn x position.
 -- @param y: Spawn y position.
@@ -172,6 +172,35 @@ function spreadShot(proCfg, x, y, num, spd, base, dam, proOwner)
     end
 end
 
+-- Fires a spread shot, using all 360 degrees.
+-- @param proCfg: The config of the projectile to use.
+-- @param x: Spawn x position.
+-- @param y: Spawn y position.
+-- @param num: The number of projectiles.
+-- @param ang: Angle of direction to fire in (pico-8 units).
+-- @param spd: Projectile speed.
+-- @param dam: Damage from the weapon definition.
+-- @param proOwner: The owner of the projectile.
+function directedSpreadShot(proCfg, x, y, num, spd, ang, dam, proOwner)
+  -- ang is the center direction (1 for down, 0.5 for up)
+  local ang = ang or 0.25
+
+  -- width of the total spread cone (0.15 is roughly 54 degrees)
+  local spreadArc = 0.15
+
+  for i = 1, num do
+
+    local offset = (i - 1) / (num - 1) - 0.5
+    if num == 1 then offset = 0 end
+
+    local finalAngle = ang + (offset * spreadArc)
+
+    addProjectile(
+      newProjectile(proCfg, x, y, finalAngle, spd, dam, proOwner)
+    )
+  end
+
+end
 
 -- Fires a single projectile.
 -- @param proCfg: The config of the projectile to use.

@@ -7,8 +7,15 @@ __lua__
 #include ./util/Async.lua
 #include ./util/Animate.lua
 #include ./util/Ease.lua
+#include ./effects/Shockwave.lua
+#include ./effects/Explosion.lua
+#include ./effects/Spark.lua
+#include ./entities/Starfield.lua
+#include ./entities/Projectiles.lua
+#include ./entities/Weapons.lua
+#include ./entities/Ship.lua
 #include ./behavior/EnemyMovement.lua
-#include ./behavior/ProjectileMovement.lua
+#include ./entities/Enemies.lua
 #include ./scenes/GameScene.lua
 
 #include ./states/TitleState.lua
@@ -17,13 +24,6 @@ __lua__
 #include ./states/GameState.lua
 #include ./states/GameOverState.lua
 #include ./states/WinState.lua
-#include ./entities/Ship.lua
-#include ./entities/Projectiles.lua
-#include ./entities/Starfield.lua
-#include ./entities/Enemies.lua
-#include ./effects/Explosion.lua
-#include ./effects/Shockwave.lua
-#include ./effects/Spark.lua
 
 __gfx__
 00000000000220000002200000022000000220000002200000000000000000000000000000000000000000000000000000000000088008800880088000000000

@@ -19,6 +19,27 @@ function calcCenX(width)
     return (128 - width * 4) / 2
 end
 
+-- Calculates the angle between two objects.
+-- @param a: the first object.
+-- @param b: the second object.
+function calcAngle(a, b)
+    return atan2((b.y - a.y), (b.x - a.x))
+end
+
+-- Returns a random integer between the provided min and max values.
+-- @param min: the minimum value.
+-- @param max: the maximum value.
+function ranInt(min, max)
+    return flr(rnd(max - min + 1)) + min
+end
+
+-- Returns a random float between the provided min and max values.
+-- @param min: the minimum value.
+-- @param max: the maximum value.
+function ranFloat(min, max)
+    return rnd(max - min) + min
+end
+
 -- Cycles through colors for blinking text.
 -- @return: the color value for the current blink frame.
 function blink()
@@ -29,27 +50,6 @@ function blink()
     end
 
     return banim[blinkT]
-end
-
--- Returns a random float between the provided min and max values.
--- @param min: the minimum value.
--- @param max: the maximum value.
-function ranFloat(min, max)
-    return rnd(max - min) + min
-end
-
--- Returns a random integer between the provided min and max values.
--- @param min: the minimum value.
--- @param max: the maximum value.
-function ranInt(min, max)
-    return flr(rnd(max - min + 1)) + min
-end
-
--- Calculates the angle between two objects.
--- @param a: the first object.
--- @param b: the second object.
-function calcAngle(a, b)
-    return atan2((b.y - a.y), (b.x - a.x))
 end
 
 -- Logs text to a file for debugging purposes.
