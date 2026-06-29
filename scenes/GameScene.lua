@@ -1,4 +1,19 @@
--- Game Scene - Shared gameplay simulation and rendering.
+-- Game Scene - Shared gameplay scene.
+
+-- Fire a projectile from the ship.
+-- @param x: The x position.
+-- @param y: The y position.
+-- @param proCfg: The projectile config to use.
+-- @param wepCfg: The weapon config to use.
+function fireProjectile(x, y, proCfg, wepCfg)
+	singleShot(proCfg, x, y, ship.ang, wepCfg.spd,
+			   wepCfg.dam, owner.player)
+
+	ship.rof = wepCfg.rof
+	ship.muzzle = 4
+
+	sfx(wepCfg.sfx)
+end
 
 -- Updates gameplay simulation.
 function updateGameScene()
@@ -35,25 +50,27 @@ function updateGameScene()
 		ship:move("down")
 	end
 
-	-- Fire spread shot if X pressed.
+	-- Fire shot if X pressed.
 	if btn(5) and canPlay then
 		if ship.rof <= 0 then
-			fireWeapon(weapons.singleYellowBullet,
-					ship.x,
+			local proCfg = getProConfig(yellowBullet)
+			local wepCfg = getWepConfig(yellowBullet)
+
+			fireProjectile(ship.x,
 					ship.y - ship.bulletOffset,
-					owner.player)
-			ship.muzzle = 4
+					proCfg, wepCfg)
 		end
 	end
 
 	-- Fire laser if Z pressed.
 	if btn(4) and canPlay then
 		if ship.rof <= 0 then
-			fireWeapon(weapons.singleYellowLaser,
-					ship.x,
+			local proCfg = getProConfig(yellowLaser)
+			local wepCfg = getWepConfig(yellowLaser)
+
+			fireProjectile(ship.x,
 					ship.y - ship.bulletOffset,
-					owner.player)
-			ship.muzzle = 4
+					proCfg, wepCfg)
 		end
 	end
 
@@ -118,7 +135,7 @@ function updateGameScene()
 			if hasCollided(ep, ship) and ship.invul <= 0 then
 				player.lives -= 1
 				ship:hit()
-				removeProjectile(ep)			
+				removeProjectile(ep)
 			end
 		end
 	end

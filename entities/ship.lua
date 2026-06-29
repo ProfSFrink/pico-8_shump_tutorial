@@ -1,3 +1,26 @@
+-- Ship weapon definitions.
+weapons = {
+    yellowBullet = {
+        spd = 3,
+        dam = 1,
+        rof = 4,
+        sfx = 0,
+    },
+    yellowLaser = {
+        spd = 4,
+        dam = 2,
+        rof = 8,
+        sfx = 2,
+    },
+}
+
+-- Get the configuration of a ship weapon type.
+-- @param wepType: The weapon type.
+-- @return: The weapon configuration.
+function getWepConfig(wepType)
+    return weapons[wepType]
+end
+
 -- Ship component logic.
 
 -- TODO: Animate the flame when the ship is moving up and down.
@@ -12,14 +35,21 @@ function newShip()
 		-- Starting position.
 		x = g.shipStartX,
 		y = g.shipStartY,
+
 		-- Speed the ship is allowed to move on each axis.
 		xMaxSpeed = 2,
 		yMaxSpeed = 2,
+
         -- Ship's current speed on each axis.
         xSpeed = 0,
 		ySpeed = 0,
-        -- Ship's current rate of fire.
-        rof = 0,
+
+        -- Hit box size, defaults to 8x8.
+        hitBoxW = 3,
+        hitBoxH = 2,
+        hitBoxOffX = 2,
+        hitBoxOffY = 4,
+
         -- Starting ship sprite.
         startSprite = 3,
 		-- Current ship sprite.
@@ -30,22 +60,21 @@ function newShip()
         -- Current ship flame sprite.
 		flameSprite = 7,
 
-        -- Hit box size, defaults to 8x8.
-        hitBoxW = 3,
-        hitBoxH = 2,
-        hitBoxOffX = 2,
-        hitBoxOffY = 4,
-
 		-- Offset for bullets.
 		bulletOffset = 3,
+        -- Angle of fired-projectiles.
+        ang = 0.5,
+        -- Ship's current rate of fire.
+        rof = 0,
 		-- Size of muzzles flash.
 		muzzle = 0,
+
 		-- Invulnerability timer in frames.
 		invul = 0,
 		-- Delay between losing last life
         -- showing game over screen.
 		deathTimer = 30,
-        
+
         -- Move the ship in a direction based on input.
         -- @param button: The button index for the direction to move.
         move = function(_ENV, button)
