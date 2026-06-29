@@ -53,24 +53,21 @@ function updateGameScene()
 	-- Fire shot if X pressed.
 	if btn(5) and canPlay then
 		if ship.rof <= 0 then
-			local proCfg = getProConfig(yellowBullet)
-			local wepCfg = getWepConfig(yellowBullet)
-
 			fireProjectile(ship.x,
 					ship.y - ship.bulletOffset,
-					proCfg, wepCfg)
+					getProConfig(yellowBullet),
+					getWepConfig(yellowBullet)
+			)
 		end
 	end
 
 	-- Fire laser if Z pressed.
 	if btn(4) and canPlay then
 		if ship.rof <= 0 then
-			local proCfg = getProConfig(yellowLaser)
-			local wepCfg = getWepConfig(yellowLaser)
-
 			fireProjectile(ship.x,
 					ship.y - ship.bulletOffset,
-					proCfg, wepCfg)
+					getProConfig(yellowLaser),
+					getWepConfig(yellowLaser))
 		end
 	end
 

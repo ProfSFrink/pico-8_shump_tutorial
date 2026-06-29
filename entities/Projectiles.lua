@@ -87,7 +87,7 @@ end
 
 -- Projectile Factory logic.
 
--- Base factory shared by all projectile types.
+-- Factory function for creating projectiles.
 -- @param proCfg: Projectile type config object.
 -- @param proX: The x position.
 -- @param proY: The y position.
@@ -96,7 +96,7 @@ end
 -- @param dam: Damage value.
 -- @param proOwner: Player or enemy.
 -- @return: A new projectile object.
-function spawnBaseProjectile(proCfg, proX, proY, spd, ang, dam, proOwner)
+function newProjectile(proCfg, proX, proY, spd, ang, dam, proOwner)
     local g = _g
 
     return {
@@ -149,21 +149,6 @@ function spawnBaseProjectile(proCfg, proX, proY, spd, ang, dam, proOwner)
     }
 end
 
--- Creates a projectile that moves toward a computed angle.
--- @param proCfg: Projectile type config object.
--- @param proX: The x position.
--- @param proY: The y position.
--- @param proOwner: Player or enemy.
--- @param spd: Projectile speed.
--- @param ang: Angle in PICO-8 units (0-1 = full circle, 0 = down).
--- @param dam: Damage from the weapon definition.
--- @return: A new projectile object.
-function spawnAimedProjectile(proCfg, proX, proY, proOwner, spd, ang, dam)
-    local p = spawnBaseProjectile(proCfg, proX, proY, spd, ang, dam, proOwner)
-
-    return p
-end
-
 -- Firing functions.
 
 -- Fires projectile in spiral pattern.
@@ -182,8 +167,8 @@ function spreadShot(proCfg, x, y, num, spd, base, dam, proOwner)
    for i = 1, num do
 
     addProjectile(
-        spawnAimedProjectile(proCfg, x, y, proOwner,
-        spd, 1 / num * i + base, dam)
+        newProjectile(proCfg, x, y,
+        spd, 1 / num * i + base, dam, proOwner)
        )
    end
 end
@@ -199,8 +184,8 @@ end
 -- @param proOwner: The owner of the projectile.
 function singleShot(proCfg, x, y, ang, spd, dam, proOwner)
     addProjectile(
-        spawnAimedProjectile(proCfg, x, y, proOwner,
-                        spd, ang, dam)
+        newProjectile(proCfg, x, y,
+                        spd, ang, dam, proOwner)
     )
 end
 
