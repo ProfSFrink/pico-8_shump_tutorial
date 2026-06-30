@@ -36,9 +36,9 @@ end
 
 -- String literals for weapon types.
 
-singleYellowBullet = "singleYellowBullet"
-singleYellowLaser = "singleYellowLaser"
-threeShotYellowBullet = "threeShotYellowBullet"
+singleBullet = "singleBullet"
+singleLaser = "singleLaser"
+threeShotBullet = "threeShotBullet"
 
 -- Weapon definitions (Player Ship ONLY).
 -- Weapon name.
@@ -50,7 +50,7 @@ threeShotYellowBullet = "threeShotYellowBullet"
 -- fireFunc: The fire function the weapon uses.
 
 weapons = {
-    singleYellowBullet = {
+    singleBullet = {
         pCfg = yellowBullet,
         spd = 3,
         dam = 1,
@@ -58,7 +58,7 @@ weapons = {
         sfx = 0,
         fireFunc = fireSingleShot
     },
-    singleYellowLaser = {
+    singleLaser = {
         pCfg = yellowLaser,
         spd = 4,
         dam = 2,
@@ -66,7 +66,7 @@ weapons = {
         sfx = 2,
         fireFunc = fireSingleShot
     },
-    threeShotYellowBullet = {
+    threeShotBullet = {
         pCfg = yellowBullet,
         spd = 3,
         dam = 1,

@@ -46,8 +46,8 @@ function newShip()
 		-- Size of muzzles flash.
 		muzzle = 0,
 
-        weaponOne = singleYellowBullet,
-        weaponTwo = singleYellowLaser,
+        weaponOne = singleBullet,
+        weaponTwo = singleLaser,
 
 		-- Invulnerability timer in frames.
 		invul = 0,

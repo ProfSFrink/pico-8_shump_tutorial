@@ -35,34 +35,34 @@ function updateGameScene()
 		ship:move("down")
 	end
 
-	-- Fire shot if Z pressed.
+	-- Fire ship weapon one if Z pressed.
 	if btn(4) and canPlay then
-		local wepCfg = getWepConfig(ship.weaponOne)
-
 		if ship.rof <= 0 then
+			local wepCfg = getWepConfig(ship.weaponOne)
+
 			wepCfg.fireFunc(ship.x,
 					ship.y - ship.bulletOffset,
 					wepCfg
 			)
-		end
 
-		ship.rof = wepCfg.rof
-		ship.muzzle = 4
+			ship.rof = wepCfg.rof
+			ship.muzzle = 4
+		end
 	end
 
-	-- Fire laser if X pressed.
+	-- Fire ship weapon two if X pressed.
 	if btn(5) and canPlay then
-		local wepCfg = getWepConfig(ship.weaponTwo)
-
 		if ship.rof <= 0 then
+			local wepCfg = getWepConfig(ship.weaponTwo)
+
 			wepCfg.fireFunc(ship.x,
 					ship.y - ship.bulletOffset,
 					wepCfg
 			)
-		end
 
-		ship.rof = wepCfg.rof
-		ship.muzzle = 4
+			ship.rof = wepCfg.rof
+			ship.muzzle = 4
+		end
 	end
 
     -- NOTE: This will only allows co-routines in the game scene,
