@@ -20,10 +20,12 @@ function calcCenX(width)
 end
 
 -- Calculates the angle between two objects.
--- @param a: the first object.
--- @param b: the second object.
-function calcAngle(a, b)
-    return atan2((b.y - a.y), (b.x - a.x))
+-- @param aX: X-Axis of the first object.
+-- @param aY: Y-Axis of the first object.
+-- @param bX: X-Axis of the second object.
+-- @param bY: Y-Axis of the second object.
+function calcAngle(aX, aY, bX, bY)
+    return atan2((bY - aY), (bX - aX))
 end
 
 -- Returns a random integer between the provided min and max values.

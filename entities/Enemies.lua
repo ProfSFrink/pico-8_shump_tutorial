@@ -246,13 +246,13 @@ eDefs = {
         flash = 100,
         aniDelay = 0.4,
 
-        xSpd = 0,
+        xSpd = -0.5,
         ySpd = 0.35,
-        move = down,
+        move = leftRight,
 
         hp = 30,
 
-        rof = 5,
+        rof = 20,
         dam = 1,
         moveTime = 45,
         stopTime = 5,
@@ -374,32 +374,34 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         fire = function(_ENV, overP)
             local proCfg = g.getProConfig(g.pinkBullet)
 
+            -- Calculate enemy projectile spawn point.
+            local firing = {
+                            x = x + bullXOffset,
+                            y = y + bullYOffset
+                        }
+
             if name == "boss" then
-                g.spreadShot(proCfg, firingX, firingY,
-                             8, 2, g.time() / 16, dam,
+                g.spreadShot(proCfg, firing.x, firing.y,
+                             8, 1.3, 0, dam,
                              g.owner.enemy)
 
             elseif name == "ufo" then
-                g.directedSpreadShot(proCfg, firingX, firingY,
+                g.directedSpreadShot(proCfg, firing.x, firing.y,
                              3, 2, 1, dam,
                              g.owner.enemy)
 
-            elseif name == "fighter" then
-                g.singleShot(proCfg, firingX, firingY,
-                             g.calcAngle(_ENV, g.ship),
-                             pSpd, dam, g.owner.enemy)
+            elseif name == "flame" then
+                g.aimedSingleShot(proCfg, firing.x, firing.y,
+                                  pSpd, dam, g.owner.enemy)
 
             else
-                g.singleShot(proCfg, firingX, firingY,
+                g.singleShot(proCfg, firing.x, firing.y,
                              ang, pSpd, dam, g.owner.enemy)
             end
         end,
 
         -- Attack the player ship.
         attack = function(_ENV)
-            firingX = x + bullXOffset
-            firingY = y + bullYOffset
-
             fireDelay -= 1
             moveDelay -= 1
 

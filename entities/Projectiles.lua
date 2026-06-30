@@ -217,6 +217,29 @@ function singleShot(proCfg, x, y, ang, spd, dam, proOwner)
     )
 end
 
+-- Fires a single projectile.
+-- @param proCfg: The config of the projectile to use.
+-- @param x: Spawn x position.
+-- @param y: Spawn y position.
+-- @param spd: Projectile speed.
+-- @param dam: Damage from the weapon definition.
+-- @param proOwner: The owner of the projectile.
+function aimedSingleShot(proCfg, x, y, spd, dam, proOwner)
+    -- Get co-ordinates for ships hit-box.
+    local target = {
+        x = ship.x + ship.hitBoxOffX,
+        y = ship.y + ship.hitBoxOffY,
+    }
+
+    -- Calculate angle between projectile & ships hit-box.
+    ang = calcAngle(x, y, target.x, target.y)
+
+    addProjectile(
+        newProjectile(proCfg, x, y,
+                        ang, spd, dam, proOwner)
+    )
+end
+
 -- Util functions.
 
 -- Adds projectile to game based on its owner.
