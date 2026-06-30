@@ -1,13 +1,13 @@
 -- Enemy movement patterns.
 
 -- Enemy stays in place.
--- @param e Enemy.
+-- @param e: Enemy to move.
 function stationary(e)
     e.x += e.xSpd
 end
 
 -- Enemy moves straight down.
--- @param e Enemy to move.
+-- @param e: Enemy to move.
 function down(e)
     e.y += e.ySpd
 end
@@ -29,15 +29,30 @@ function downWave(e, t)
     e.y += e.ySpd
 end
 
+-- Enemy moves horizontally between sides of the screen.
+-- @param e: Enemy to move.
+function leftRight(e)
+    -- TODO: Get this to work without hard-coded values.
+    if e.x < 12 then
+        e.xSpd = 0.5
+    end
+
+    if e.x > 116 then
+        e.xSpd = -0.5
+    end
+
+    e.x += e.xSpd
+end
+
 -- Enemy moves down slowly while weaving left and right using cosine of its y position.
--- @param e Enemy to move.
+-- @param e: Enemy to move.
 function downWaveSlow(e)
     e.x += cos(e.y / 32) * e.xSpd
     e.y += e.ySpd / 2
 end
 
 -- Enemy moves down toward the horizontal center of the screen.
--- @param e Enemy to move.
+-- @param e: Enemy to move.
 function downTowardCenter(e)
     local angle = atan2(64 - e.x, 140 - e.y)
 
@@ -47,7 +62,7 @@ end
 
 -- NOTE: Only used by fighter.
 -- Enemy moves down until it reaches the player's y position, then moves horizontally toward the player.
--- @param e Enemy to move.
+-- @param e: Enemy to move.
 function downAcross(e)
     if e.xSpd == 0 then
         e.ySpd = 2
@@ -67,7 +82,7 @@ function downAcross(e)
 end
 
 -- Enemy moves down toward the horizontal center of the screen, then back up.
--- @param e Enemy to move.
+-- @param e: Enemy to move.
 function downTowardCenterBackUp(e)
 
     if e.x < 64 and e.y > 70 and not e.moving then
