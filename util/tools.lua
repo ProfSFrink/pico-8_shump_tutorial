@@ -82,3 +82,21 @@ end
 function inBounds(e)
     return mid(0, e.x, 128) == e.x and mid(0 + uiHeight, e.y, 128) == e.y
 end
+
+-- Shakes the screen.
+function doShake()
+    local shakeX = rnd(shake) - (shake / 2)
+    local shakeY = rnd(shake) - (shake / 2)
+
+    camera(shakeX, shakeY)
+
+    if shake > 10 then
+        shake *= 0.9
+    else
+        shake -= 1
+
+        if shake <= 1 then
+            shake = 0
+        end
+    end
+end

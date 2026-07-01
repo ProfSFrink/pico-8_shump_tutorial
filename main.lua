@@ -33,6 +33,8 @@ function _init()
 
 	waveNum = 0
 
+	shake = 0
+
 	-- Setup and initialize starfield.
 	-- TODO: Move to starfield module.
 	stars = {}
@@ -92,4 +94,6 @@ function _draw()
 	elseif state == stateNames.win then
 		drawWin()
 	end
+
+	doShake()
 end

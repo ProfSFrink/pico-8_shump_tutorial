@@ -115,6 +115,7 @@ function updateGameScene()
 				player.lives -= 1
 				e:hit()
 				ship:hit()
+				shake = 6
 			end
 		end
 	end
@@ -126,6 +127,7 @@ function updateGameScene()
 			if hasCollided(ep, ship) and ship.invul <= 0 then
 				player.lives -= 1
 				ship:hit()
+				shake = 6
 				removeProjectile(ep)
 			end
 		end
