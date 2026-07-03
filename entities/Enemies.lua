@@ -80,16 +80,16 @@ eDefs = {
         flash = 68,
         aniDelay = 0.4,
 
-        xSpd = 1,
-        ySpd = 1,
+        xSpd = 0.5,
+        ySpd = 0.5,
         move = downWaveSlow,
 
         hp = 2,
 
-        rof = 30,
-        dam = 1,
+        rof = 45,
+        dam = 2,
         ang = 0.875,
-        pSpd = 2,
+        pSpd = 1,
 
         points = 175,
     },
@@ -166,13 +166,13 @@ eDefs = {
         flash = 87,
         aniDelay = 0.4,
 
-        xSpd = 2.5,
-        ySpd = 2.5,
+        xSpd = 2,
+        ySpd = 2,
         move = downWave,
         waveLen = 20,
 
         hp = 1,
-        rof = 10,
+        rof = 15,
         dam = 1,
 
         points = 200,
@@ -194,12 +194,13 @@ eDefs = {
         flash = 78,
         aniDelay = 0.4,
 
+        spd = 1.5,
         xSpd = 0,
-        ySpd = 0,
+        ySpd = 2,
         move = downAcross,
 
         hp = 2,
-        rof = 10,
+        rof = 20,
         dam = 1,
 
         points = 300,
@@ -273,6 +274,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         y = eneY,
         rowNum = eneRowNum,
 
+        spd = enemyCfg.spd or 0,
         xSpd = enemyCfg.xSpd,
         ySpd = enemyCfg.ySpd,
         move = enemyCfg.move,
@@ -286,6 +288,9 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 offX = enemyCfg.hitBox.offX or 0,
                 offY = enemyCfg.hitBox.offY or 0
             },
+
+        -- Offset for where projectile leave enemy.
+        -- Defaults to 8x8 sprite size.
 
         bullXOffset = enemyCfg.bullXOffset or -1,
         bullYOffset = enemyCfg.bullYOffset or 6,
@@ -372,7 +377,9 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                              3, 2, 1, dam,
                              g.owner.enemy)
 
-            elseif name == "flame" then
+            elseif (name == "flame") or (name == "fighter") then
+                local proCfg = g.getProConfig(g.blueBullet)
+
                 g.aimedSingleShot(proCfg, firing.x, firing.y,
                                   pSpd, dam, g.owner.enemy)
 
@@ -398,7 +405,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             if fireDelay <= 0 then
                 fire(_ENV)
 
-                fireDelay = rof
+                fireDelay = rof + g.ranInt(1, 4)
                 g.sfx(29)
             end
         end,
@@ -428,7 +435,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 -- If player destroys attacking enemy
                 -- have new enemy start attacking.
                 if state == eneState.attacking then
-                    if g.rnd() < 0.5 then
+                    if g.ranInt(0, 1) < 0.5 then
                         g.shakeEnemy(g.enemies)
                     end
                     points = g.flr(points * 0.3)

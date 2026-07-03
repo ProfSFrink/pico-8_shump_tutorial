@@ -4,6 +4,7 @@
 yellowBullet = "yellowBullet"
 yellowLaser = "yellowLaser"
 pinkBullet = "pinkBullet"
+blueBullet = "blueBullet"
 
 -- Setup for various projectiles.
 -- ani: Table of animation settings.
@@ -55,6 +56,22 @@ pTypes = {
     pinkBullet = {
         ani = { start = 32,
                 fin = 34,
+                delay = 5
+            },
+
+        hitBox = { w = 1, h = 1, offX = 2, offY = 2 },
+
+        animate = function(_ENV)
+            if curSpr < ani.fin then
+                curSpr += 1
+            else
+                curSpr = ani.start
+            end
+        end,
+    },
+    blueBullet = {
+        ani = { start = 48,
+                fin = 50,
                 delay = 5
             },
 

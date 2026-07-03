@@ -65,15 +65,17 @@ end
 -- @param e: Enemy to move.
 function downAcross(e)
     if e.xSpd == 0 then
-        e.ySpd = 2
+        e.ySpd = e.spd
         if ship.y <= e.y then
             e.ySpd = 0
 
             if ship.x < e.x then
-                e.xSpd = -2
+                e.xSpd -= e.spd
             else
-                e.xSpd = 2
+                e.xSpd += e.spd
             end
+
+            e:fire()
         end
     end
 

@@ -2,23 +2,22 @@
 
 spawnEvents = {
 	{ '1',
-		'45,-8,14,alien,alien,gap,alien,alien,alien,gap,alien,alien',
-		'30,136,34,alien,alien,gap,alien,alien,alien,gap,alien,alien',
-		'15,64,-12,alien,alien,gap,gap,gap,gap,alien,alien'
+		'45,-8,14,alien,alien,alien,alien,alien,alien,alien',
+		'30,136,34,alien,alien,alien,alien,alien,alien',
+		'15,64,-12,alien,alien,gap,alien,alien'
 	},
 	{ '2',
 		'45,-8,14,alien,alien,gap,flame,flame,gap,alien,alien',
 		'30,136,34,alien,alien,gap,flame,flame,gap,alien,alien',
-		'15,64,-12,alien,alien,gap,gap,gap,gap,gap,alien,alien'
+		'15,64,-12,alien,alien,alien,alien,alien,alien,alien,alien'
 	},
 	{ '3',
-		'20,-8,-24,fighter,gap,gap,flame,flame,gap,gap,fighter',
-		'20,136,34,fighter,gap,gap,flame,flame,gap,gap,fighter',
+		'20,-8,-24,fighter,gap,gap,gap,gap,gap,gap,fighter',
+		'20,136,34,fighter,gap,gap,gap,gap,gap,gap,fighter',
+		'15,64,-12,fighter,gap,gap,gap,gap,gap,gap,fighter',
 	},
 	{ '4',
-		'20,-8,-24,redeye,redeye,redeye',
-		'20,136,34,redeye,gap,redeye',
-		'20,64,-12,redeye,redeye,redeye'
+		'20,-8,-24,ufo,ufo,ufo,ufo,ufo',
 	},
 	{
 		'5',
