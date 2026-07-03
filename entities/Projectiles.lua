@@ -10,6 +10,10 @@ pinkBullet = "pinkBullet"
 --      start: First sprite index of the animation.
 --      fin: Last sprite index of the animation.
 --      delay: Frames between animation changes.
+-- hitBox.w: Collision width - defaults to 7.
+-- hitBox.h: Collision height - defaults to 7
+-- hitBox.offX: X-Offset for hit box - defaults to 0.
+-- hitBox.offY: Y-Offset for hit box  - defaults to 0.
 -- spd: (Player Only) Speed of projectile.
 -- dam: (Player Only) Damage of projectile.
 -- rof: (Player Only) Rate of fire in frames.
@@ -22,10 +26,7 @@ pTypes = {
                 delay = 5
             },
 
-        hitBoxW = 1,
-        hitBoxH = 1,
-        hitBoxOffX = 1,
-        hitBoxOffY = 1,
+        hitBox = { w = 3, h = 1, offX = 0, offY = 1 },
 
         animate = function(_ENV)
             if curSpr == ani.start then
@@ -41,10 +42,7 @@ pTypes = {
                 delay = 6
             },
 
-        hitBoxW = 1,
-        hitBoxH = 5,
-        hitBoxOffX = 1,
-        hitBoxOffY = 1,
+        hitBox = { w = 1, h = 5, offX = 1, offY = 1 },
 
         animate = function(_ENV)
             if curSpr < ani.fin then
@@ -60,10 +58,7 @@ pTypes = {
                 delay = 5
             },
 
-        hitBoxW = 1,
-        hitBoxH = 1,
-        hitBoxOffX = 2,
-        hitBoxOffY = 2,
+        hitBox = { w = 1, h = 1, offX = 2, offY = 2 },
 
         animate = function(_ENV)
             if curSpr < ani.fin then
@@ -112,10 +107,14 @@ function newProjectile(proCfg, proX, proY, ang, spd, dam, proOwner)
         owner = proOwner,
         dam = dam or 1,
 
-        hitBoxW = proCfg.hitBoxW or hitDefault,
-        hitBoxH = proCfg.hitBoxH or hitDefault,
-        hitBoxOffX = proCfg.hitBoxOffX or 0,
-        hitBoxOffY = proCfg.hitBoxOffY or 0,
+        -- Hit box size.
+
+        hitBox = {
+                w = proCfg.hitBox.w or hitDefault,
+                h = proCfg.hitBox.h or hitDefault,
+                offX = proCfg.hitBox.offX or 0,
+                offY = proCfg.hitBox.offY or 0
+            },
 
         animate = proCfg.animate,
         curSpr = proCfg.ani.start,
@@ -227,8 +226,8 @@ end
 function aimedSingleShot(proCfg, x, y, spd, dam, proOwner)
     -- Get co-ordinates for ships hit-box.
     local target = {
-        x = ship.x + ship.hitBoxOffX,
-        y = ship.y + ship.hitBoxOffY,
+        x = ship.x + ship.hitBox.offX,
+        y = ship.y + ship.hitBox.offY,
     }
 
     -- Calculate angle between projectile & ships hit-box.

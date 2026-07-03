@@ -6,10 +6,10 @@
 -- cols: table of color pairs for the enemy, first is
 --       entry matches sprite colours.
 
--- hitBoxW: Collision width - defaults to 7 (Optional).
--- hitBoxH: Collision height - defaults to 7 (Optional).
--- hitBoxOffX: X-Offset for hit box (Optional).
--- hitBoxOffY: Y-Offset for hit box (Optional).
+-- hitBox.w: Collision width - defaults to 7.
+-- hitBox.h: Collision height - defaults to 7
+-- hitBox.offX: X-Offset for hit box - defaults to 0.
+-- hitBox.offY: Y-Offset for hit box  - defaults to 0.
 
 -- sprSize: Size the sprite - defaults to 7x7 (Optional).
 -- ani: Table of animation settings.
@@ -44,10 +44,7 @@ eDefs = {
             { c1 = 6, c2 = 13 } -- Grey.
         },
 
-        hitBoxW = 5,
-        hitBoxH = 5,
-        hitBoxOffX = 1,
-        hitBoxOffY = 1,
+        hitBox = { w = 7, h = 5, offX = 0, offY = 1 },
 
         ani = { 80, 81, 82, 83 },
         flash = 84,
@@ -77,10 +74,7 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
 
-        hitBoxW = 5,
-        hitBoxH = 3,
-        hitBoxOffX = 1,
-        hitBoxOffY = 3,
+        hitBox = { w = 5, h = 3, offX = 1, offY = 3 },
 
         ani = { 64, 65, 66, 67 },
         flash = 68,
@@ -110,10 +104,7 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
 
-        hitBoxW = 5,
-        hitBoxH = 5,
-        hitBoxOffX = 1,
-        hitBoxOffY = 1,
+        hitBox = { w = 5, h = 5, offX = 1, offY = 1 },
 
         ani = { 69, 70, 71, 72 },
         flash = 73,
@@ -141,10 +132,7 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
 
-        hitBoxW = 4,
-        hitBoxH = 4,
-        hitBoxOffX = 1,
-        hitBoxOffY = 1,
+        hitBox = { w = 4, h = 4, offX = 1, offY = 1 },
 
         ani = { 88, 89, 90, 91, 92 },
         flash = 93,
@@ -172,10 +160,7 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
 
-        hitBoxW = 5,
-        hitBoxH = 4,
-        hitBoxOffX = 1,
-        hitBoxOffY = 3,
+        hitBox = { w = 5, h = 4, offX = 1, offY = 3 },
 
         ani = { 85, 86 },
         flash = 87,
@@ -203,10 +188,7 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
 
-        hitBoxW = 5,
-        hitBoxH = 4,
-        hitBoxOffX = 1,
-        hitBoxOffY = 1,
+        hitBox = { w = 5, h = 4, offX = 1, offY = 1 },
 
         ani = { 74, 75, 76, 77 },
         flash = 78,
@@ -233,10 +215,7 @@ eDefs = {
             { c1 = 14, c2 = 2 } -- Pink.
         },
 
-        hitBoxW = 11,
-        hitBoxH = 9,
-        hitBoxOffX = 2,
-        hitBoxOffY = 4,
+        hitBox = { w = 11, h = 9, offX = 2, offY = 4 },
 
         bullXOffset = 4,
         bullYOffset = 12,
@@ -299,11 +278,14 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         move = enemyCfg.move,
         waveLen = enemyCfg.waveLen or 45,
 
-        -- Hit box size, defaults to 8x8.
-        hitBoxW = enemyCfg.hitBoxW or hitDefault,
-        hitBoxH = enemyCfg.hitBoxH or hitDefault,
-        hitBoxOffX = enemyCfg.hitBoxOffX or 0,
-        hitBoxOffY = enemyCfg.hitBoxOffY or 0,
+        -- Hit box size.
+
+        hitBox = {
+                w = enemyCfg.hitBox.w or hitDefault,
+                h = enemyCfg.hitBox.h or hitDefault,
+                offX = enemyCfg.hitBox.offX or 0,
+                offY = enemyCfg.hitBox.offY or 0
+            },
 
         bullXOffset = enemyCfg.bullXOffset or -1,
         bullYOffset = enemyCfg.bullYOffset or 6,

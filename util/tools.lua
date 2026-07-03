@@ -64,11 +64,14 @@ end
 -- Draws an entity's hitbox as a filled rectangle for debugging.
 -- @param e: the entity to draw the hitbox for.
 function showHitBox(e)
-    local x = e.x + (e.hitBoxOffX or 0)
-    local y = e.y + (e.hitBoxOffY or 0)
-    local w = e.hitBoxW or hitDefault
-    local h = e.hitBoxH or hitDefault
-    rectfill(x, y, x + w, y + h, 7)
+    blinkT += 1
+
+    local x = e.x + (e.hitBox.offX or 0)
+    local y = e.y + (e.hitBox.offY or 0)
+    local w = e.hitBox.w or hitDefault
+    local h = e.hitBox.h or hitDefault
+
+    rectfill(x, y, x + w, y + h, blink())
 end
 
 -- Checks if both fire buttons are released.

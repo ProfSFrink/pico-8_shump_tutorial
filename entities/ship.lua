@@ -22,10 +22,8 @@ function newShip()
 		ySpeed = 0,
 
         -- Hit box size, defaults to 8x8.
-        hitBoxW = 3,
-        hitBoxH = 2,
-        hitBoxOffX = 2,
-        hitBoxOffY = 4,
+
+        hitBox = { w = 3, h = 2, offX = 2, offY = 4 },
 
         -- Starting ship sprite.
         startSprite = 3,
