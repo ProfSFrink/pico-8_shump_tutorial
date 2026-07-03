@@ -1,32 +1,34 @@
 -- Game state logic.
 
+-- Table containing, wave information.
+-- row number.
+-- row attack rate (higher is less infrequent, x spawn, y spawn.
+
 spawnEvents = {
 	{ '1',
-		'45,-8,14,alien,alien,alien,alien,alien,alien,alien',
-		'30,136,34,alien,alien,alien,alien,alien,alien',
+		'5,-8,14,alien,alien,alien,alien,alien,alien,alien',
+		'10,136,34,alien,alien,alien,alien,alien,alien',
 		'15,64,-12,alien,alien,gap,alien,alien'
 	},
 	{ '2',
-		'45,-8,14,alien,alien,gap,flame,flame,gap,alien,alien',
-		'30,136,34,alien,alien,gap,flame,flame,gap,alien,alien',
+		'5,-8,14,alien,alien,gap,flame,flame,gap,alien,alien',
+		'10,136,34,alien,alien,gap,flame,flame,gap,alien,alien',
 		'15,64,-12,alien,alien,alien,alien,alien,alien,alien,alien'
 	},
 	{ '3',
-		'20,-8,-24,fighter,gap,gap,gap,gap,gap,gap,fighter',
-		'20,136,34,fighter,gap,gap,gap,gap,gap,gap,fighter',
-		'15,64,-12,fighter,gap,gap,gap,gap,gap,gap,fighter',
+		'5,-8,-24,fighter,gap,alien,gap,alien,gap,gap,fighter',
+		'10,136,34,fighter,gap,alien,ufo,alien,gap,gap,fighter',
+		'15,64,-12,fighter,gap,alien,gap,alien,gap,gap,fighter',
 	},
 	{ '4',
-		'20,-8,-24,ufo,ufo,ufo,ufo,ufo',
+		'10,-8,-24,ufo,ufo,ufo,ufo,ufo',
 	},
 	{
 		'5',
-		'20,-8,-24,eyeball,eyeball,eyeball',
-		'20,136,34,eyeball,eyeball,eyeball',
-		'20,64,-12,eyeball,eyeball,eyeball'
+		'10,-8,-24,eyeball,eyeball,eyeball,eyeball,eyeball,eyeball',
 	},
 	{ '6',
-		'20,60,-12,boss'
+		'0,60,-12,boss'
 	}
 }
 

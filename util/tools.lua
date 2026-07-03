@@ -74,11 +74,18 @@ function showHitBox(e)
     rectfill(x, y, x + w, y + h, blink())
 end
 
+-- Returns the centre of an entity with a hit-box.
+-- @returns: The X and Y of the centre of the entity.
+function getCentre(e)
+    return { x = e.x + e.hitBox.offX + e.hitBox.w / 2, y = e.y + e.hitBox.offY + e.hitBox.h / 2 }
+end
+
 -- Checks if both fire buttons are released.
 -- @return: true if both fire buttons released.
 function hasStoppedFiring()
     return btn(4) == false and btn(5) == false
 end
+
 
 -- Check if an entity is inbounds
 -- @return: true if an entity in bounds.

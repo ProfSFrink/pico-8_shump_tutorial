@@ -188,7 +188,7 @@ function spreadShot(proCfg, x, y, num, spd, base, dam, proOwner)
     end
 end
 
--- Fires a spread shot, using all 360 degrees.
+-- Fires a spread shot, contained to fixed angle.
 -- @param proCfg: The config of the projectile to use.
 -- @param x: Spawn x position.
 -- @param y: Spawn y position.
@@ -218,6 +218,22 @@ function directedSpreadShot(proCfg, x, y, num, spd, ang, dam, proOwner)
 
 end
 
+-- Fires a spread shot, angle aimed at player ship.
+-- @param proCfg: The config of the projectile to use.
+-- @param x: Spawn x position.
+-- @param y: Spawn y position.
+-- @param num: The number of projectiles.
+-- @param spd: Projectile speed.
+-- @param dam: Damage from the weapon definition.
+-- @param proOwner: The owner of the projectile.
+function aimedSpreadShot(proCfg, x, y, num, spd, dam, proOwner)
+  local target = getCentre(ship)
+
+  local ang = calcAngle(x, y, target.x, target.y)
+
+  directedSpreadShot(proCfg, x, y, num, spd, ang, dam, proOwner)
+end
+
 -- Fires a single projectile.
 -- @param proCfg: The config of the projectile to use.
 -- @param x: Spawn x position.
@@ -242,10 +258,7 @@ end
 -- @param proOwner: The owner of the projectile.
 function aimedSingleShot(proCfg, x, y, spd, dam, proOwner)
     -- Get co-ordinates for ships hit-box.
-    local target = {
-        x = ship.x + ship.hitBox.offX,
-        y = ship.y + ship.hitBox.offY,
-    }
+    local target = getCentre(ship)
 
     -- Calculate angle between projectile & ships hit-box.
     ang = calcAngle(x, y, target.x, target.y)

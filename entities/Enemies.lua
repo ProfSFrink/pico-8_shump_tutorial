@@ -81,12 +81,12 @@ eDefs = {
         aniDelay = 0.4,
 
         xSpd = 0.5,
-        ySpd = 0.5,
+        ySpd = 1,
         move = downWaveSlow,
 
         hp = 2,
 
-        rof = 45,
+        rof = 60,
         dam = 2,
         ang = 0.875,
         pSpd = 1,
@@ -110,13 +110,13 @@ eDefs = {
         flash = 73,
         aniDelay = 0.4,
 
-        xSpd = 0.6,
-        ySpd = 0.6,
+        xSpd = 0.2,
+        ySpd = 0.4,
         move = downWave,
 
-        hp = 3,
+        hp = 2,
 
-        rof = 10,
+        rof = 20,
         dam = 1,
 
         points = 150,
@@ -230,9 +230,9 @@ eDefs = {
         ySpd = 0.35,
         move = leftRight,
 
-        hp = 30,
+        hp = 40,
 
-        rof = 20,
+        rof = 10,
         dam = 1,
         moveTime = 45,
         stopTime = 5,
@@ -373,8 +373,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                              g.owner.enemy)
 
             elseif name == "ufo" then
-                g.directedSpreadShot(proCfg, firing.x, firing.y,
-                             3, 2, 1, dam,
+                g.aimedSpreadShot(proCfg, firing.x, firing.y,
+                             5, 2, dam,
                              g.owner.enemy)
 
             elseif (name == "flame") or (name == "fighter") then
@@ -414,8 +414,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         shake = function(_ENV)
             if state != eneState.stopped then return end
             aniDelay *= 3
-            moveDelay = 30
-            shakeTimer = 30
+            moveDelay = 15
+            shakeTimer = 15 -- enemy shakes for 1 second.
             state = eneState.attacking
         end,
 
@@ -442,11 +442,13 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 end
 
                 state = eneState.dead
+                eCentre = g.getCentre(_ENV)
+
                 g.player.score += points
                 -- Spawn explosion.
-                g.spawnExp(x, y, ySpd, g.eneCols)
+                g.spawnExp(eCentre.x, eCentre.y, ySpd, g.eneCols)
                 -- Spawn large shockwave.
-                g.spawnShockWave(x, y, g.lgSwCfg)
+                g.spawnShockWave(eCentre.x, eCentre.y, g.lgSwCfg)
             else
                 state = eneState.flashing
             end
@@ -497,7 +499,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
             -- Remove if off-screen and not spawning.
             if state != eneState.spawning then
-                if x < 0 or x > 128 or y > 128 then
+                if x < -5 or x > 134 or y > 134 then
                     del(g.enemies, _ENV)
                 end
             end

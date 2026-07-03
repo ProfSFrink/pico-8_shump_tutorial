@@ -104,8 +104,11 @@ function updateGameScene()
 			for p in all(projectiles) do
 				if hasCollided(e, p) then
 					e:hit(p.dam)
-					spawnShockWave(p.x, p.y, slSwCfg)
-					spawnSparks(e.x, e.y, 7)
+					local pCentre = getCentre(p)
+					local eCentre = getCentre(e)
+
+					spawnShockWave(pCentre.x, pCentre.y, slSwCfg)
+					spawnSparks(eCentre.x, eCentre.y, 7)
 					removeProjectile(p)
 				end
 			end
