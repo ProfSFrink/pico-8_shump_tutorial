@@ -397,17 +397,17 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                             y = y + bullYOffset
                         }
 
-            if name == boss then
+            if name == g.boss then
                 g.spreadShot(proCfg, firing.x, firing.y,
                              8, 1.3, 0, dam,
                              g.owner.enemy)
 
-            elseif name == ufo then
+            elseif name == g.ufo then
                 g.aimedSpreadShot(proCfg, firing.x, firing.y,
-                             5, 2, dam,
+                             3, 2, dam,
                              g.owner.enemy)
 
-            elseif (name == flame) or (name == fighter) then
+            elseif (name == g.flame) or (name == g.fighter) then
                 local proCfg = g.getProConfig(g.blueBullet)
 
                 g.aimedSingleShot(proCfg, firing.x, firing.y,

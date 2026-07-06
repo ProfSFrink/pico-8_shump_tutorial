@@ -38,6 +38,7 @@ end
 
 singleBullet = "singleBullet"
 singleLaser = "singleLaser"
+blastShot = "blastShot"
 threeShotBullet = "threeShotBullet"
 
 -- Weapon definitions (Player Ship ONLY).
@@ -66,11 +67,19 @@ weapons = {
         sfx = 2,
         fireFunc = fireSingleShot
     },
+    blastShot = {
+        pCfg = yellowBlaster,
+        spd = 3,
+        dam = 3,
+        rof = 12,
+        sfx = 33,
+        fireFunc = fireSingleShot
+    },
     threeShotBullet = {
         pCfg = yellowBullet,
         spd = 3,
         dam = 1,
-        rof = 4,
+        rof = 6,
         num = 3,
         ang = 0.5,
         sfx = 0,

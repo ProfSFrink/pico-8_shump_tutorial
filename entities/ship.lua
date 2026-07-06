@@ -45,7 +45,7 @@ function newShip()
 		muzzle = 0,
 
         weaponOne = singleBullet,
-        weaponTwo = singleLaser,
+        weaponTwo = blastShot,
 
 		-- Invulnerability timer in frames.
 		invul = 0,

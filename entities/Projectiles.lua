@@ -3,6 +3,7 @@
 -- String literals for projectile types.
 yellowBullet = "yellowBullet"
 yellowLaser = "yellowLaser"
+yellowBlaster = "yellowBlaster"
 pinkBullet = "pinkBullet"
 blueBullet = "blueBullet"
 
@@ -27,23 +28,39 @@ pTypes = {
                 delay = 5
             },
 
-        hitBox = { w = 3, h = 1, offX = 0, offY = 1 },
+        hitBox = { w = 1, h = 1, offX = 2, offY = 2 },
 
         animate = function(_ENV)
-            if curSpr == ani.start then
-                curSpr = ani.fin
+            if curSpr < ani.fin then
+                curSpr += 1
             else
                 curSpr = ani.start
             end
         end,
     },
     yellowLaser = {
-        ani = { start = 18,
-                fin = 21,
+        ani = { start = 35,
+                fin = 38,
                 delay = 6
             },
 
-        hitBox = { w = 1, h = 5, offX = 1, offY = 1 },
+        hitBox = { w = 2, h = 5, offX = 1, offY = 1 },
+
+        animate = function(_ENV)
+            if curSpr < ani.fin then
+                curSpr += 1
+            else
+                curSpr = ani.start
+            end
+        end,
+    },
+    yellowBlaster = {
+        ani = { start = 19,
+                fin = 19,
+                delay = 0
+            },
+
+        hitBox = { w = 3, h = 6, offX = 1, offY = 0 },
 
         animate = function(_ENV)
             if curSpr < ani.fin then
