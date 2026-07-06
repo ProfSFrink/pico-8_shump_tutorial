@@ -20,6 +20,9 @@
 
 -- xSpd: Enemy speed when moving on x-axis.
 -- ySpd: Enemy speed when moving on y-axis.
+-- movements: Table of movement patterns.
+--       normal: General movement behavior.
+--       onHit: Movement upon being hit.
 -- move: Movement function to use.
 -- waveLen: Wave length enemy moves in (Optional).
 
@@ -29,12 +32,20 @@
 -- dam: Damage of projectile fired.
 -- ang: Angle to fire projectiles.
 -- pSpd: Speed fired projectiles move at.
-
 -- points: Enemy score value.
+
+-- Enemy string literals.
+alien = "alien"
+ufo = "ufo"
+eyeball = "eyeball"
+redeye = "redeye"
+flame= "flame"
+fighter = "fighter"
+boss = "boss"
 
 eDefs = {
     alien = {
-        name = "alien",
+        name = alien,
 
         cols = {
             { c1 = 11, c2 = 3 }, -- Green.
@@ -51,10 +62,12 @@ eDefs = {
         aniDelay = 0.4,
 
         xSpd = 0,
-        ySpd = 1.25,
+        ySpd = 1,
+
+        movements = { normal = stationary, onHit = stationary },
         move = stationary,
 
-        hp = 2,
+        hp = 1,
 
         rof = 30,
         dam = 1,
@@ -64,7 +77,7 @@ eDefs = {
         points = 100,
     },
     ufo = {
-        name = "ufo",
+        name = ufo,
 
         cols = {
             { c1 = 12, c2 = 1 }, -- Blue.
@@ -82,6 +95,8 @@ eDefs = {
 
         xSpd = 0.5,
         ySpd = 1,
+
+        movements = { normal = downWaveSlow, onHit = downWaveSlow },
         move = downWaveSlow,
 
         hp = 2,
@@ -94,7 +109,7 @@ eDefs = {
         points = 175,
     },
     eyeball = {
-        name = "eyeball",
+        name = eyeball,
 
         cols = {
             { c1 = 8, c2 = 2 }, -- Red.
@@ -112,6 +127,8 @@ eDefs = {
 
         xSpd = 0.2,
         ySpd = 0.4,
+
+        movements = { normal = downWave, onHit = downWave },
         move = downWave,
 
         hp = 2,
@@ -122,7 +139,7 @@ eDefs = {
         points = 150,
     },
     redeye = {
-        name = "redeye",
+        name = redeye,
 
         cols = {
             { c1 = 5, c2 = 8 }, -- Grey / Red.
@@ -140,6 +157,11 @@ eDefs = {
 
         xSpd = 1.5,
         ySpd = 1.2,
+
+        movements = {
+            normal = downTowardCenterBackUp,
+            onHit = downTowardCenterBackUp
+        },
         move = downTowardCenterBackUp,
 
         hp = 3,
@@ -150,7 +172,7 @@ eDefs = {
         points = 200,
     },
     flame = {
-        name= "flame",
+        name= flame,
 
         cols = {
             { c1 = 8, c2 = 2 }, -- Grey / Red.
@@ -168,17 +190,19 @@ eDefs = {
 
         xSpd = 2,
         ySpd = 2,
+
+        movements = { normal = downWave, onHit = downWave },
         move = downWave,
         waveLen = 20,
 
-        hp = 1,
+        hp = 2,
         rof = 15,
         dam = 1,
 
         points = 200,
     },
     fighter = {
-        name = "fighter",
+        name = fighter,
 
         cols = {
             { c1 = 1, c2 = 5 }, -- Blue / Grey.
@@ -197,6 +221,8 @@ eDefs = {
         spd = 1.5,
         xSpd = 0,
         ySpd = 2,
+
+        movements = { normal = downAcross, onHit = downAcross },
         move = downAcross,
 
         hp = 2,
@@ -206,7 +232,7 @@ eDefs = {
         points = 300,
     },
     boss = {
-        name = "boss",
+        name = boss,
 
         cols = {
             { c1 = 6, c2 = 14 }, -- Grey / Yellow.
@@ -228,14 +254,14 @@ eDefs = {
 
         xSpd = -0.5,
         ySpd = 0.35,
+
+        movements = { normal = leftRight, onHit = leftRight },
         move = leftRight,
 
         hp = 40,
 
         rof = 10,
         dam = 1,
-        moveTime = 45,
-        stopTime = 5,
 
         points = 1000,
     }
@@ -277,7 +303,11 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         spd = enemyCfg.spd or 0,
         xSpd = enemyCfg.xSpd,
         ySpd = enemyCfg.ySpd,
-        move = enemyCfg.move,
+        movements = {
+                     normal = enemyCfg.movements.normal,
+                     onHit = enemyCfg.movements.onHit
+                    },
+        move = enemyCfg.movements.normal,
         waveLen = enemyCfg.waveLen or 45,
 
         -- Hit box size.
@@ -367,17 +397,17 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                             y = y + bullYOffset
                         }
 
-            if name == "boss" then
+            if name == boss then
                 g.spreadShot(proCfg, firing.x, firing.y,
                              8, 1.3, 0, dam,
                              g.owner.enemy)
 
-            elseif name == "ufo" then
+            elseif name == ufo then
                 g.aimedSpreadShot(proCfg, firing.x, firing.y,
                              5, 2, dam,
                              g.owner.enemy)
 
-            elseif (name == "flame") or (name == "fighter") then
+            elseif (name == flame) or (name == fighter) then
                 local proCfg = g.getProConfig(g.blueBullet)
 
                 g.aimedSingleShot(proCfg, firing.x, firing.y,
@@ -400,14 +430,14 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
             if moveDelay <= 0 then
                 move(_ENV, g.gameT)
+                if fireDelay <= 0 then
+                    fire(_ENV)
+
+                    fireDelay = rof + g.ranInt(1, 4)
+                    g.sfx(29)
+                end
             end
 
-            if fireDelay <= 0 then
-                fire(_ENV)
-
-                fireDelay = rof + g.ranInt(1, 4)
-                g.sfx(29)
-            end
         end,
 
         -- Have enemy shake before attacking.
@@ -415,7 +445,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             if state != eneState.stopped then return end
             aniDelay *= 3
             moveDelay = 15
-            shakeTimer = 15 -- enemy shakes for 1 second.
+            shakeTimer = 30 -- enemy shakes for 1 second.
             state = eneState.attacking
         end,
 
@@ -459,8 +489,11 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
             curSpr = flashSpr
             flashTimer -= 1
             if flashTimer <= 0 then
-                state = eneState.attacking
                 flashTimer = flashTimerDefault
+
+                -- Change movement to on hit.
+                move = movements.onHit
+                state = eneState.attacking
             end
         end,
 

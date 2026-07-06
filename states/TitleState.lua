@@ -31,7 +31,7 @@ function enterTitle()
 	waveNum = 0
 	music(7)
 
-	-- Get's game ready now so we
+	-- Get game ready now so we
 	-- can show in the background
 	-- of the new wave state.
 	setupGame()
