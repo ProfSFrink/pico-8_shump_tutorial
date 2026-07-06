@@ -105,7 +105,7 @@ eDefs = {
 
         hp = 2,
 
-        rof = 60,
+        rof = 45,
         dam = 2,
         ang = 0.875,
         pSpd = 1,
@@ -168,16 +168,16 @@ eDefs = {
         ySpd = 1.2,
 
         movements = {
-            normal = downTowardCenterBackUp,
-            onHit = downTowardCenterBackUp
+            normal = stationary,
+            onHit = stationary
         },
-        move = downTowardCenterBackUp,
+        move = stationary,
 
-        hp = 3,
+        hp = 4,
 
-        rof = 30,
+        rof = 60,
         dam = 1,
-        pSpd = 1,
+        pSpd = 0.8,
 
         points = 200,
     },
@@ -198,16 +198,17 @@ eDefs = {
         flash = 87,
         aniDelay = 0.4,
 
-        xSpd = 2,
-        ySpd = 2,
+        xSpd = 1.4,
+        ySpd = 1.2,
 
         movements = { normal = downWave, onHit = downWave },
         move = downWave,
         waveLen = 20,
 
         hp = 2,
-        rof = 15,
+        rof = 35,
         dam = 1,
+        pSpd = 2,
 
         points = 200,
     },
@@ -238,6 +239,7 @@ eDefs = {
         hp = 2,
         rof = 20,
         dam = 1,
+        pSpd = 2.5,
 
         points = 300,
     },
@@ -339,12 +341,16 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         rof = enemyCfg.rof,
         dam = enemyCfg.dam,
         ang = enemyCfg.ang or 1,
-        pSpd = enemyCfg.pSpd or 2,
+        pSpd = enemyCfg.pSpd or 1,
 
         moveDelay = 0,
         shakeTimer = 0,
         points = enemyCfg.points,
-        moving = false,
+
+        -- Needed by some enemies to change movement
+        -- movement behavior if certain conditions are
+        -- met (Redeye only atm).
+        moveSwitch = false,
 
         -- Use default colour palette.
         colId = 1,
@@ -426,7 +432,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 local proCfg = g.getProConfig(g.blueBullet)
 
                 g.aimedMultiShot(proCfg, firing.x, firing.y,
-                                  3, pSpd, dam, g.owner.enemy)
+                                  2, pSpd, dam, g.owner.enemy)
             else
                 g.singleShot(proCfg, firing.x, firing.y,
                              ang, pSpd, dam, g.owner.enemy)

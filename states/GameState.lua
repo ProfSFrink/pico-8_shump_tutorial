@@ -20,20 +20,27 @@ spawnEvents = {
 	-- Wave #3.
 	{ '3',
 		'5,-8,14,ufo,gap,ufo,gap,ufo',
-		'30,136,34,alien,alien,alien,alien,alien,alien',
+		'10,136,34,alien,alien,alien,alien,alien,alien',
 	},
-	-- Wave #5.
+	-- Wave #4.
 	{ '4',
-		'5,-8,14,ufo,gap,ufo,gap,ufo',
+		'2,-8,14,ufo,gap,ufo,gap,ufo',
 		'5,136,34,gap,ufo,gap,ufo,gap',
-		'5,64,-12,gap,gap,ufo,gap,gap',
+		'10,64,-12,gap,gap,ufo,gap,gap',
 	},
 	-- Wave #5.
 	{ '5',
-		'10,136,34,alien,gap,boss,gap,alien',
-		'0,0,0,gap',
-		'30,-8,14,alien,alien,alien,alien,alien',
+		'0,-8,14,ufo,gap,ufo,gap,ufo',
+		'3,136,34,fighter,alien,alien,gap,ufo,gap,alien,alien,fighter',
+		'5,136,50,alien,alien,gap,redeye,redeye,redeye,redeye,redeye,gap,alien,alien',
 	},
+	-- Wave #6.
+	{ '6',
+		'0,136,34,alien,gap,boss,gap,alien',
+		'0,0,0,gap',
+		'10,-8,14,alien,alien,alien,alien,alien',
+	},
+
 }
 
 -- Sets up the game.
@@ -156,7 +163,7 @@ function spawnWaveRows(wave)
         -- Spawn each enemy in the row.
         for i = 1, #row.rowEnemies do
 			local targetX = rowStartX + (i - 1) * rowSpacing
-			local targetY = 10 + rowIdx * 13
+			local targetY = 0 + rowIdx * 13
 			local delay = flr(rowDelay)
 
 			if row.rowEnemies[i] ~= 'gap' then

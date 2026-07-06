@@ -3,7 +3,6 @@
 -- Enemy stays in place.
 -- @param e: Enemy to move.
 function stationary(e)
-    e.x += e.xSpd
 end
 
 -- Enemy moves straight down.
@@ -109,8 +108,8 @@ end
 -- Enemy moves down toward the horizontal center of the screen, then back up.
 -- @param e: Enemy to move.
 function downTowardCenterBackUp(e)
-    if not e.moving and e.y > 70 then
-        e.moving = true
+    if not e.moveSwitch and e.y > 70 then
+        e.moveSwitch = true
 
         if ship.x < 63 then
             e.ang = calcAngle(e.x, e.y, 0, 0)
@@ -119,7 +118,7 @@ function downTowardCenterBackUp(e)
         end
     end
 
-    if e.moving then
+    if e.moveSwitch then
         e.x += sin(e.ang) * e.xSpd
     end
 
