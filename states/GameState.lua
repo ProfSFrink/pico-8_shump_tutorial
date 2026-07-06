@@ -5,31 +5,41 @@
 -- row attack rate (higher is less infrequent, x spawn, y spawn.
 
 spawnEvents = {
+	-- Wave #1.
 	{ '1',
 		'5,-8,14,alien,alien,alien,alien,alien,alien,alien',
 		'10,136,34,alien,alien,alien,alien,alien,alien',
 		'15,64,-12,alien,alien,gap,alien,alien'
 	},
+	-- Wave #2.
 	{ '2',
 		'5,-8,14,alien,alien,gap,flame,flame,gap,alien,alien',
 		'10,136,34,alien,alien,gap,flame,flame,gap,alien,alien',
 		'15,64,-12,alien,alien,alien,alien,alien,alien,alien,alien'
 	},
+	-- Wave #3.
 	{ '3',
-		'5,-8,-24,fighter,gap,alien,gap,alien,gap,gap,fighter',
+		'5,-8,-24,gap,gap,alien,gap,alien,gap,gap,gap',
 		'10,136,34,fighter,gap,alien,ufo,alien,gap,gap,fighter',
-		'15,64,-12,fighter,gap,alien,gap,alien,gap,gap,fighter',
+		'15,64,-12,gap,gap,alien,gap,alien,gap,gap,gap',
 	},
+	-- Wave #4.
 	{ '4',
-		'10,-8,-24,ufo,ufo,ufo,ufo,ufo',
+		'5,-8,14,ufo,gap,ufo,gap,ufo',
+		'10,136,34,alien,alien,alien,alien,alien,alien',
 	},
-	{
-		'5',
-		'10,-8,-24,eyeball,eyeball,eyeball,eyeball,eyeball,eyeball',
+	-- Wave #5.
+	{ '5',
+		'5,-8,14,ufo',
+		'5,136,34,ufo',
+		'5,64,-12,ufo'
 	},
+	-- Wave #6.
 	{ '6',
-		'0,60,-12,boss'
-	}
+		'10,136,34,alien,gap,boss,gap,alien',
+		'0,0,0,gap',
+		'30,-8,14,alien,alien,alien,alien,alien',
+	},
 }
 
 -- Sets up the game.

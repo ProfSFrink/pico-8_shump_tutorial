@@ -308,6 +308,17 @@ function removeProjectile(p)
     end
 end
 
+-- Removes all projectiles from the game.
+function removeAllProjectiles()
+    for p in all(projectiles) do
+        del(projectiles, p)
+    end
+
+    for ep in all(enemyProjectiles) do
+        del(enemyProjectiles, ep)
+    end
+end
+
 -- Update all projectiles.
 function updateProjectiles()
     for p in all(projectiles) do

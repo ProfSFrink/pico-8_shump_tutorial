@@ -30,6 +30,8 @@ function enterNewWave()
     canPlay = false
     exitTimer = 50
 
+    removeAllProjectiles()
+
     -- Move ship to starting position for new wave. 
     async(function()
         animate(ship,"x", shipStartX, 60, easeOutQuad)

@@ -93,10 +93,14 @@ eDefs = {
         flash = 68,
         aniDelay = 0.4,
 
+        spd = 0.5,
         xSpd = 0.5,
-        ySpd = 1,
+        ySpd = 1.25,
 
-        movements = { normal = downWaveSlow, onHit = downWaveSlow },
+        movements = {
+                normal = leftRight,
+                onHit = downWaveSlow
+            },
         move = downWaveSlow,
 
         hp = 2,

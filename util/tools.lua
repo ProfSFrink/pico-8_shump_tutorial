@@ -42,6 +42,13 @@ function ranFloat(min, max)
     return rnd(max - min) + min
 end
 
+-- Switch the sign of a provided value.
+-- @param num: The value to switch.
+-- @returns: The switched value.
+function switchSign(num)
+    return -num
+end
+
 -- Cycles through colors for blinking text.
 -- @return: the color value for the current blink frame.
 function blink()

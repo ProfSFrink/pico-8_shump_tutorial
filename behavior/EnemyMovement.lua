@@ -32,13 +32,12 @@ end
 -- Enemy moves horizontally between sides of the screen.
 -- @param e: Enemy to move.
 function leftRight(e)
-    -- TODO: Get this to work without hard-coded values.
     if e.x < 12 then
-        e.xSpd = 0.5
+        e.xSpd = e.spd
     end
 
     if e.x > 116 then
-        e.xSpd = -0.5
+        e.xSpd = switchSign(e.spd)
     end
 
     e.x += e.xSpd
