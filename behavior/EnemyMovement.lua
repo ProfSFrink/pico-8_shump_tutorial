@@ -33,14 +33,38 @@ end
 -- @param e: Enemy to move.
 function leftRight(e)
     if e.x < 12 then
-        e.xSpd = e.spd
+        e.xSpd = switchSign(e.xSpd)
     end
 
     if e.x > 116 then
-        e.xSpd = switchSign(e.spd)
+        e.xSpd = switchSign(e.xSpd)
     end
 
     e.x += e.xSpd
+end
+
+-- Enemy moves horizontally between sides of the screen.
+-- enemy will also move between top and bottom of the screen.
+-- @param e: Enemy to move.
+function leftRightUpDown(e)
+    if e.x < 12 then
+        e.xSpd = switchSign(e.xSpd)
+    end
+
+    if e.x > 116 then
+        e.xSpd = switchSign(e.xSpd)
+    end
+
+    if e.y < 10 then
+        e.ySpd = switchSign(e.ySpd)
+    end
+
+    if e.y > 95 then
+        e.ySpd = switchSign(e.ySpd)
+    end
+
+    e.x += e.xSpd
+    e.y += e.ySpd
 end
 
 -- Enemy moves down slowly while weaving left and right using cosine of its y position.
@@ -85,27 +109,19 @@ end
 -- Enemy moves down toward the horizontal center of the screen, then back up.
 -- @param e: Enemy to move.
 function downTowardCenterBackUp(e)
-
-    if e.x < 64 and e.y > 70 and not e.moving then
+    if not e.moving and e.y > 70 then
         e.moving = true
-        e.movingLeft = false
-        e.x += e.xSpd
-        e.ySpd = 0.6
 
-    elseif e.x > 64 and e.y > 70 and not e.moving then
-        e.moving = true
-        e.movingLeft = true
-        e.x -= e.xSpd
-        e.ySpd = 0.6
-    end
-
-    if e.moving == true then
-        if e.movingLeft == true then
-            e.x -= e.xSpd
+        if ship.x < 63 then
+            e.ang = calcAngle(e.x, e.y, 0, 0)
         else
-            e.x += e.xSpd
+            e.ang = calcAngle(e.x, e.y, 128, 0)
         end
     end
 
-    e.y += e.ySpd
+    if e.moving then
+        e.x += sin(e.ang) * e.xSpd
+    end
+
+    e.y += cos(e.ang) * e.spd
 end

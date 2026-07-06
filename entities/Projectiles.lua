@@ -286,6 +286,27 @@ function aimedSingleShot(proCfg, x, y, spd, dam, proOwner)
     )
 end
 
+-- Fires multiple aimed-projectiles.
+-- @param proCfg: The config of the projectile to use.
+-- @param x: Spawn x position.
+-- @param y: Spawn y position.
+-- @param num: The number of projectiles.
+-- @param spd: Projectile speed.
+-- @param dam: Damage from the weapon definition.
+-- @param proOwner: The owner of the projectile.
+function aimedMultiShot(proCfg, x, y, num, spd, dam, proOwner)
+  local target = getCentre(ship)
+
+  local ang = calcAngle(x, y, target.x, target.y)
+
+  for i = 1, num do
+
+    addProjectile(
+      newProjectile(proCfg, x, y, ang, spd + (i * 0.5), dam, proOwner)
+    )
+  end
+end
+
 -- Util functions.
 
 -- Adds projectile to game based on its owner.

@@ -93,15 +93,15 @@ eDefs = {
         flash = 68,
         aniDelay = 0.4,
 
-        spd = 0.5,
-        xSpd = 0.5,
-        ySpd = 1.25,
+        spd = 0.8,
+        xSpd = 0.8,
+        ySpd = 0.8,
 
         movements = {
                 normal = leftRight,
-                onHit = downWaveSlow
+                onHit = downWaveSlow,
             },
-        move = downWaveSlow,
+        move = leftRight,
 
         hp = 2,
 
@@ -132,13 +132,17 @@ eDefs = {
         xSpd = 0.2,
         ySpd = 0.4,
 
-        movements = { normal = downWave, onHit = downWave },
+        movements = {
+            normal = downWave,
+            onHit = downWave
+        },
         move = downWave,
 
         hp = 2,
 
         rof = 20,
         dam = 1,
+        ang = 0.5,
 
         points = 150,
     },
@@ -159,6 +163,7 @@ eDefs = {
         flash = 93,
         aniDelay = 0.4,
 
+        spd = 1.25,
         xSpd = 1.5,
         ySpd = 1.2,
 
@@ -170,13 +175,14 @@ eDefs = {
 
         hp = 3,
 
-        rof = 10,
+        rof = 30,
         dam = 1,
+        pSpd = 1,
 
         points = 200,
     },
     flame = {
-        name= flame,
+        name = flame,
 
         cols = {
             { c1 = 8, c2 = 2 }, -- Grey / Red.
@@ -259,8 +265,8 @@ eDefs = {
         xSpd = -0.5,
         ySpd = 0.35,
 
-        movements = { normal = leftRight, onHit = leftRight },
-        move = leftRight,
+        movements = { normal = leftRightUpDown, onHit = leftRightUpDown },
+        move = leftRightUpDown,
 
         hp = 40,
 
@@ -339,7 +345,6 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         shakeTimer = 0,
         points = enemyCfg.points,
         moving = false,
-        movingLeft = false,
 
         -- Use default colour palette.
         colId = 1,
@@ -417,6 +422,11 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
                 g.aimedSingleShot(proCfg, firing.x, firing.y,
                                   pSpd, dam, g.owner.enemy)
 
+            elseif name == g.redeye then
+                local proCfg = g.getProConfig(g.blueBullet)
+
+                g.aimedMultiShot(proCfg, firing.x, firing.y,
+                                  3, pSpd, dam, g.owner.enemy)
             else
                 g.singleShot(proCfg, firing.x, firing.y,
                              ang, pSpd, dam, g.owner.enemy)
@@ -536,7 +546,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
             -- Remove if off-screen and not spawning.
             if state != eneState.spawning then
-                if x < -5 or x > 134 or y > 134 then
+                if x < -25 or x > 153 or y > 153 then
                     del(g.enemies, _ENV)
                 end
             end

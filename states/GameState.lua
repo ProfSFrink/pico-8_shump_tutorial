@@ -19,23 +19,17 @@ spawnEvents = {
 	},
 	-- Wave #3.
 	{ '3',
-		'5,-8,-24,gap,gap,alien,gap,alien,gap,gap,gap',
-		'10,136,34,fighter,gap,alien,ufo,alien,gap,gap,fighter',
-		'15,64,-12,gap,gap,alien,gap,alien,gap,gap,gap',
+		'5,-8,14,ufo,gap,ufo,gap,ufo',
+		'30,136,34,alien,alien,alien,alien,alien,alien',
 	},
-	-- Wave #4.
+	-- Wave #5.
 	{ '4',
 		'5,-8,14,ufo,gap,ufo,gap,ufo',
-		'10,136,34,alien,alien,alien,alien,alien,alien',
+		'5,136,34,gap,ufo,gap,ufo,gap',
+		'5,64,-12,gap,gap,ufo,gap,gap',
 	},
 	-- Wave #5.
 	{ '5',
-		'5,-8,14,ufo',
-		'5,136,34,ufo',
-		'5,64,-12,ufo'
-	},
-	-- Wave #6.
-	{ '6',
 		'10,136,34,alien,gap,boss,gap,alien',
 		'0,0,0,gap',
 		'30,-8,14,alien,alien,alien,alien,alien',
@@ -97,7 +91,7 @@ function parseWaveRow(s)
 	end
 
 	-- Return row data.
-	return { 
+	return {
 		attackRate = tonum(parts[1]),
 		x = tonum(parts[2]),
 		y = tonum(parts[3]),
@@ -209,7 +203,6 @@ function updateGame()
 		end
 	end
 
-	rowEnemies = {}
 	for e in all(enemies) do
 		if e.rowNum == activeRow then
 			add(rowEnemies, e)
