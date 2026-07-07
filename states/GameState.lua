@@ -10,7 +10,7 @@ spawnEvents =
 	{ '1',
 		'-8,14,alien:140,alien:160,alien:210,gap,alien:210,gap,alien:210,alien:160,alien:140',
 		'136,34,alien:180,alien:210,alien:240,alien:240,alien:210,alien:180',
-		'136,34,gap,ufo:80,gap,ufo:110,gap',
+		'136,34,gap,alien:80,gap,alien:110,gap',
 	},
 	-- Wave #2 - Introduce aimed shots / Flame enemies.
 	{ '2',

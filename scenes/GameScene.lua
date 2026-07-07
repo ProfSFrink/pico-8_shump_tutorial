@@ -37,7 +37,7 @@ function updateGameScene()
 
 	-- Fire ship weapon one if Z pressed.
 	if btn(4) and canPlay then
-		if ship.rof <= 0 then
+		if ship.rof <= 0 and ship.weaponOne != nil then
 			local wepCfg = getWepConfig(ship.weaponOne)
 
 			wepCfg.fireFunc(ship.x,
@@ -51,7 +51,7 @@ function updateGameScene()
 	end
 
 	-- Fire ship weapon two if X pressed.
-	if btn(5) and canPlay then
+	if btn(5) and canPlay and ship.weaponTwo != nil  then
 		if ship.rof <= 0 then
 			local wepCfg = getWepConfig(ship.weaponTwo)
 
@@ -147,6 +147,15 @@ function drawGameScene()
 		showDebugUI()
 	end
 
+	-- Sparks.
+	drawSparks()
+
+	-- Shockwaves.
+	drawShockWaves()
+
+	-- Explosions.
+	drawExplosions()
+
 	-- Game screen.
 	if player.lives > 0 then
 		ship:draw(gameT)
@@ -157,15 +166,6 @@ function drawGameScene()
 
 	-- Projectiles.
 	drawProjectiles()
-
-	-- Sparks.
-	drawSparks()
-
-	-- Shockwaves.
-	drawShockWaves()
-
-	-- Explosions.
-	drawExplosions()
 
 	-- UI.
 

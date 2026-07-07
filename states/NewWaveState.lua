@@ -42,6 +42,16 @@ function enterNewWave()
     end)
 
     waveNum += 1
+
+    -- TODO: Remove at end of dev.
+    if waveNum == 2 or waveNum == 4 or waveNum == 5 then
+        ship.weaponTwo = threeShotBullet
+    end
+
+    if waveNum == 3 then
+        ship.weaponTwo = blastShot
+    end
+
     if waveNum == 1 then
         music(0)
     else

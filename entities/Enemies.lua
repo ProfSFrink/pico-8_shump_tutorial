@@ -203,12 +203,12 @@ eDefs = {
 
         movements = { normal = downWave, onHit = downWave },
         move = downWave,
-        waveLen = 60,
+        waveLen = 30,
 
         hp = 2,
         rof = 45,
         dam = 1,
-        pSpd = 2.1,
+        pSpd = 1.4,
 
         points = 200,
     },
@@ -380,7 +380,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
         aniDelay = enemyCfg.aniDelay,
 
         -- Delay between firing bullets.
-        fireDelay = enemyCfg.rof,
+        fireDelay = 10,
 
         -- Setup flash & death timers.
         flashTimer = flashTimerDefault,
@@ -405,7 +405,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
         end,
 
         -- Fire a projectile.
-        fire = function(_ENV, overP)
+        fire = function(_ENV)
             local proCfg = g.getProConfig(g.pinkBullet)
 
             -- Calculate enemy projectile spawn point.
@@ -468,9 +468,6 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
             aniDelay *= 3
             moveDelay = 15
             shakeTimer = 20
-            -- So enemy attack as soon as shaking stops.
-            -- Then normal rate of fire is used.
-            fireDelay = 10
             state = eneState.attacking
         end,
 
