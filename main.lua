@@ -3,7 +3,9 @@
 -- Reference to global scope.
 _g = _ENV
 
-debugMode = false
+debugMode = true
+
+waveT = 0
 
 -- Game strings.
 

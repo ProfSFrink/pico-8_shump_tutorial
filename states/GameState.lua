@@ -1,44 +1,44 @@
 -- Game state logic.
 
--- Table containing, wave information.
--- row number.
--- row attack rate (higher is less infrequent, x spawn, y spawn.
+-- Wave spawn data.
+-- Format per row: 'startX,startY,enemyType:activateAt,...'
+-- activateAt: wave timer value (frames) when the enemy begins attacking.
 
 spawnEvents = {
 	-- Wave #1.
 	{ '1',
-		'5,-8,14,alien,alien,alien,alien,alien,alien,alien',
-		'10,136,34,alien,alien,alien,alien,alien,alien',
-		'15,64,-12,alien,alien,gap,alien,alien'
+		'-8,14,alien:170,alien:185,alien:200,alien:215,alien:230,alien:245,alien:260',
+		'136,34,alien:110,alien:125,alien:140,alien:155,alien:170,alien:185',
+		'64,-12,alien:50,alien:65,gap,alien:80,alien:95'
 	},
 	-- Wave #2.
 	{ '2',
-		'5,-8,14,alien,alien,gap,flame,flame,gap,alien,alien',
-		'10,136,34,alien,alien,gap,flame,flame,gap,alien,alien',
-		'15,64,-12,alien,alien,alien,alien,alien,alien,alien,alien'
+		'-8,14,alien:170,alien:185,gap,flame:200,flame:215,gap,alien:230,alien:245',
+		'136,34,alien:110,alien:125,gap,flame:140,flame:155,gap,alien:170,alien:185',
+		'64,-12,alien:50,alien:65,alien:80,alien:95,alien:110,alien:125,alien:140,alien:155'
 	},
 	-- Wave #3.
 	{ '3',
-		'5,-8,14,ufo,gap,ufo,gap,ufo',
-		'10,136,34,alien,alien,alien,alien,alien,alien',
+		'-8,14,ufo:110,gap,ufo:140,gap,ufo:170',
+		'136,34,alien:50,alien:65,alien:80,alien:95,alien:110,alien:125',
 	},
 	-- Wave #4.
 	{ '4',
-		'2,-8,14,ufo,gap,ufo,gap,ufo',
-		'5,136,34,gap,ufo,gap,ufo,gap',
-		'10,64,-12,gap,gap,ufo,gap,gap',
+		'-8,14,ufo:110,gap,ufo:140,gap,ufo:170',
+		'136,34,gap,ufo:80,gap,ufo:110,gap',
+		'64,-12,gap,gap,ufo:50,gap,gap',
 	},
 	-- Wave #5.
 	{ '5',
-		'0,-8,14,ufo,gap,ufo,gap,ufo',
-		'3,136,34,fighter,alien,alien,gap,ufo,gap,alien,alien,fighter',
-		'5,136,50,alien,alien,gap,redeye,redeye,redeye,redeye,redeye,gap,alien,alien',
+		'-8,14,ufo:110,gap,ufo:140,gap,ufo:170',
+		'136,34,fighter:55,alien:70,alien:85,gap,ufo:100,gap,alien:115,alien:130,fighter:145',
+		'136,50,alien:175,alien:190,gap,redeye:50,redeye:70,redeye:90,redeye:110,redeye:130,gap,alien:205,alien:220',
 	},
 	-- Wave #6.
 	{ '6',
-		'0,136,34,alien,gap,boss,gap,alien',
-		'0,0,0,gap',
-		'10,-8,14,alien,alien,alien,alien,alien',
+		'136,34,alien:80,gap,boss:50,gap,alien:100',
+		'0,0,gap',
+		'-8,14,alien:120,alien:140,alien:160,alien:180,alien:200',
 	},
 
 }
@@ -86,22 +86,26 @@ function setupGame()
 end
 
 -- Parses a row string into row data.
--- Format: attackRate,x,y,enemy1,enemy2,...
+-- Format: x,y,enemy1:activateAt,enemy2:activateAt,...
 function parseWaveRow(s)
 	local parts = split(s, ',')
 	local rowEnemies = {}
 
 	-- Get enemies for the row.
-	for i = 4, #parts do
-		local name = parts[i]
-		add(rowEnemies, name == 'gap' and 'gap' or eDefs[name])
+	for i = 3, #parts do
+		local token = parts[i]
+		if token == 'gap' then
+			add(rowEnemies, 'gap')
+		else
+			local p = split(token, ':')
+			add(rowEnemies, { def = eDefs[p[1]], activateAt = tonum(p[2]) })
+		end
 	end
 
 	-- Return row data.
 	return {
-		attackRate = tonum(parts[1]),
-		x = tonum(parts[2]),
-		y = tonum(parts[3]),
+		x = tonum(parts[1]),
+		y = tonum(parts[2]),
 		rowEnemies = rowEnemies
 	}
 end
@@ -122,7 +126,6 @@ end
 
 -- Spawns all enemy rows for a wave.
 function spawnWaveRows(wave)
-    rowAttackRate = {}
     local waveRows = getWaveData(wave)
 
     if not waveRows then
@@ -143,14 +146,12 @@ function spawnWaveRows(wave)
         local row = parseWaveRow(waveRows[rowNum])
         local rowIdx = rowNum - 1
 
-		add(rowAttackRate, row.attackRate)
-
         local firstEnemy = nil
         for _, e in pairs(row.rowEnemies) do
             if e ~= 'gap' then firstEnemy = e break end
         end
 
-        local spriteW = (firstEnemy and firstEnemy.sprSize or 1) * 8
+        local spriteW = (firstEnemy and firstEnemy.def.sprSize or 1) * 8
 
         local rowSpacing = max(spacing, spriteW + 4)
 
@@ -167,7 +168,8 @@ function spawnWaveRows(wave)
 			local delay = flr(rowDelay)
 
 			if row.rowEnemies[i] ~= 'gap' then
-				local e = spawnEnemy(row.rowEnemies[i], row.x, row.y, currentRow)
+				local entry = row.rowEnemies[i]
+				local e = spawnEnemy(entry.def, row.x, row.y, currentRow, entry.activateAt)
 
 				async(function()
 					wait(delay)
@@ -186,22 +188,12 @@ function spawnWaveRows(wave)
 	sfx(28)
 end
 
--- Have an enemy shake before attacking.
--- @param ene: The table of enemies to choose from.
-function shakeEnemy(ene)
-	local e = rnd(ene)
-	if e and e:canCollide() then
-		e:shake()
-	end
-end
-
 -- Updates the game screen.
 function updateGame()
 	updateGameScene()
 
 	spawnT += 1
-
-	canAttack = gameT % (rowAttackRate[activeRow] or 1) == 0
+	waveT += 1
 
 	if spawnT == spawnDur then
 		canPlay = true
@@ -210,33 +202,12 @@ function updateGame()
 		end
 	end
 
-	for e in all(enemies) do
-		if e.rowNum == activeRow then
-			add(rowEnemies, e)
-		end
-	end
-
 	if canPlay then
-		local rowActive = false
-		for e in all(rowEnemies) do
-			if e:canCollide() then
-				rowActive = true
-				break
+		for e in all(enemies) do
+			if waveT >= e.activateAt then
+				e:shake()
 			end
 		end
-
-		if not rowActive then
-			activeRow += 1
-			for e in all(enemies) do
-				if e.rowNum == activeRow then
-					add(rowEnemies, e)
-				end
-			end
-		end
-	end
-
-	if canAttack then
-		shakeEnemy(rowEnemies)
 	end
 
 	-- Check for end of wave.
@@ -268,6 +239,5 @@ function enterGame()
 	-- Spawn the next wave of enemies.
 	spawnWaveRows(waveNum)
 
-	rowEnemies = {}
-	activeRow = 1
+	waveT = 0
 end

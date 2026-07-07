@@ -300,8 +300,9 @@ local eneState = {
 -- @param eneX: Spawn x position.
 -- @param eneY: Spawn y position.
 -- @param eneRowNum: Spawn row number.
+-- @param activateAt: Wave timer value at which this enemy starts attacking.
 -- @return: A new enemy object.
-function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
+function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
     -- Local reference to global scope.
     local g = _g
 
@@ -311,6 +312,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
         x = eneX,
         y = eneY,
         rowNum = eneRowNum,
+        activateAt = activateAt or 0,
 
         spd = enemyCfg.spd or 0,
         xSpd = enemyCfg.xSpd,
@@ -482,13 +484,8 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum)
 
             g.sfx(3)
             if hp <= 0 then
-                -- If player destroys attacking enemy
-                -- have new enemy start attacking.
                 if state == eneState.attacking then
-                    if g.ranInt(0, 1) < 0.5 then
-                        g.shakeEnemy(g.enemies)
-                    end
-                    points = g.flr(points * 0.3)
+                    points += g.flr(points * 0.3)
                 end
 
                 state = eneState.dead
@@ -593,9 +590,10 @@ end
 -- @param x: Enemy spawn x position.
 -- @param y: Enemy spawn y position.
 -- @param spawnRowNum: Enemies row number.
+-- @param activateAt: Wave timer value at which this enemy starts attacking.
 -- @return: The spawned enemy object.
-function spawnEnemy(enemy, spawnX, spawnY, spawnRowNum)
-    local newE = newEnemy(enemy, spawnX, spawnY, spawnRowNum)
+function spawnEnemy(enemy, spawnX, spawnY, spawnRowNum, activateAt)
+    local newE = newEnemy(enemy, spawnX, spawnY, spawnRowNum, activateAt)
 
     add(enemies, newE)
 

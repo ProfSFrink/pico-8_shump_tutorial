@@ -10,7 +10,7 @@ function showDebugUI()
     ?ship.x, 0, 63, 7
     ?ship.y, 0, 70, 7
     ?"i:" .. ship.invul, 110, 113, 7
-    ?"t:" .. gameT, 105, 123, 7
+    ?"wt:" .. waveT, 105, 123, 7
 end
 
 -- Returns the x value to centre an object on the screen.
@@ -71,14 +71,14 @@ end
 -- Draws an entity's hitbox as a filled rectangle for debugging.
 -- @param e: the entity to draw the hitbox for.
 function showHitBox(e)
-    blinkT += 1
+    -- blinkT += 1
 
-    local x = e.x + (e.hitBox.offX or 0)
-    local y = e.y + (e.hitBox.offY or 0)
-    local w = e.hitBox.w or hitDefault
-    local h = e.hitBox.h or hitDefault
+    -- local x = e.x + (e.hitBox.offX or 0)
+    -- local y = e.y + (e.hitBox.offY or 0)
+    -- local w = e.hitBox.w or hitDefault
+    -- local h = e.hitBox.h or hitDefault
 
-    rectfill(x, y, x + w, y + h, blink())
+    -- rectfill(x, y, x + w, y + h, blink())
 end
 
 -- Returns the centre of an entity with a hit-box.
