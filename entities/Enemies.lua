@@ -69,7 +69,7 @@ eDefs = {
 
         hp = 1,
 
-        rof = 30,
+        rof = 45,
         dam = 1,
         ang = 1,
         pSpd = 2,
@@ -199,16 +199,16 @@ eDefs = {
         aniDelay = 0.4,
 
         xSpd = 1.4,
-        ySpd = 1.2,
+        ySpd = 1,
 
         movements = { normal = downWave, onHit = downWave },
         move = downWave,
-        waveLen = 20,
+        waveLen = 60,
 
         hp = 2,
-        rof = 35,
+        rof = 45,
         dam = 1,
-        pSpd = 2,
+        pSpd = 2.1,
 
         points = 200,
     },
@@ -267,8 +267,8 @@ eDefs = {
         xSpd = -0.5,
         ySpd = 0.35,
 
-        movements = { normal = leftRightUpDown, onHit = leftRightUpDown },
-        move = leftRightUpDown,
+        movements = { normal = leftRight, onHit = leftRight },
+        move = leftRight,
 
         hp = 40,
 
@@ -467,7 +467,10 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
             if state != eneState.stopped then return end
             aniDelay *= 3
             moveDelay = 15
-            shakeTimer = 30 -- enemy shakes for 1 second.
+            shakeTimer = 20
+            -- So enemy attack as soon as shaking stops.
+            -- Then normal rate of fire is used.
+            fireDelay = 10
             state = eneState.attacking
         end,
 

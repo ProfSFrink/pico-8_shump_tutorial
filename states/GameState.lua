@@ -4,41 +4,44 @@
 -- Format per row: 'startX,startY,enemyType:activateAt,...'
 -- activateAt: wave timer value (frames) when the enemy begins attacking.
 
-spawnEvents = {
-	-- Wave #1.
+spawnEvents =
+	{
+	-- Wave #1 - Basic aliens / fixed shots.
 	{ '1',
-		'-8,14,alien:170,alien:185,alien:200,alien:215,alien:230,alien:245,alien:260',
-		'136,34,alien:110,alien:125,alien:140,alien:155,alien:170,alien:185',
-		'64,-12,alien:50,alien:65,gap,alien:80,alien:95'
+		'-8,14,alien:140,alien:160,alien:210,gap,alien:210,gap,alien:210,alien:160,alien:140',
+		'136,34,alien:180,alien:210,alien:240,alien:240,alien:210,alien:180',
+		'136,34,gap,ufo:80,gap,ufo:110,gap',
 	},
-	-- Wave #2.
+	-- Wave #2 - Introduce aimed shots / Flame enemies.
 	{ '2',
-		'-8,14,alien:170,alien:185,gap,flame:200,flame:215,gap,alien:230,alien:245',
-		'136,34,alien:110,alien:125,gap,flame:140,flame:155,gap,alien:170,alien:185',
-		'64,-12,alien:50,alien:65,alien:80,alien:95,alien:110,alien:125,alien:140,alien:155'
+		'-8,14,alien:90,alien:100,gap,gap,flame:200,flame:200,gap,gap,alien:100,alien:90',
+		'136,34,alien:110,alien:125,gap,flame:155,flame:155,gap,alien:125,alien:110',
+		'64,-12,alien:120,alien:150,alien:60,alien:150,alien:150,alien:150,alien:120',
 	},
-	-- Wave #3.
+	-- Wave #3 -- Introduce redeye (High HP) teach player to move.
 	{ '3',
-		'-8,14,ufo:110,gap,ufo:140,gap,ufo:170',
-		'136,34,alien:50,alien:65,alien:80,alien:95,alien:110,alien:125',
+		'-8,14,redeye:30,gap,gap,gap,gap,redeye:120',
+		'136,34,flame:125,gap,gap,gap,gap,gap,gap,gap,gap,flame:125',
+		'64,-12,alien:45,alien:55,alien:60,gap,gap,alien:60,alien:55,alien:45',
 	},
-	-- Wave #4.
+	-- Wave #4. -- TODO: Re-work this / add fighters.
 	{ '4',
 		'-8,14,ufo:110,gap,ufo:140,gap,ufo:170',
 		'136,34,gap,ufo:80,gap,ufo:110,gap',
-		'64,-12,gap,gap,ufo:50,gap,gap',
+		'64,-12,gap,redeye:60,gap,redeye:90,gap'
 	},
 	-- Wave #5.
 	{ '5',
-		'-8,14,ufo:110,gap,ufo:140,gap,ufo:170',
-		'136,34,fighter:55,alien:70,alien:85,gap,ufo:100,gap,alien:115,alien:130,fighter:145',
-		'136,50,alien:175,alien:190,gap,redeye:50,redeye:70,redeye:90,redeye:110,redeye:130,gap,alien:205,alien:220',
+		'-8,14,ufo:200,gap,ufo:200,gap,ufo:200',
+		'136,34,fighter:120,alien:45,alien:47,gap,ufo:200,gap,alien:45,alien:47,fighter:200',
+		'136,50,alien:35,alien:37,gap,redeye:150,redeye:150,redeye:150,redeye:150,redeye:130,gap,alien:37,alien:35'
 	},
 	-- Wave #6.
 	{ '6',
-		'136,34,alien:80,gap,boss:50,gap,alien:100',
-		'0,0,gap',
-		'-8,14,alien:120,alien:140,alien:160,alien:180,alien:200',
+		'-8,14,boss:45',
+		'136,34,ufo:240,gap,alien:40,alien:40,gap,alien:40,alien:40,gap,ufo:240',
+		'-8,54,redeye:30,alien:140,alien:120,redeye:30,alien:120,alien:140,redeye:30',
+		'136,74,gap,gap,alien:140,alien:120,alien:100,alien:120,alien:140,gap,gap'
 	},
 
 }
@@ -151,24 +154,30 @@ function spawnWaveRows(wave)
             if e ~= 'gap' then firstEnemy = e break end
         end
 
-        local spriteW = (firstEnemy and firstEnemy.def.sprSize or 1) * 8
+        local firstDef = firstEnemy and firstEnemy.def or nil
+        local hitW = firstDef and (firstDef.hitBox.w or 7) or 7
 
-        local rowSpacing = max(spacing, spriteW + 4)
+        local rowSpacing = max(spacing, hitW + 4)
 
         local rowDelay = (rowIdx-1)*baseGapDelay - ((rowIdx-1)*(rowIdx-2)*delayReduction)/2
 
         local rowWidth = (#row.rowEnemies - 1) * rowSpacing
 
-        local rowStartX = flr(centerX - spriteW / 2 - rowWidth / 2)
+        -- rowStartHitCenterX is the x of the first enemy's hitbox centre.
+        local rowStartHitCenterX = flr(centerX - rowWidth / 2)
 
         -- Spawn each enemy in the row.
         for i = 1, #row.rowEnemies do
-			local targetX = rowStartX + (i - 1) * rowSpacing
 			local targetY = 0 + rowIdx * 13
 			local delay = flr(rowDelay)
 
 			if row.rowEnemies[i] ~= 'gap' then
 				local entry = row.rowEnemies[i]
+				local eHitOffX = entry.def.hitBox.offX or 0
+				local eHitW = entry.def.hitBox.w or 7
+				local hitCenterX = rowStartHitCenterX + (i - 1) * rowSpacing
+				local targetX = flr(hitCenterX - eHitOffX - eHitW / 2)
+
 				local e = spawnEnemy(entry.def, row.x, row.y, currentRow, entry.activateAt)
 
 				async(function()
@@ -239,5 +248,5 @@ function enterGame()
 	-- Spawn the next wave of enemies.
 	spawnWaveRows(waveNum)
 
-	waveT = 0
+	waveT = -10
 end

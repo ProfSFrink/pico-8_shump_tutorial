@@ -58,7 +58,7 @@ function leftRightUpDown(e)
         e.ySpd = switchSign(e.ySpd)
     end
 
-    if e.y > 95 then
+    if e.y > 65 then
         e.ySpd = switchSign(e.ySpd)
     end
 
