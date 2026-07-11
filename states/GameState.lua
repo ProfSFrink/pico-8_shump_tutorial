@@ -24,19 +24,19 @@ spawnEvents =
 		'136,34,flame:125,gap,gap,gap,gap,gap,gap,gap,gap,flame:125',
 		'64,-12,alien:45,alien:55,alien:60,gap,gap,alien:60,alien:55,alien:45',
 	},
-	-- Wave #4. -- TODO: Re-work this / add fighters.
+	-- Wave #4. -- Introduce Fighters (Catch player by surprise).
 	{ '4',
-		'-8,14,ufo:110,gap,ufo:140,gap,ufo:170',
-		'136,34,gap,ufo:80,gap,ufo:110,gap',
-		'64,-12,gap,redeye:60,gap,redeye:90,gap'
+		'-8,14,ufo:150,gap,ufo:180,gap,ufo:190',
+		'136,34,fighter:60,gap,gap,gap,redeye:130,redeye:130,gap,gap,gap,fighter:75',
+		'64,-12,alien:130,alien:125,alien:120,alien:115,alien:110'
 	},
-	-- Wave #5.
+	-- Wave #5 -- Step up in difficulty, player has to use everything learned so far.
 	{ '5',
 		'-8,14,ufo:200,gap,ufo:200,gap,ufo:200',
 		'136,34,fighter:120,alien:45,alien:47,gap,ufo:200,gap,alien:45,alien:47,fighter:200',
 		'136,50,alien:35,alien:37,gap,redeye:150,redeye:150,redeye:150,redeye:150,redeye:130,gap,alien:37,alien:35'
 	},
-	-- Wave #6.
+	-- Wave #6 -- Final stage with temporary end-boss.
 	{ '6',
 		'-8,14,boss:45',
 		'136,34,ufo:240,gap,alien:40,alien:40,gap,alien:40,alien:40,gap,ufo:240',
