@@ -69,7 +69,7 @@ eDefs = {
 
         hp = 1,
 
-        rof = 45,
+        rof = 60,
         dam = 1,
         ang = 1,
         pSpd = 2,

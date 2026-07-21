@@ -3,7 +3,7 @@
 -- Reference to global scope.
 _g = _ENV
 
-debugMode = true
+debugMode = false
 
 waveT = 0
 

@@ -107,13 +107,6 @@ pTypes = {
 -- String literals for entities that can own a projectile.
 owner = { player = "player", enemy = "enemy"}
 
--- Get the configuration for a projectile type.
--- @param proType: The projectile type.
--- @return: The projectile configuration.
-function getProConfig(proType)
-    return pTypes[proType]
-end
-
 -- Projectile Factory logic.
 
 -- Factory function for creating projectiles.
@@ -309,6 +302,13 @@ end
 
 -- Util functions.
 
+-- Get the configuration for a projectile type.
+-- @param proType: The projectile type.
+-- @return: The projectile configuration.
+function getProConfig(proType)
+    return pTypes[proType]
+end
+
 -- Adds projectile to game based on its owner.
 -- p: Projectile to add.
 function addProjectile(p)
@@ -323,7 +323,7 @@ end
 -- p: Projectile to remove.
 function removeProjectile(p)
     if p.owner == owner.player then
-        del(projectiles,p)
+        del(projectiles, p)
     else
         del(enemyProjectiles,p)
     end

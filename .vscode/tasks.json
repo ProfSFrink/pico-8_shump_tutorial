@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Shrink PICO-8 Cart",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "/Users/swpartlow/Repos/python_repos/shrinko8/shrinko8.py",
+        "./shump.p8",
+        "./shump_min.p8",
+        "--count",
+        "--minify-safe-only"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
