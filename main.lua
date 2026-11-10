@@ -30,23 +30,14 @@ function _init()
 
 	routines = {}
 
+	-- Ship starting position.
 	shipStartX = 61
 	shipStartY = 108
 
+	-- Track the current wave number.
 	waveNum = 0
 
 	shake = 0
-
-	-- Setup and initialize starfield.
-	-- TODO: Move to starfield module.
-	stars = {}
-	numOfStars = 80
-
-	farStar = { col = 5, spd = 0.25 }
-
-	midStar = { col = 6, spd = 0.75, isAsteroid = false }
-
-	nearStar = { col = 7, twinkleCol = 10, spd = 2 }
 
 	stateNames = {
 		title = "title", start = "start",

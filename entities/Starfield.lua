@@ -1,3 +1,14 @@
+	-- Starfield component data.
+	stars = {}
+
+	numOfStars = 80
+
+	farStar = { col = 5, spd = 0.25 }
+
+	midStar = { col = 6, spd = 0.75, isAsteroid = false }
+
+	nearStar = { col = 7, twinkleCol = 10, spd = 2 }
+
 -- Starfield component logic.
 
 -- Factory function for creating stars.
@@ -9,12 +20,9 @@
 -- @return: A new star object.
 function newStar(sCol, sSpd, isStart)
     -- References to global scope.
+    local g = _g
+
     local uiOffset = isStart and 0 or uiHeight
-    local midStar = midStar
-    local farStar = farStar
-    local nearStar = nearStar
-    local rnd = rnd
-    local flr = flr
 
     return {
         x = flr(rnd(118) + 10),
@@ -30,14 +38,14 @@ function newStar(sCol, sSpd, isStart)
             if it goes off the bottom.]]
             if y > 128 then
                 y = uiOffset
-                x = flr(rnd(128))
+                x = g.flr(g.rnd(128))
             end
 
             -- Twinkle the star if it's a near star.
-            if col == nearStar.col then
-                col = nearStar.twinkleCol
-            elseif col == nearStar.twinkleCol then
-                col = nearStar.col
+            if col == g.nearStar.col then
+                col = g.nearStar.twinkleCol
+            elseif col == g.nearStar.twinkleCol then
+                col = g.nearStar.col
             end
         end
     }
