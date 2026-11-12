@@ -272,7 +272,7 @@ eDefs = {
 
         hp = 40,
 
-        rof = 10,
+        rof = 20,
         dam = 1,
 
         points = 1000,

@@ -46,8 +46,8 @@ spawnEvents =
 	-- Wave #7 -- Final stage with temporary end-boss.
 	{ '7',
 		'-8,14,boss:45',
-		'136,34,ufo:240,gap,alien:40,alien:40,gap,alien:40,alien:40,gap,ufo:240',
-		'-8,54,redeye:30,alien:140,alien:120,redeye:30,alien:120,alien:140,redeye:30',
+		'136,34,ufo:240,gap,gap,gap,gap,gap,gap,gap,ufo:240',
+		'-8,54,alien:140,alien:120,alien:120,alien:120,alien:120,alien:140',
 		'136,74,gap,gap,alien:140,alien:120,alien:100,alien:120,alien:140,gap,gap'
 	},
 
