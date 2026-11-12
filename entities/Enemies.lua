@@ -94,7 +94,7 @@ eDefs = {
         aniDelay = 0.4,
 
         spd = 0.8,
-        xSpd = 0.8,
+        xSpd = 0.7,
         ySpd = 0.8,
 
         movements = {

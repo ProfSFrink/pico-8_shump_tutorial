@@ -20,24 +20,31 @@ spawnEvents =
 	},
 	-- Wave #3 -- Introduce redeye (High HP) teach player to move.
 	{ '3',
-		'-8,14,redeye:30,gap,gap,gap,gap,redeye:120',
-		'136,34,flame:125,gap,gap,gap,gap,gap,gap,gap,gap,flame:125',
-		'64,-12,alien:45,alien:55,alien:60,gap,gap,alien:60,alien:55,alien:45',
+		'-8,14,redeye:30,gap,gap,gap,gap,redeye:150',
+		'64,-12,redeye:60,gap,redeye:90,gap,redeye:120',
+		'32,-12,alien:45,alien:55,alien:60,gap,gap,alien:60,alien:55,alien:45',
+		'96,-12,alien:55,alien:60,gap,gap,gap,alien:55,alien:45',
 	},
 	-- Wave #4. -- Introduce Fighters (Catch player by surprise).
 	{ '4',
-		'-8,14,ufo:150,gap,ufo:180,gap,ufo:190',
 		'136,34,fighter:60,gap,gap,gap,redeye:130,redeye:130,gap,gap,gap,fighter:75',
 		'64,-12,alien:130,alien:125,alien:120,alien:115,alien:110'
 	},
-	-- Wave #5 -- Step up in difficulty, player has to use everything learned so far.
+	-- Wave #5. -- Introduce UFOs.
 	{ '5',
+		'-8,14,ufo:60,gap,ufo:120,gap,ufo:180',
+		'136,34,fighter:60,gap,gap,gap,gap,gap,gap,gap,gap,fighter:75',
+		'-8,48,alien:130,alien:125,alien:120,alien:115,alien:110,alien:100',
+		'136,48,alien:110,alien:115,alien:120,alien:125,alien:130,alien:140'
+	},
+	-- Wave #6 -- Step up in difficulty, player has to use everything learned so far.
+	{ '6',
 		'-8,14,ufo:200,gap,ufo:200,gap,ufo:200',
 		'136,34,fighter:120,alien:45,alien:47,gap,ufo:200,gap,alien:45,alien:47,fighter:200',
 		'136,50,alien:35,alien:37,gap,redeye:150,redeye:150,redeye:150,redeye:150,redeye:130,gap,alien:37,alien:35'
 	},
-	-- Wave #6 -- Final stage with temporary end-boss.
-	{ '6',
+	-- Wave #7 -- Final stage with temporary end-boss.
+	{ '7',
 		'-8,14,boss:45',
 		'136,34,ufo:240,gap,alien:40,alien:40,gap,alien:40,alien:40,gap,ufo:240',
 		'-8,54,redeye:30,alien:140,alien:120,redeye:30,alien:120,alien:140,redeye:30',
