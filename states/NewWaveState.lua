@@ -1,5 +1,4 @@
 -- New Wave state logic.
-
 local exitTimer = 0
 
 -- Update the new wave screen.
@@ -18,8 +17,6 @@ end
 -- Draw the new wave screen.
 function drawNewWave()
     drawGameScene()
-
-    local waveText = "WAVE " .. waveNum
 
     ?waveText, calcCenX(#waveText), 30, blink()
 end
@@ -43,6 +40,9 @@ function enterNewWave()
 
     waveNum += 1
 
+    waveText = "WAVE " .. waveNum
+
+    -- Testing for new weapons for the ship.
     -- TODO: Remove at end of dev.
     if waveNum == 2 or waveNum == 4 or waveNum == 5 then
         ship.weaponTwo = threeShotBullet

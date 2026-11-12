@@ -1,3 +1,8 @@
+-- Game Over state data.
+
+local gameOver = "GAME OVER"
+local restart = pressAKey .. "RESTART"
+
 -- Game over state logic.
 
 -- Update the game over screen.
@@ -33,9 +38,6 @@ function drawGameOver()
             bg.y2 += bgSpd
             rectfill(bg.x1, bg.y1, bg.x2, bg.y2, bgCol)
         end
-
-        local gameOver = "GAME OVER"
-        local restart = pressAKey .. "RESTART"
 
         ?gameOver, calcCenX(#gameOver), 50, 7
         ?restart, calcCenX(#restart), 80, blink()

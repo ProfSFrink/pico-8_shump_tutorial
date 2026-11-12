@@ -1,4 +1,6 @@
 -- Start state logic.
+local start = "PLAYER 1 START"
+local getReady = "GET READY"
 
 -- Updates the start screen.
 function updateStart()
@@ -14,9 +16,6 @@ function drawStart()
 	cls(0)
 
 	startTimer += 1
-
-	local start = "PLAYER 1 START"
-	local getReady = "GET READY"
 
 	?start, calcCenX(#start) + 1, 41, 1
 	?start, calcCenX(#start), 40, 8

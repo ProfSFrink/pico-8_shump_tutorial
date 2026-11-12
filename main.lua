@@ -7,10 +7,8 @@ debugMode = false
 
 waveT = 0
 
--- Game strings.
-
--- Text for start and restart.
-pressAKey = "PRESS Z OR X TO "
+-- Track the current wave number.
+waveNum = 0
 
 -- Offset for the height of the UI.
 uiHeight = 8
@@ -18,7 +16,7 @@ uiHeight = 8
 -- Height of a bullet.
 bullHeight = 3
 
--- Starting colour for blinking text.
+-- Starting colour for blinking title screen text.
 blinkT = 1
 
 -- Default collision box size - 8x8 sprite.
@@ -33,9 +31,6 @@ function _init()
 	-- Ship starting position.
 	shipStartX = 61
 	shipStartY = 108
-
-	-- Track the current wave number.
-	waveNum = 0
 
 	shake = 0
 

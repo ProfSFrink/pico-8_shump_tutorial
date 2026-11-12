@@ -1,3 +1,7 @@
+-- Win State data.
+local winText = "YOU WIN!"
+local restart = pressAKey .. "RESTART"
+
 -- Win state logic.
 
 -- Update the win screen.
@@ -19,9 +23,6 @@ end
 -- Draw the win screen.
 function drawWin()
     drawGameScene()
-
-    local winText = "YOU WIN!"
-    local restart = pressAKey .. "RESTART"
 
     ?winText, calcCenX(#winText) + 1, 41, 1
     ?winText, calcCenX(#winText), 40, 10

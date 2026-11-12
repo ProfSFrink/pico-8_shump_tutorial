@@ -1,3 +1,10 @@
+-- Title state data.
+
+-- Text for start and restart.
+local pressAKey = "PRESS Z OR X TO "
+local title = "MY FIRST SHUMP!"
+local start = pressAKey .. "START"
+
 -- Title state logic
 
 -- Updates the title screen.
@@ -16,9 +23,6 @@ function drawTitle()
 	cls(0)
 
 	drawStarfield()
-
-	local title = "MY FIRST SHUMP!"
-	local start = pressAKey .. "START"
 
 	?title, calcCenX(#title) + 1, 41, 1
 	?title, calcCenX(#title), 40, 10
