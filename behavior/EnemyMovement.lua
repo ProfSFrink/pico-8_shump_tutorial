@@ -31,11 +31,9 @@ end
 -- Enemy moves horizontally between sides of the screen.
 -- @param e: Enemy to move.
 function leftRight(e)
-    if e.x < 12 then
+    if e.x < 12 and e.xSpd < 0 then
         e.xSpd = switchSign(e.xSpd)
-    end
-
-    if e.x > 116 then
+    elseif e.x > 116 and e.xSpd > 0 then
         e.xSpd = switchSign(e.xSpd)
     end
 
@@ -83,7 +81,7 @@ function downTowardCenter(e)
 end
 
 -- NOTE: Only used by fighter.
--- Enemy moves down until it reaches the player's y position, then moves horizontally toward the player.
+-- Enemy moves down until it reaches the player's y position, then moves horizontally toward the player and fires.
 -- @param e: Enemy to move.
 function downAcross(e)
     if e.xSpd == 0 then

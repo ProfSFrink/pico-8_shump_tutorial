@@ -43,10 +43,9 @@ spawnEvents =
 		'136,34,fighter:120,alien:45,alien:47,gap,ufo:200,gap,alien:45,alien:47,fighter:200',
 		'136,50,alien:35,alien:37,gap,redeye:150,redeye:150,redeye:150,redeye:150,redeye:130,gap,alien:37,alien:35'
 	},
-	-- Wave #7 -- Final stage with temporary end-boss.
+	-- Wave #7 -- Final stage with two battleships.
 	{ '7',
-		'-8,14,boss:45',
-		'136,34,ufo:240,gap,gap,gap,gap,gap,gap,gap,ufo:240',
+		'-8,14,battleship:45,alien:45,alien:47,battleship:47,alien:45,alien:47,battleship:45',
 		'-8,54,alien:140,alien:120,alien:120,alien:120,alien:120,alien:140',
 		'136,74,gap,gap,alien:140,alien:120,alien:100,alien:120,alien:140,gap,gap'
 	},

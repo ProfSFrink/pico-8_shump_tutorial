@@ -41,7 +41,7 @@ eyeball = "eyeball"
 redeye = "redeye"
 flame= "flame"
 fighter = "fighter"
-boss = "boss"
+battleship = "battleship"
 
 eDefs = {
     alien = {
@@ -243,8 +243,8 @@ eDefs = {
 
         points = 300,
     },
-    boss = {
-        name = boss,
+    battleship = {
+        name = battleship,
 
         cols = {
             { c1 = 6, c2 = 14 }, -- Grey / Yellow.
@@ -264,7 +264,7 @@ eDefs = {
         flash = 100,
         aniDelay = 0.4,
 
-        xSpd = -0.5,
+        xSpd = -0.8,
         ySpd = 0.35,
 
         movements = { normal = leftRight, onHit = leftRight },
@@ -414,7 +414,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
                             y = y + bullYOffset
                         }
 
-            if name == g.boss then
+            if name == g.battleship then
                 g.spreadShot(proCfg, firing.x, firing.y,
                              8, 1.3, 0, dam,
                              g.owner.enemy)

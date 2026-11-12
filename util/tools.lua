@@ -82,7 +82,7 @@ function showHitBox(e)
 end
 
 -- Returns the centre of an entity with a hit-box.
--- @returns: The X and Y of the centre of the entity.
+-- @returns: Table with the X and Y of the centre of the entity.
 function getCentre(e)
     return { x = e.x + e.hitBox.offX + e.hitBox.w / 2, y = e.y + e.hitBox.offY + e.hitBox.h / 2 }
 end
