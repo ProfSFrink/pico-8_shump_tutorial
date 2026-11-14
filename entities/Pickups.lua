@@ -13,8 +13,11 @@ pickUpTypes = {
 
 -- Factory functions for creating pickups.
 -- @param pickUpCfg: The pickUpCfg: Pick-up config object.
+-- @param pickUpX: The x position of the pick-up.
+-- @param pickUpY: The y position of the pick-up.
+-- @param pickUpSpawnT: The time in frames when the pick-up appears.
 -- @return: A new pick-up object.
-function newPickUp(pickUpCfg, pickUpX, pickUpY)
+function newPickUp(pickUpCfg, pickUpX, pickUpY, pickUpSpawnT)
     local g = _g
 
     return {
@@ -22,6 +25,8 @@ function newPickUp(pickUpCfg, pickUpX, pickUpY)
         curSpr = pickUpCfg.curSpr,
         x = pickUpX,
         y = pickUpY,
+        pickUpSpawnT = pickUpSpawnT or 0,
+        pickUpActive = false,
 
         hitBox = {
             w = hitDefault,
@@ -30,13 +35,21 @@ function newPickUp(pickUpCfg, pickUpX, pickUpY)
             offY = 0,
         },
 
+        activate = function(_ENV)
+            pickUpActive = true
+        end,
+
         update = function(_ENV)
-            x += 1
-            y += 1
+            if pickUpActive then
+                y += 0.5
+            end
         end,
 
         draw = function(_ENV)
+            if not pickUpActive then return end
+
             spr(curSpr, x, y)
+
             if g.debugMode then g.showHitBox(_ENV) end
         end,
     }

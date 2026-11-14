@@ -29,7 +29,7 @@ function enterNewWave()
 
     removeAllProjectiles()
 
-    -- Move ship to starting position for new wave. 
+    -- Move ship to starting position for new wave.
     async(function()
         animate(ship,"x", shipStartX, 60, easeOutQuad)
     end)

@@ -1,10 +1,10 @@
 -- Game state logic.
 
--- Wave spawn data.
+-- Enemy spawn data for each wave.
 -- Format per row: 'startX,startY,enemyType:activateAt,...'
 -- activateAt: wave timer value (frames) when the enemy begins attacking.
 
-spawnEvents =
+enemySpawnEvents =
 	{
 	-- Wave #1 - Basic aliens / fixed shots.
 	{ '1',
@@ -52,13 +52,24 @@ spawnEvents =
 
 }
 
+-- Pickup spawn data for certain waves.
+
+pickupSpawnEvents =
+	{
+	-- Wave #3
+		{ '3',
+			'65, 0, redCherry:90',
+
+		},
+}
+
 -- Sets up the game.
 function setupGame()
 	-- Setup game (frames).
 	gameT = 0
 
+	-- Time in frames for current want to spawn in.
 	spawnDur = 40
-	attackDur = 40
 
 	-- Setup player ship.
 	ship = newShip()
@@ -97,9 +108,9 @@ function setupGame()
 	createStarfield(false)
 end
 
--- Parses a row string into row data.
+-- Parses a row string of enemies into row data.
 -- Format: x,y,enemy1:activateAt,enemy2:activateAt,...
-function parseWaveRow(s)
+function parseEnemyWaveRow(s)
 	local parts = split(s, ',')
 	local rowEnemies = {}
 
@@ -122,23 +133,23 @@ function parseWaveRow(s)
 	}
 end
 
--- Returns the wave data for the requested wave number.
-function getWaveData(wave)
-	for i = 1, #spawnEvents do
-		if tonum(spawnEvents[i][1]) == wave then
-			return spawnEvents[i]
+-- Returns the enemy wave data for the requested wave number.
+function getEnemyWaveData(wave)
+	for i = 1, #enemySpawnEvents do
+		if tonum(enemySpawnEvents[i][1]) == wave then
+			return enemySpawnEvents[i]
 		end
 	end
 end
 
--- Returns true if the requested wave has any spawn events.
-function hasWaveSpawnEvents(wave)
-	return getWaveData(wave) ~= nil
+-- Returns true if the requested wave has any enemy spawn events.
+function hasWaveEnemySpawnEvents(wave)
+	return getEnemyWaveData(wave) ~= nil
 end
 
 -- Spawns all enemy rows for a wave.
-function spawnWaveRows(wave)
-    local waveRows = getWaveData(wave)
+function spawnEnemyWaveRows(wave)
+    local waveRows = getEnemyWaveData(wave)
 
     if not waveRows then
         return
@@ -155,7 +166,7 @@ function spawnWaveRows(wave)
 
     -- Iterate through each row in the wave (index 1 is the wave number).
     for rowNum = 2, #waveRows do
-        local row = parseWaveRow(waveRows[rowNum])
+        local row = parseEnemyWaveRow(waveRows[rowNum])
         local rowIdx = rowNum - 1
 
         local firstEnemy = nil
@@ -206,6 +217,17 @@ function spawnWaveRows(wave)
 	sfx(28)
 end
 
+-- Spawns all pickup for a wave.
+function spawnWavePickUps(wave)
+	local waveRows = pickupSpawnEvents[wave]
+
+	if not waveRows then
+		return
+	end
+
+	-- TODO: Implement pickup spawning logic.
+end
+
 -- Updates the game screen.
 function updateGame()
 	updateGameScene()
@@ -213,6 +235,7 @@ function updateGame()
 	spawnT += 1
 	waveT += 1
 
+	-- Once the wave has spawned in activate enemies and allow player input.
 	if spawnT == spawnDur then
 		canPlay = true
 		for e in all(enemies) do
@@ -220,10 +243,18 @@ function updateGame()
 		end
 	end
 
+	-- If playing check if any enemy is ready to attack
+	-- if so set enemy to start shaking.
 	if canPlay then
 		for e in all(enemies) do
 			if waveT >= e.activateAt then
 				e:shake()
+			end
+		end
+
+		for pu in all(pickups) do
+			if waveT >= pu.pickUpSpawnT then
+				pu:activate()
 			end
 		end
 	end
@@ -231,7 +262,7 @@ function updateGame()
 	-- Check for end of wave.
 	if #enemies == 0 then
 		-- Either start next wave or go to win screen.
-		if hasWaveSpawnEvents(waveNum + 1) then
+		if hasWaveEnemySpawnEvents(waveNum + 1) then
 			enterNewWave()
 			return
 		else
@@ -255,7 +286,7 @@ function enterGame()
 	spawnT = 0
 
 	-- Spawn the next wave of enemies.
-	spawnWaveRows(waveNum)
+	spawnEnemyWaveRows(waveNum)
 
 	waveT = -10
 end
