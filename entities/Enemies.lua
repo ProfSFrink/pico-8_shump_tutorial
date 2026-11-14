@@ -289,7 +289,6 @@ local deathTimerDefault = 10
 -- String literals for enemy state names.
 local eneState = {
     spawning = "spawning",
-    stopped = "stopped",
     flashing = "flashing",
     attacking = "attacking",
     dead = "dead"
@@ -391,7 +390,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
 
         -- Activate the enemy after spawning.
         activate = function(_ENV)
-            state = eneState.stopped
+            state = eneState.spawning
         end,
 
         -- Run looping enemy animation.
@@ -403,6 +402,9 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
 
             curSpr = ani[flr(aniFrame)]
         end,
+
+        -- TODO: Consider adding a fire function property to the enemy config.
+        -- TODO: so we can remove this this huge if / else block.
 
         -- Fire a projectile.
         fire = function(_ENV)
@@ -464,7 +466,7 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
 
         -- Have enemy shake before attacking.
         shake = function(_ENV)
-            if state != eneState.stopped then return end
+            if state != eneState.spawning then return end
             aniDelay *= 3
             moveDelay = 15
             shakeTimer = 20
@@ -539,8 +541,6 @@ function newEnemy(enemyCfg, eneX, eneY, eneRowNum, activateAt)
             elseif state == eneState.flashing then
                 flash(_ENV)
             elseif state == eneState.spawning then
-                animate(_ENV)
-            elseif state == eneState.stopped then
                 animate(_ENV)
             elseif state == eneState.attacking then
                 animate(_ENV)
